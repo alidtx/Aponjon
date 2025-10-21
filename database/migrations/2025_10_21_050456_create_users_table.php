@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('phone')->unique();
             $table->string('password');
+            $table->enum('role',['customer','tasker','admin'])->default('customer')->index();
+            $table->string('avatar')->nullable();
+            $table->boolean('is_verified')->default(false);
+            $table->string('location')->nullable(); //need to add point type, i will do that later($table->point('location')->nullable();)
+            $table->foreignId('district_id')->nullable()->constrained();
+            $table->foreignId('zila_id')->nullable()->constrained();
+            $table->foreignId('upozila_id')->nullable()->constrained();
             $table->rememberToken();
             $table->timestamps();
         });
