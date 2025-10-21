@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Zila extends Model
 {
-
+    use HasFactory;
     protected $fillable = ['name', 'slug', 'district_id'];
 
     public function districts()

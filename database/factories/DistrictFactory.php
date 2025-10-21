@@ -16,7 +16,7 @@ class DistrictFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->unique()->word();
+        $name = fake()->word();
         return [
             'name' => ucfirst($name),
             'slug' => str::slug($name),
