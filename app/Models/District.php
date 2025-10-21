@@ -6,5 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class District extends Model
 {
-    //
+
+    protected $fillable = ['name', 'slug'];
+
+
+    public function zilas()
+    {
+
+        return $this->hasMany(Zila::class);
+    }
+
+
+
+    public function users()
+    {
+
+        return $this->hasMany(User::class);
+    }
+
 }
