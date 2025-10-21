@@ -3,42 +3,36 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\District;
+use App\Models\Zila;
+use App\Models\Upozila;
+use App\Models\User;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected $model = User::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        // Create related records using factories
+        $district = District::factory()->create();
+        $zila = Zila::factory()->create(['district_id' => $district->id]);
+        $upozila = Upozila::factory()->create(['zila_id' => $zila->id]);
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'phone' => fake()->unique()->phoneNumber(),
+            'password' => bcrypt('password'),
+            'type' => $this->getWeightedUserType(),
+            'avatar' => fake()->optional(0.7)->imageUrl(100, 100, 'people'),
+            'is_verified' => fake()->boolean(80),
+            'district_id' => $district->id,
+            'zila_id' => $zila->id,
+            'upozila_id' => $upozila->id,
             'remember_token' => Str::random(10),
+            'email_verified_at' => fake()->optional(0.8)->dateTime(),
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }
