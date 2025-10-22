@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->belongsTo(Upozila::class);
     }
 
+    public function  taskerProfiles() 
+    {
+      return $this->hasMany(TaskerProfile::class);
+    }
+
     public function scopeCustomers($query)
     {
         return $query->where('role', 'customer');
