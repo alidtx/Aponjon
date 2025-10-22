@@ -15,6 +15,12 @@ class Upozila extends Model
         return $this->belongsTo(Zila::class);
     }
 
+    public function tasks()
+    {
+
+        return $this->hasMany(Task::class);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);

@@ -42,9 +42,19 @@ class User extends Authenticatable
         return $this->belongsTo(Upozila::class);
     }
 
-    public function  taskerProfiles() 
+    public function taskerProfiles()
     {
-      return $this->hasMany(TaskerProfile::class);
+        return $this->hasMany(TaskerProfile::class);
+    }
+
+    public function customerTasks()
+    {
+        return $this->hasMany(Task::class, 'customer_id');
+    }
+
+    public function taskerTasks()
+    {
+        return $this->hasMany(Task::class, 'tasker_id');
     }
 
     public function scopeCustomers($query)
@@ -79,7 +89,7 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-     public function isVerified()
+    public function isVerified()
     {
 
         return $this->is_verified === true;

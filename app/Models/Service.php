@@ -24,6 +24,11 @@ class Service extends Model
         return $this->belongsTo(Category::class);
     }
 
+     public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
+
     protected $casts = [
     'requirements' => 'array',  
     'is_active' => 'boolean',   

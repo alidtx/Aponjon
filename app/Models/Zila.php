@@ -20,6 +20,11 @@ class Zila extends Model
 
         return $this->hasMany(Upozila::class);
     }
+    public function tasks()
+    {
+
+        return $this->hasMany(Task::class);
+    }
 
     public function users()
     {

@@ -17,7 +17,10 @@ class District extends Model
         return $this->hasMany(Zila::class);
     }
 
-
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 
     public function users()
     {
