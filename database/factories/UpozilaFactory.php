@@ -2,27 +2,22 @@
 
 namespace Database\Factories;
 
-use App\Models\Upozila;
+use App\Models\Zila;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Upozila>
- */
 class UpozilaFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-       $name=fake()->unique()->word();
+        static $i = 1;
+
+        $name = 'Upozila ' . $i++;
+
         return [
-            'name'=>ucfirst($name),
-            'slug'=>str::slug($name),
-            'zila_id'=>Upozila::factory()  
+            'name' => $name,
+            'slug' => Str::slug($name),
+            'zila_id' => Zila::inRandomOrder()->first()->id ?? Zila::factory(),
         ];
     }
 }
