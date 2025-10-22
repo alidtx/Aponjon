@@ -10,6 +10,6 @@ class UpozilasTableSeeder extends Seeder
     
     public function run(): void
     {
-        Upozila::factory()->count(30)->create();
+        Upozila::factory()->count(10)->create();
     }
 }
