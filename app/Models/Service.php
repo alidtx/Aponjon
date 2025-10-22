@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
-{
+{   
+    use HasFactory;
     protected $fillable = [
         'title',
         'category_id',
@@ -21,4 +23,13 @@ class Service extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    protected $casts = [
+    'requirements' => 'array',  
+    'is_active' => 'boolean',   
+    'base_price' => 'float',   
+    'estimated_duration' => 'integer', 
+   ];
+
+   
 }

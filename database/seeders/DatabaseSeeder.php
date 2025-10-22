@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             UpozilasTableSeeder::class,
             UsersTableSeeder::class,
             TaskerProfileTableSeeder::class,
-            CategoryTableSeeder::class
+            CategoryTableSeeder::class,
+            ServiceTableSeeder::class,
         ]);
     }
 }
