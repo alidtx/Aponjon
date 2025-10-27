@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'tasker_id');
     }
 
+    public function bids()
+    {
+        return $this->hasMany(Bid::class, 'tasker_id');
+    }
+
     public function scopeCustomers($query)
     {
         return $query->where('role', 'customer');
