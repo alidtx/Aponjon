@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             TaskTableSeeder::class,
             BidTableSeeder::class,
             OrderTableSeeder::class,
+            ReviewTableSeeder::class,
         ]);
     }
 }

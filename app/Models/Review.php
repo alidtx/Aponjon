@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
-{
+{   
+    Use HasFactory;
     protected $fillable = [
         'task_id',
         'reviewer_id',
