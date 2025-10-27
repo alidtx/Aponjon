@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
-{ 
+{
     use HasFactory;
     protected $fillable = [
         'task_number',
@@ -56,5 +56,9 @@ class Task extends Model
         return $this->belongsTo(Upozila::class);
     }
 
+    public function order()
+    {
 
+        return $this->hasMany(Order::class);
+    }
 }
