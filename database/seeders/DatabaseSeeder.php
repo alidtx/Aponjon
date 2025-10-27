@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             TaskerProfileTableSeeder::class,
             CategoryTableSeeder::class,
             ServiceTableSeeder::class,
-            TaskTableSeeder::class
+            TaskTableSeeder::class,
+            BidTableSeeder::class,
         ]);
     }
 }
