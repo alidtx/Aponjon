@@ -62,6 +62,16 @@ class User extends Authenticatable
         return $this->hasMany(Bid::class, 'tasker_id');
     }
 
+    public function writtenReviews()
+    {
+        return $this->hasMany(Review::class, 'reviewer_id');
+    }
+
+    public function receivedReviews()
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
     public function scopeCustomers($query)
     {
         return $query->where('role', 'customer');
