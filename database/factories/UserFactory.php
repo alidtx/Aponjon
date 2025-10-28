@@ -24,7 +24,6 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->unique()->phoneNumber(),
             'password' => bcrypt('password'),
-            'role' => $this->getWeightedUserRole(), 
             'avatar' => fake()->optional(0.7)->imageUrl(100, 100, 'people'),
             'is_verified' => fake()->boolean(80),
             'district_id' => $district->id,
@@ -34,26 +33,4 @@ class UserFactory extends Factory
         ];
     }
 
-   
-    private function getWeightedUserRole(): string
-    {
-        
-        $roles = [
-            'customer' => 47, 
-            'tasker'   => 47, 
-            'admin'    => 6,  
-        ];
-
-        $rand = rand(1, 100);
-        $cumulative = 0;
-
-        foreach ($roles as $role => $weight) {
-            $cumulative += $weight;
-            if ($rand <= $cumulative) {
-                return $role;
-            }
-        }
-
-        return 'customer';
-    }
 }

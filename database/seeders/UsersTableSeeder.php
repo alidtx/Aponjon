@@ -12,9 +12,8 @@ class UsersTableSeeder extends Seeder
     {  
         User::factory()->create([
             'name' => 'Super Admin',
-            'email' => 'admin@tasker.com',
+            'email' => 'admin@gmail.com',
             'phone' => '+8801000000001',
-            'role' => 'admin',
             'is_verified' => true,
         ]);
            
