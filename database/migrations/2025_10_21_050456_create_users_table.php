@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique();
             $table->string('password');
-            $table->enum('role',['customer','tasker','admin'])->default('customer')->index();
             $table->string('avatar')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->string('location')->nullable(); //need to add point type, i will do that later($table->point('location')->nullable();)
