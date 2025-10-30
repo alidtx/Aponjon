@@ -14,6 +14,25 @@ Route::get('/', function () {
     ]);
 });
 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('admin', function(){
+        return 'admin';
+    });
+});
+
+Route::middleware(['auth', 'role:customer','verified'])->group(function () {
+    Route::get('customer', function(){
+        return 'customer';
+    });
+});
+
+Route::middleware(['auth', 'role:tasker','verified'])->group(function () {
+    Route::get('tasker', function(){
+        return 'tasker';
+    });
+});
+
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
