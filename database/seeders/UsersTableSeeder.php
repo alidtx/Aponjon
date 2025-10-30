@@ -14,6 +14,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'admin@gmail.com',
             'phone' => '+8801000000001',
+            'role' => 'admin',
             'is_verified' => true,
         ]);
            
