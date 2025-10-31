@@ -1,27 +1,22 @@
 <script setup>
-
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { Link } from '@inertiajs/vue3';
+import MenuItem from '@/Layouts/MenuItem.json';
 </script>
 
 
 <template>
-         <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                        <i class="fas fa-hands-helping text-white text-lg"></i>
-                    </div>
-                    <span class="text-xl font-bold text-dark">Shei<span class="text-primary">Shohoj</span></span>
-                </div>
-
+                <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="text-dark hover:text-primary font-medium">হোম</a>
-                    <a href="#services" class="text-dark hover:text-primary font-medium">সেবাসমূহ</a>
-                    <a href="#how-it-works" class="text-dark hover:text-primary font-medium">কিভাবে কাজ করে</a>
-                    <a href="#taskers" class="text-dark hover:text-primary font-medium">টাস্কার</a>
-                    <a href="#about" class="text-dark hover:text-primary font-medium">আমাদের সম্পর্কে</a>
+                    <a v-for="(item, index) in MenuItem.HomeMenus" :key="index" :href="item.href"
+                        class="text-dark hover:text-primary font-medium">
+                        {{ item.name }}
+                    </a>
                 </div>
 
                 <!-- Auth Buttons -->
