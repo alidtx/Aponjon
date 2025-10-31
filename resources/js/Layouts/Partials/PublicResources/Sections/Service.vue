@@ -16,7 +16,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Service Card 1 -->
                 <div class="bg-light rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200">
                     <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-tools text-white text-2xl"></i>
@@ -27,8 +26,6 @@
                         বিস্তারিত দেখুন <i class="fas fa-arrow-left ml-2 transform rotate-180"></i>
                     </a>
                 </div>
-
-                <!-- Service Card 2 -->
                 <div class="bg-light rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200">
                     <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-broom text-white text-2xl"></i>
@@ -39,8 +36,6 @@
                         বিস্তারিত দেখুন <i class="fas fa-arrow-left ml-2 transform rotate-180"></i>
                     </a>
                 </div>
-
-                <!-- Service Card 3 -->
                 <div class="bg-light rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200">
                     <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-truck-loading text-white text-2xl"></i>

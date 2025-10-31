@@ -2,8 +2,6 @@
 
 </script>
 
-
-
 <template>
   <section id="home" class="hero-bg text-white py-20">
         <div class="max-w-7xl mx-auto px-4 text-center">
@@ -11,8 +9,6 @@
             <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
                 বাংলাদেশের প্রথম হাইপারলোকাল টাস্ক ও এর্যান্ড সার্ভিস। আপনার দৈনন্দিন কাজগুলো আমরা করিয়ে দেব সহজেই।
             </p>
-            
-            <!-- Search/Service Selection -->
             <div class="bg-white rounded-xl p-6 shadow-2xl max-w-4xl mx-auto">
                 <div class="flex flex-col md:flex-row gap-4">
                     <div class="flex-1">
