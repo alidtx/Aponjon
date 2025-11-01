@@ -27,7 +27,7 @@ provide('siteConfig', props.siteConfig)
 
 
 <template>
-            <Head title="Home-page"/>
+            <Head title="হোম"/>
             <PublicDefaultLayout
             :canLogin="canLogin"
             :canRegister="canRegister"
