@@ -13,6 +13,7 @@ class HomeController extends Controller
         return Inertia::render('PublicResources/Home', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
+            'siteConfig' => config('aponjon.siteConfig'),
         ]);
     }
 }

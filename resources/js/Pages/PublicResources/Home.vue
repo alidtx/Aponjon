@@ -6,15 +6,21 @@ import Service from '@/Layouts/Partials/PublicResources/Sections/Service.vue';
 import HowItWork from '@/Layouts/Partials/PublicResources/Sections/HowItWork.vue';
 import TaskerRegistration from '@/Layouts/Partials/PublicResources/Sections/TaskerRegistration.vue';
 import Testimonial from '@/Layouts/Partials/PublicResources/Sections/Testimonials.vue';
+import { provide } from 'vue'
 
-defineProps({
+const props = defineProps({
     canLogin: {
         type: Boolean,
     },
     canRegister: {
         type: Boolean,
+    },
+    siteConfig:{
+      type:Object,
     }
 });
+
+provide('siteConfig', props.siteConfig)
 
 </script>
 
