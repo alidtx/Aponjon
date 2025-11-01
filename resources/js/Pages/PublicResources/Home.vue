@@ -21,7 +21,7 @@ defineProps({
 
 
 <template>
-            <Head title="Home" />
+            <Head title="Home-page"/>
             <PublicDefaultLayout
             :canLogin="canLogin"
             :canRegister="canRegister"
