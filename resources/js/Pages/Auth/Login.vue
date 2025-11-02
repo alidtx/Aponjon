@@ -41,13 +41,14 @@ const togglePasswordVisibility = () => {
     <GuestLayout>
 
         <Head title="লগইন" />
-        <div class="text-center mb-8">
+        <div class="text-center">
             <div class="flex items-center justify-center space-x-2 mb-4">
                 <Link :href="route('home')">
                 <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                 </Link>
             </div>
             <h1 class="text-3xl font-bold text-dark">আপনার অ্যাকাউন্টে লগইন করুন</h1>
+            </div>
 
             <div class="bg-white rounded-xl shadow-md p-6">
                 <form @submit.prevent="submit">
@@ -99,7 +100,7 @@ const togglePasswordVisibility = () => {
                     </p>
                 </div>
             </div>
-        </div>
+        
 
         <div class="mt-6">
             <div class="relative">
