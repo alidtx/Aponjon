@@ -19,7 +19,7 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
+    identifier: '',
     password: '',
     remember: false,
 });
@@ -41,6 +41,9 @@ const togglePasswordVisibility = () => {
     <GuestLayout>
 
         <Head title="লগইন" />
+        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+            {{ status }}
+        </div>
         <div class="text-center mb-2">
             <div class="flex items-center justify-center space-x-2 mb-4">
                 <Link :href="route('home')">
@@ -48,59 +51,58 @@ const togglePasswordVisibility = () => {
                 </Link>
             </div>
             <h1 class="text-3xl font-bold text-dark">আপনার অ্যাকাউন্টে লগইন করুন</h1>
-            </div>
+        </div>
 
-            <div class="bg-white rounded-xl shadow-md p-6">
-                <form @submit.prevent="submit">
-                    <div class="mb-4">
-                        <InputLabel for="email" value="মোবাইল নম্বর বা ইমেইল" required />
-                        <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required
-                            placeholder="01XXXXXXXXX বা your@email.com" autofocus autocomplete="username" />
-                        <InputError class="mt-2" :message="form.errors.email" />
-                    </div>
-
-                    <div class="mb-4">
-                        <InputLabel for="password" value="পাসওয়ার্ড" required />
-                        <div class="relative">
-                            <TextInput id="password" :type="showPassword ? 'text' : 'password'"
-                                class="mt-1 block w-full pr-10" v-model="form.password" required
-                                autocomplete="current-password" />
-                            <button type="button" @click="togglePasswordVisibility"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center mt-1">
-                                <i :class="showPassword ? 'far fa-eye-slash text-gray-600' : 'far fa-eye text-gray-400'"
-                                    class="transition-colors duration-200"></i>
-                            </button>
-                        </div>
-                        <InputError class="mt-2" :message="form.errors.password" />
-                    </div>
-
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center">
-                            <label class="flex items-center">
-                                <Checkbox name="remember" v-model:checked="form.remember" />
-                                <span class="ms-2 text-sm text-gray-600">আমাকে মনে রাখুন</span>
-                            </label>
-                        </div>
-                        <Link v-if="canResetPassword" :href="route('password.request')"
-                            class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        পাসওয়ার্ড ভুলে গেছেন?
-                        </Link>
-                    </div>
-
-                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        লগইন করুন
-                    </PrimaryButton>
-                </form>
-
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <p class="text-gray-600 text-center">অ্যাকাউন্ট নেই?
-                        <Link :href="route('register')" class="text-primary font-medium hover:underline">
-                        একটি অ্যাকাউন্ট তৈরি করুন
-                        </Link>
-                    </p>
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <form @submit.prevent="submit">
+                <div class="mb-4">
+                    <InputLabel for="email" value="মোবাইল নম্বর বা ইমেইল" required />
+                    <TextInput id="email" type="text" class="mt-1 block w-full" v-model="form.identifier"
+                        placeholder="01XXXXXXXXX বা your@email.com" autofocus autocomplete="username" />
+                    <InputError class="mt-2" :message="form.errors.identifier" />
                 </div>
+
+                <div class="mb-4">
+                    <InputLabel for="password" value="পাসওয়ার্ড" required />
+                    <div class="relative">
+                        <TextInput id="password" :type="showPassword ? 'text' : 'password'"
+                            class="mt-1 block w-full pr-10" v-model="form.password" autocomplete="current-password" />
+                        <button type="button" @click="togglePasswordVisibility"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center mt-1">
+                            <i :class="showPassword ? 'far fa-eye-slash text-gray-600' : 'far fa-eye text-gray-400'"
+                                class="transition-colors duration-200"></i>
+                        </button>
+                    </div>
+                    <InputError class="mt-2" :message="form.errors.password" />
+                </div>
+
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <label class="flex items-center">
+                            <Checkbox name="remember" v-model:checked="form.remember" />
+                            <span class="ms-2 text-sm text-gray-600">আমাকে মনে রাখুন</span>
+                        </label>
+                    </div>
+                    <Link v-if="canResetPassword" :href="route('password.request')"
+                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    পাসওয়ার্ড ভুলে গেছেন?
+                    </Link>
+                </div>
+
+                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    লগইন করুন
+                </PrimaryButton>
+            </form>
+
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <p class="text-gray-600 text-center">অ্যাকাউন্ট নেই?
+                    <Link :href="route('register')" class="text-primary font-medium hover:underline">
+                    একটি অ্যাকাউন্ট তৈরি করুন
+                    </Link>
+                </p>
             </div>
-        
+        </div>
+
 
         <div class="mt-6">
             <div class="relative">
