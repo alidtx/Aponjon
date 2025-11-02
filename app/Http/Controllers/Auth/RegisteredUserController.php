@@ -7,10 +7,8 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,7 +29,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : null,
             'phone' => !filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : null,
-            'role' => $request->role ?? 'user',
+            'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
 
