@@ -86,4 +86,12 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->string('identifier')).'|'.$this->ip());
     }
+
+    public function messages(): array
+    {
+        return [
+            'identifier.required' => 'অনুগ্রহ করে ইমেইল বা ফোন নম্বর লিখুন।',
+            'password.required' => 'অনুগ্রহ করে পাসওয়ার্ড লিখুন',
+        ];
+    }
 }
