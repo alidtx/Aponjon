@@ -10,7 +10,7 @@ import { ref } from 'vue';
 
 const form = useForm({
     name: '',
-    email: '',
+    identifier: '',
     password: '',
     password_confirmation: '',
     role: '', 
@@ -134,30 +134,30 @@ const submit = () => {
                 <input type="hidden" v-model="form.role">
 
                 <div class="mb-4">
-                    <InputLabel for="name" value="পূর্ণ নাম *" />
-                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus
+                    <InputLabel for="name" value="পূর্ণ নাম" required/>
+                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name"  autofocus
                         autocomplete="name" />
                     <InputError class="mt-2" :message="form.errors.name" />
                 </div>
 
                 <div class="mb-4">
-                    <InputLabel for="email" value="ইমেইল" />
-                    <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email"
-                        autocomplete="username" />
-                    <InputError class="mt-2" :message="form.errors.email" />
+                    <InputLabel for="email" value="মোবাইল নম্বর বা ইমেইল " required/>
+                    <TextInput id="email" type="text" class="mt-1 block w-full" v-model="form.identifier"
+                        autocomplete="username"  />
+                    <InputError class="mt-2" :message="form.errors.identifier" />
                 </div>
 
                 <div class="mb-4">
-                    <InputLabel for="password" value="পাসওয়ার্ড *" />
-                    <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required
+                    <InputLabel for="password" value="পাসওয়ার্ড" required/>
+                    <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" 
                         autocomplete="new-password" />
                     <InputError class="mt-2" :message="form.errors.password" />
                 </div>
 
                 <div class="mb-6">
-                    <InputLabel for="password_confirmation" value="পাসওয়ার্ড নিশ্চিত করুন *" />
+                    <InputLabel for="password_confirmation" value="পাসওয়ার্ড নিশ্চিত করুন" required/>
                     <TextInput id="password_confirmation" type="password" class="mt-1 block w-full"
-                        v-model="form.password_confirmation" required autocomplete="new-password" />
+                        v-model="form.password_confirmation"  autocomplete="new-password" />
                     <InputError class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
 
