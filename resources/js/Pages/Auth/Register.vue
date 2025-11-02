@@ -6,13 +6,24 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { ref } from 'vue';
 
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    role: '', 
 });
+
+const showRegistrationForm = ref(false); 
+const selectedRole = ref(''); 
+
+const FormRoleToggle = (role) => {
+    showRegistrationForm.value = true;
+    selectedRole.value = role;
+    form.role = role; 
+};
 
 const submit = () => {
     form.post(route('register'), {
@@ -23,20 +34,21 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-
         <Head title="রেজিস্টার" />
         <div class="text-center mb-2">
             <div class="flex items-center justify-center space-x-2 mb-4">
                 <Link :href="route('home')">
-                <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
+                    <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                 </Link>
             </div>
             <h1 class="text-3xl font-bold text-dark">একটি অ্যাকাউন্ট তৈরি করুন</h1>
             <p class="text-gray-600 mt-2">আপনি কীভাবে <span class="text-dark">আপ</span><span
                     class="text-primary">জন</span> ব্যবহার করতে চান?</p>
         </div>
-        <div class="grid grid-cols-1 gap-4 mb-8">
-            <div
+
+        
+        <div v-if="!showRegistrationForm" class="grid grid-cols-1 gap-4 mb-8">
+            <div @click="FormRoleToggle('customer')"
                 class="role-card border-2 border-gray-200 rounded-xl p-6 hover:border-primary cursor-pointer transition-all bg-white">
                 <div class="flex items-start">
                     <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
@@ -62,7 +74,7 @@ const submit = () => {
                     </div>
                 </div>
             </div>
-            <div
+            <div @click="FormRoleToggle('tasker')"
                 class="role-card border-2 border-gray-200 rounded-xl p-6 hover:border-primary cursor-pointer transition-all bg-white">
                 <div class="flex items-start">
                     <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mr-4">
@@ -89,48 +101,76 @@ const submit = () => {
                 </div>
             </div>
         </div>
-        <div id="registrationForm" class="hidden bg-white rounded-xl shadow-md p-6">
-            <form id="unifiedRegistration">
-                <input type="hidden" id="userRole" name="role" value="">
+
+
+        <div v-if="showRegistrationForm" class="bg-white rounded-xl shadow-md p-6">
+            
+            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
+                            :class="selectedRole === 'customer' ? 'bg-primary' : 'bg-accent'">
+                            <i class="fas text-white text-sm"
+                                :class="selectedRole === 'customer' ? 'fa-user' : 'fa-tools'"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-dark">
+                                {{ selectedRole === 'customer' ? 'সেবা নিন' : 'টাস্কার হোন' }}
+                            </h3>
+                            <p class="text-sm text-gray-600">
+                                {{ selectedRole === 'customer' ? 'আপনি সেবা গ্রহণকারী হিসেবে রেজিস্টার করছেন' : 'আপনি টাস্কার হিসেবে রেজিস্টার করছেন' }}
+                            </p>
+                        </div>
+                    </div>
+                    <button @click="showRegistrationForm = false; selectedRole = ''; form.role = '';"
+                        class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <form @submit.prevent="submit">
+                
+                <input type="hidden" v-model="form.role">
 
                 <div class="mb-4">
-                    <label class="block text-dark font-medium mb-2">পূর্ণ নাম <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" name="name"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" required>
+                    <InputLabel for="name" value="পূর্ণ নাম *" />
+                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus
+                        autocomplete="name" />
+                    <InputError class="mt-2" :message="form.errors.name" />
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-dark font-medium mb-2">মোবাইল নম্বর <span
-                            class="text-red-500">*</span></label>
-                    <input type="tel" name="phone"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
-                        placeholder="01XXXXXXXXX" required>
+                    <InputLabel for="email" value="ইমেইল" />
+                    <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email"
+                        autocomplete="username" />
+                    <InputError class="mt-2" :message="form.errors.email" />
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-dark font-medium mb-2">ইমেইল (ঐচ্ছিক)</label>
-                    <input type="email" name="email"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
-                        placeholder="your@email.com">
+                    <InputLabel for="password" value="পাসওয়ার্ড *" />
+                    <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required
+                        autocomplete="new-password" />
+                    <InputError class="mt-2" :message="form.errors.password" />
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-dark font-medium mb-2">পাসওয়ার্ড <span
-                            class="text-red-500">*</span></label>
-                    <input type="password" name="password"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary" required>
+                    <InputLabel for="password_confirmation" value="পাসওয়ার্ড নিশ্চিত করুন *" />
+                    <TextInput id="password_confirmation" type="password" class="mt-1 block w-full"
+                        v-model="form.password_confirmation" required autocomplete="new-password" />
+                    <InputError class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
 
-                <button type="submit"
-                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium">
-                    অ্যাকাউন্ট তৈরি করুন
-                </button>
+                <div class="flex items-center justify-end mt-4">
+                    <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                        অ্যাকাউন্ট তৈরি করুন
+                    </PrimaryButton>
+                </div>
             </form>
 
             <div class="mt-4 text-center">
                 <p class="text-gray-600">ইতিমধ্যে অ্যাকাউন্ট আছে?
-                    <a href="login.html" class="text-primary font-medium">লগইন করুন</a>
+                    <Link :href="route('login')" class="text-primary font-medium">লগইন করুন</Link>
                 </p>
             </div>
         </div>
