@@ -1,6 +1,13 @@
 <?php
 
 return [
+
+    'static_data' => [
+        'max_login_attempts' => env('MAX_LOGIN_ATTEMPTS', 3),
+        'login_attempt_timeout_in_minutes' => env('LOGIN_ATTEMPT_TIMEOUT_IN_MINUTES', 30),
+        'otp_expiry_time_in_minutes' => env('OTP_EXPIRY_TIME_IN_MINUTES', 2),
+    ],
+
   'siteConfig' => [
     'name' => env('APONJON_FULL_NAME', 'আপনজন'),
     'address' => [
