@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Otp;
 
 class User extends Authenticatable
 {
@@ -104,10 +105,15 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-   public function isVerified(): bool
-{
-    return $this->is_verified === true;
-}
+    public function isVerified(): bool
+    {
+        return $this->is_verified === true;
+    }
+
+    public function latestOtp()
+    {
+        return $this->hasOne(Otp::class)->latestOfMany();
+    }
 
     public function getFullAddressAttribute(): string
     {
