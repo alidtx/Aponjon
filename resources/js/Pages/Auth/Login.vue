@@ -58,7 +58,7 @@ const togglePasswordVisibility = () => {
                 <div class="mb-4">
                     <InputLabel for="email" value="মোবাইল নম্বর বা ইমেইল" required />
                     <TextInput id="email" type="text" class="mt-1 block w-full" v-model="form.identifier"
-                        placeholder="01XXXXXXXXX বা your@email.com" autofocus autocomplete="username" />
+                        placeholder="01xxxxxxxxx or your@example.com" autofocus autocomplete="username" />
                     <InputError class="mt-2" :message="form.errors.identifier" />
                 </div>
 
@@ -68,7 +68,7 @@ const togglePasswordVisibility = () => {
                         <TextInput id="password" :type="showPassword ? 'text' : 'password'"
                             class="mt-1 block w-full pr-10" v-model="form.password" autocomplete="current-password" />
                         <button type="button" @click="togglePasswordVisibility"
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center mt-1">
+                            class="absolute text-sm inset-y-0 right-0 pr-3 flex items-center mt-1">
                             <i :class="showPassword ? 'far fa-eye-slash text-gray-600' : 'far fa-eye text-gray-400'"
                                 class="transition-colors duration-200"></i>
                         </button>
@@ -104,7 +104,7 @@ const togglePasswordVisibility = () => {
         </div>
 
 
-        <div class="mt-6">
+        <!-- <div class="mt-6">
             <div class="relative">
                 <div class="absolute inset-0 flex items-center">
                     <div class="w-full border-t border-gray-300"></div>
@@ -126,7 +126,7 @@ const togglePasswordVisibility = () => {
                     <span class="ml-2">ফেসবুক</span>
                 </button>
             </div>
-        </div>
+        </div> -->
     </GuestLayout>
 </template>
 

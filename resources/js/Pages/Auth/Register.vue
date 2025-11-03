@@ -141,9 +141,9 @@ const submit = () => {
                 </div>
 
                 <div class="mb-4">
-                    <InputLabel for="email" value="মোবাইল নম্বর বা ইমেইল " required/>
+                    <InputLabel for="email or phone" value="মোবাইল নম্বর বা ইমেইল " required/>
                     <TextInput id="email" type="text" class="mt-1 block w-full" v-model="form.identifier"
-                        autocomplete="username"  />
+                        autocomplete="username" placeholder="01xxxxxxxxx or your@example.com"/>
                     <InputError class="mt-2" :message="form.errors.identifier" />
                 </div>
 
