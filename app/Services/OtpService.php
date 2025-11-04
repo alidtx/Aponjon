@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Random\RandomException;
+use Illuminate\Support\Facades\Log;
 
 class OtpService
 {
@@ -16,11 +17,10 @@ class OtpService
     public static function generate($value): Otp|Model|null
     {
         $otp = random_int(100000, 999999);
-
         $user = User::query()
             ->where(function ($query) use ($value) {
                 $query->where('email', $value)
-                    ->orWhere('mobile', $value);
+                    ->orWhere('phone', $value);
             })
             ->first();
         if (! $user) {
@@ -46,8 +46,8 @@ class OtpService
         
     }
 
-    public static function sendOtp(string $mobile, string $otp)
+    public static function sendOtp(string $phone, string $otp)
     {
-        
+        Log::info("OTP sent to phone:".$phone.''.$otp);
     }
 }
