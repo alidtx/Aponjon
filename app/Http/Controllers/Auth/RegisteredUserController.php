@@ -10,7 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
-
+use Illuminate\Support\Facades\Session;
 class RegisteredUserController extends Controller
 {
    
@@ -25,11 +25,13 @@ class RegisteredUserController extends Controller
         
         $user=UserService::register($request);
 
+        Session::put('otp_verified_user_id', $user->id);
+
+        // Session::put('otp_identifier', $user->phone ?? $user->email);
+        
         UserRegistered::dispatch($user);
         event(new Registered($user));
-
-        // Auth::login($user);
-
-        return redirect()->route('dashboard');
+        
+        return redirect()->route('otp.verify');
     }
 }
