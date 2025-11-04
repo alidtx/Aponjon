@@ -2,8 +2,7 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref, onMounted, onUnmounted } from 'vue';
-
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 
 const otpInputs = ref([]);
 const countdown = ref('02:00');
@@ -11,16 +10,21 @@ const showResendButton = ref(false);
 const timer = ref(null);
 const timeLeft = ref(2 * 60);
 
+const form = useForm({
+    otp: '',
+});
+
+watch(otpInputs, (newVal) => {
+  form.otp = newVal.map(input => input?.value || '').join('')
+})
 
 const handleInput = (event, index) => {
     const value = event.target.value;
-
 
     if (!/^\d*$/.test(value)) {
         event.target.value = '';
         return;
     }
-
 
     if (value.length === 1 && index < otpInputs.value.length - 1) {
         otpInputs.value[index + 1].focus();
@@ -28,7 +32,6 @@ const handleInput = (event, index) => {
 };
 
 const handleKeydown = (event, index) => {
-
     if (event.key === 'Backspace' && !event.target.value && index > 0) {
         otpInputs.value[index - 1].focus();
     }
@@ -47,7 +50,6 @@ const handlePaste = (event) => {
         otpInputs.value[otpInputs.value.length - 1].focus();
     }
 };
-
 
 const startCountdown = () => {
     showResendButton.value = false;
@@ -75,16 +77,27 @@ const resendOTP = () => {
 };
 
 const submitOTP = () => {
-    const otp = otpInputs.value.map(input => input.value).join('');
+    const otp = otpInputs.value.map(input => input?.value || '').join('');
 
     if (otp.length === 6) {
-        console.log('OTP submitted:', otp);
+        form.otp = otp;
+        form.post(route('otp.verify.submit'), {
+            onSuccess: () => {
+                // Success handled by Laravel redirect
+            },
+            onError: (errors) => {
+                // Clear OTP fields on error
+                otpInputs.value.forEach(input => {
+                    if (input) input.value = '';
+                });
+                otpInputs.value[0]?.focus();
+            }
+        });
     }
 };
 
-
 onMounted(() => {
-    otpInputs.value = document.querySelectorAll('#otpForm input[type="text"]');
+    otpInputs.value = Array.from(document.querySelectorAll('#otpForm input[type="text"]'));
     startCountdown();
 });
 
