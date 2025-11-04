@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Models\User;
+use App\Services\OtpService;
+use App\Services\UserService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -23,19 +25,12 @@ class RegisteredUserController extends Controller
    
     public function store(RegisterUserRequest $request): RedirectResponse
     {
-       $identifier = $request->input('identifier');
         
-         $user = User::create([
-            'name' => $request->name,
-            'email' => filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : null,
-            'phone' => !filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : null,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
-        ]);
-
+        $user=UserService::register($request);
         event(new Registered($user));
 
-        Auth::login($user);
+
+        // Auth::login($user);
 
         return redirect()->route('dashboard');
     }
