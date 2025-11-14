@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Request;
 
 class OtpVerificationController extends Controller
 {
@@ -26,7 +27,7 @@ class OtpVerificationController extends Controller
 
   }
 
-  public function verify(OtpRequest $request)
+  public function verify(Request $request)
   {
 
     $userId = Session::get('otp_verified_user_id'); //user id
