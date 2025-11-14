@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 
 const otpInputs = ref([]);
+
 const countdown = ref('02:00');
 const showResendButton = ref(false);
 const timer = ref(null);
@@ -15,8 +16,12 @@ const form = useForm({
 });
 
 watch(otpInputs, (newVal) => {
-  form.otp = newVal.map(input => input?.value || '').join('')
+    form.otp = newVal.map(input => input?.value || '').join('')
 })
+
+const isOtpCompleted = computed(() => {
+     return otpInputs.value.length === 6 && /^\d+$/.test(otpInputs.value)
+});
 
 const handleInput = (event, index) => {
     const value = event.target.value;
@@ -78,22 +83,17 @@ const resendOTP = () => {
 
 const submitOTP = () => {
     const otp = otpInputs.value.map(input => input?.value || '').join('');
-
-    if (otp.length === 6) {
-        form.otp = otp;
-        form.post(route('otp.verify.submit'), {
-            onSuccess: () => {
-                // Success handled by Laravel redirect
-            },
-            onError: (errors) => {
-                // Clear OTP fields on error
-                otpInputs.value.forEach(input => {
-                    if (input) input.value = '';
-                });
+    form.otp = otp;
+    form.post(route('otp.verify.submit'), {
+        onSuccess: () => {
+            // Success handled by Laravel redirect
+        },
+        onError: (errors) => {
+            otpInputs.value.forEach(input => {
                 otpInputs.value[0]?.focus();
-            }
-        });
-    }
+            });
+        }
+    });
 };
 
 onMounted(() => {
@@ -140,6 +140,9 @@ onUnmounted(() => {
                             @input="(e) => handleInput(e, index - 1)" @keydown="(e) => handleKeydown(e, index - 1)"
                             @paste="handlePaste" />
                     </div>
+                    <p class="error text-center text-red-500 py-2">
+                        {{ form.errors.otp }}
+                    </p>
                 </div>
 
                 <div class="mb-6 text-center">
@@ -152,7 +155,7 @@ onUnmounted(() => {
                     </button>
                 </div>
 
-                <button type="submit"
+                <button type="submit" :disabled="!isOtpCompleted"
                     class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium transition duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                     যাচাই করুন
                 </button>
