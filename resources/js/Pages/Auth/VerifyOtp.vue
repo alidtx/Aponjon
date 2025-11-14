@@ -4,8 +4,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 
-const otpInputs = ref([]);
-
+const otpValues = ref(Array(6).fill('')); 
 const countdown = ref('02:00');
 const showResendButton = ref(false);
 const timer = ref(null);
@@ -15,30 +14,38 @@ const form = useForm({
     otp: '',
 });
 
-watch(otpInputs, (newVal) => {
-    form.otp = newVal.map(input => input?.value || '').join('')
-})
+watch(otpValues, (newVal) => {
+    form.otp = newVal.join('');
+}, { deep: true });
 
 const isOtpCompleted = computed(() => {
-     return otpInputs.value.length === 6 && /^\d+$/.test(otpInputs.value)
+    return otpValues.value.every(digit => digit !== '') && 
+           otpValues.value.join('').length === 6;
 });
 
 const handleInput = (event, index) => {
     const value = event.target.value;
 
+    // Only allow numbers
     if (!/^\d*$/.test(value)) {
-        event.target.value = '';
+        otpValues.value[index] = '';
         return;
     }
 
-    if (value.length === 1 && index < otpInputs.value.length - 1) {
-        otpInputs.value[index + 1].focus();
+    // Update the value
+    otpValues.value[index] = value;
+
+    // Auto-focus next input
+    if (value.length === 1 && index < 5) {
+        const nextInput = document.querySelector(`#otp-${index + 1}`);
+        if (nextInput) nextInput.focus();
     }
 };
 
 const handleKeydown = (event, index) => {
-    if (event.key === 'Backspace' && !event.target.value && index > 0) {
-        otpInputs.value[index - 1].focus();
+    if (event.key === 'Backspace' && !otpValues.value[index] && index > 0) {
+        const prevInput = document.querySelector(`#otp-${index - 1}`);
+        if (prevInput) prevInput.focus();
     }
 };
 
@@ -46,13 +53,18 @@ const handlePaste = (event) => {
     event.preventDefault();
     const pasteData = event.clipboardData.getData('text').trim();
 
-    if (pasteData.length === otpInputs.value.length && /^\d+$/.test(pasteData)) {
-        pasteData.split('').forEach((char, index) => {
-            if (otpInputs.value[index]) {
-                otpInputs.value[index].value = char;
-            }
+    if (pasteData.length === 6 && /^\d+$/.test(pasteData)) {
+        // Update the reactive array directly
+        const digits = pasteData.split('');
+        digits.forEach((char, index) => {
+            otpValues.value[index] = char;
         });
-        otpInputs.value[otpInputs.value.length - 1].focus();
+        
+        // Focus last input after a small delay to ensure DOM is updated
+        setTimeout(() => {
+            const lastInput = document.querySelector('#otp-5');
+            if (lastInput) lastInput.focus();
+        }, 10);
     }
 };
 
@@ -78,26 +90,31 @@ const startCountdown = () => {
 };
 
 const resendOTP = () => {
+    // Clear OTP values when resending
+    otpValues.value = Array(6).fill('');
     startCountdown();
+    
+    // Focus first input
+    const firstInput = document.querySelector('#otp-0');
+    if (firstInput) firstInput.focus();
 };
 
 const submitOTP = () => {
-    const otp = otpInputs.value.map(input => input?.value || '').join('');
-    form.otp = otp;
+    form.otp = otpValues.value.join('');
     form.post(route('otp.verify.submit'), {
         onSuccess: () => {
             // Success handled by Laravel redirect
         },
         onError: (errors) => {
-            otpInputs.value.forEach(input => {
-                otpInputs.value[0]?.focus();
-            });
+            // Clear OTP on error and focus first input
+            otpValues.value = Array(6).fill('');
+            const firstInput = document.querySelector('#otp-0');
+            if (firstInput) firstInput.focus();
         }
     });
 };
 
 onMounted(() => {
-    otpInputs.value = Array.from(document.querySelectorAll('#otpForm input[type="text"]'));
     startCountdown();
 });
 
@@ -135,10 +152,18 @@ onUnmounted(() => {
                 <div class="mb-6">
                     <label class="block text-dark font-medium mb-3 text-center">৬-সংখ্যার ওটিপি কোড</label>
                     <div class="flex justify-between space-x-2 px-4">
-                        <input v-for="index in 6" :key="index" ref="otpInputs" type="text" maxlength="1"
+                        <input 
+                            v-for="(digit, index) in otpValues" 
+                            :key="index" 
+                            :id="`otp-${index}`"
+                            v-model="otpValues[index]"
+                            type="text" 
+                            maxlength="1"
                             class="w-full h-10 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-transparent transition-colors duration-200"
-                            @input="(e) => handleInput(e, index - 1)" @keydown="(e) => handleKeydown(e, index - 1)"
-                            @paste="handlePaste" />
+                            @input="(e) => handleInput(e, index)" 
+                            @keydown="(e) => handleKeydown(e, index)"
+                            @paste="handlePaste" 
+                        />
                     </div>
                     <p class="error text-center text-red-500 py-2">
                         {{ form.errors.otp }}
@@ -155,8 +180,11 @@ onUnmounted(() => {
                     </button>
                 </div>
 
-                <button type="submit" :disabled="!isOtpCompleted"
-                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium transition duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                <button 
+                    type="submit" 
+                    :disabled="!isOtpCompleted"
+                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium transition duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
                     যাচাই করুন
                 </button>
             </form>
