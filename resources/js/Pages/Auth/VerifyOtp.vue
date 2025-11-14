@@ -25,17 +25,11 @@ const isOtpCompleted = computed(() => {
 
 const handleInput = (event, index) => {
     const value = event.target.value;
-
-    // Only allow numbers
     if (!/^\d*$/.test(value)) {
         otpValues.value[index] = '';
         return;
     }
-
-    // Update the value
     otpValues.value[index] = value;
-
-    // Auto-focus next input
     if (value.length === 1 && index < 5) {
         const nextInput = document.querySelector(`#otp-${index + 1}`);
         if (nextInput) nextInput.focus();
@@ -52,19 +46,11 @@ const handleKeydown = (event, index) => {
 const handlePaste = (event) => {
     event.preventDefault();
     const pasteData = event.clipboardData.getData('text').trim();
-
     if (pasteData.length === 6 && /^\d+$/.test(pasteData)) {
-        // Update the reactive array directly
         const digits = pasteData.split('');
         digits.forEach((char, index) => {
             otpValues.value[index] = char;
         });
-        
-        // Focus last input after a small delay to ensure DOM is updated
-        setTimeout(() => {
-            const lastInput = document.querySelector('#otp-5');
-            if (lastInput) lastInput.focus();
-        }, 10);
     }
 };
 
@@ -90,11 +76,8 @@ const startCountdown = () => {
 };
 
 const resendOTP = () => {
-    // Clear OTP values when resending
     otpValues.value = Array(6).fill('');
     startCountdown();
-    
-    // Focus first input
     const firstInput = document.querySelector('#otp-0');
     if (firstInput) firstInput.focus();
 };
@@ -103,7 +86,7 @@ const submitOTP = () => {
     form.otp = otpValues.value.join('');
     form.post(route('otp.verify.submit'), {
         onSuccess: () => {
-            // Success handled by Laravel redirect
+            
         },
         onError: (errors) => {
             // Clear OTP on error and focus first input
