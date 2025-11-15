@@ -148,7 +148,7 @@ onUnmounted(() => {
                             @paste="handlePaste" 
                         />
                     </div>
-                    <p class="error text-center text-red-500 py-2">
+                    <p class="error text-center text-red-500 py-2 xl:text-sm">
                         {{ form.errors.otp }}
                     </p>
                 </div>
