@@ -45,12 +45,12 @@ public function messages(): array
 
     if (preg_match('/^\d+$/', $identifier)) {
         return $commonMessages + [
-            'identifier.required' => 'অনুগ্রহ করে ফোন নম্বর লিখুন।',
+            'identifier.required' => 'অনুগ্রহ করে বাংলাদেশী ফোন নাম্বার অথবা ইমেলটি লিখুন।',
             'identifier.unique' => 'এই ফোন নম্বর ইতিমধ্যেই নিবন্ধিত।',
         ];
     } else {
         return $commonMessages + [
-            'identifier.required' => 'অনুগ্রহ করে ইমেইল লিখুন।',
+            'identifier.required' => 'অনুগ্রহ করে বাংলাদেশী ফোন নাম্বার অথবা ইমেলটি লিখুন।',
             'identifier.email' => 'দয়া করে বৈধ ইমেইল ঠিকানা লিখুন।',
             'identifier.unique' => 'এই ইমেইল ইতিমধ্যেই নিবন্ধিত।',
         ];
