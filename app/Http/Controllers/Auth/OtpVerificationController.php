@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\OtpRequest;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Services\OtpService;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -17,14 +15,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OtpVerificationController extends Controller
 {
-  public function showVerificationForm()
-  {
+ public function showVerificationForm()
+{
 
-    if (!Session::has('otp_verified_user_id')) {
-          return redirect()->route('register');
-      }
-    return Inertia::render('Auth/VerifyOtp',);
-  }
+    $userId = Session::get('otp_verified_user_id');
+    
+    if (!$userId) {
+        return redirect()->route('register');
+    }
+
+    $user = User::find($userId);
+
+    if (!$user) {
+        Session::forget('otp_verified_user_id');
+        return redirect()->route('register');
+    }
+
+    return Inertia::render('Auth/VerifyOtp', [
+        'contact' => $user->phone ?? $user->email,
+    ]);
+
+}
+
 
   public function verify(Request $request)
   {

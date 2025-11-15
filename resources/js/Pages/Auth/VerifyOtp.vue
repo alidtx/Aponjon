@@ -1,4 +1,5 @@
 <script setup>
+import { usePage } from '@inertiajs/vue3';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
@@ -9,7 +10,8 @@ const countdown = ref('02:00');
 const showResendButton = ref(false);
 const timer = ref(null);
 const timeLeft = ref(2 * 60);
-
+const page = usePage();
+const contact = page.props.contact;
 const form = useForm({
     otp: '',
 });
@@ -127,7 +129,7 @@ onUnmounted(() => {
                     <i class="fas fa-mobile-alt text-4xl text-primary"></i>
                 </div>
                 <p class="text-gray-700">
-                    আমরা <span class="font-semibold">+8801XXXXXXXXX</span> নম্বরে একটি ওটিপি পাঠিয়েছি
+                    আমরা <span class="font-semibold">{{ contact }}</span> নম্বরে একটি ওটিপি পাঠিয়েছি
                 </p>
             </div>
 
