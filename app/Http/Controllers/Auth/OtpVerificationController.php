@@ -20,18 +20,16 @@ class OtpVerificationController extends Controller
   public function showVerificationForm()
   {
 
-    // if (!Session::has('otp_verified_user_id')) {
-    //       return redirect()->route('register');
-    //   }
-    return Inertia::render('Auth/VerifyOtp', );
-
+    if (!Session::has('otp_verified_user_id')) {
+          return redirect()->route('register');
+      }
+    return Inertia::render('Auth/VerifyOtp',);
   }
 
   public function verify(Request $request)
   {
 
     $userId = Session::get('otp_verified_user_id'); //user id
-    $userId = 74;
     $user = User::findOrFail($userId);
     $cacheKey = $user?->login_attempts_cache_key;
     $maxLoginAttempts = config('aponjon.static_data.max_login_attempts');
@@ -45,7 +43,6 @@ class OtpVerificationController extends Controller
       throw ValidationException::withMessages([
         'otp' => 'অনেকবার চেষ্টা করা হয়েছে। অনুগ্রহ করে ' . $loginAttemptTimeout . ' মিনিট পরে আবার চেষ্টা করুন।'
       ]);
-
     }
 
     if ($user->latestOtp?->code !== $request->otp) {
@@ -54,7 +51,11 @@ class OtpVerificationController extends Controller
         'otp' => 'ওটিপি সঠিক নয়! অনুগ্রহ করে আবার চেষ্টা করুন।',
       ]);
     }
+
+    $lastOtp = $user->latestOtp;
+
     if (Carbon::now()->greaterThan($user->latestOtp->expires_at)) {
+      $lastOtp->delete();
       throw ValidationException::withMessages([
         'otp' => 'ওটিপি মেয়াদোত্তীর্ণ হয়েছে! অনুগ্রহ করে নতুন ওটিপি কোড অনুরোধ করুন।',
       ]);
