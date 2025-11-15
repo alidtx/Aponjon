@@ -50,7 +50,6 @@ public function resend(Request $request)
    
   }
 
-
   public function verify(Request $request)
   {
 

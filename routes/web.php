@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
 use Illuminate\Foundation\Application;
@@ -24,9 +25,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:customer','verified'])->group(function () {
-    Route::get('customer', function(){
-        return 'customer';
-    });
+
+    Route::prefix('customer')->name('customer.')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
+    }); 
+
 });
 
 Route::middleware(['auth', 'role:tasker','verified'])->group(function () {
