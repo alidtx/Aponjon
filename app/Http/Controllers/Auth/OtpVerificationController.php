@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,18 @@ class OtpVerificationController extends Controller
     ]);
 
 }
+
+public function resend(Request $request)
+    
+  {
+  $userId = Session::get('otp_verified_user_id');
+   $user = User::find($userId);
+   UserRegistered::dispatch($user);  
+   throw ValidationException::withMessages([
+        'otp' => 'ওটিপিটি আবার পাটানো হয়েচে।',
+      ]);
+   
+  }
 
 
   public function verify(Request $request)

@@ -80,6 +80,11 @@ const startCountdown = () => {
 const resendOTP = () => {
     otpValues.value = Array(6).fill('');
     startCountdown();
+    form.post(route('otp.resend'),{
+       onSuccess: () => {
+            
+        },
+    })
     const firstInput = document.querySelector('#otp-0');
     if (firstInput) firstInput.focus();
 };
