@@ -1,4 +1,6 @@
 <script setup>
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { Link } from '@inertiajs/vue3';
 </script>
 
 
@@ -8,7 +10,9 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-2">
-                    <span class="text-xl font-bold text-dark">Shei<span class="text-primary">Shohoj</span></span>
+                    <Link :href="route('home')">
+                    <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
+                    </Link>
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="marketplace.html" class="text-dark hover:text-primary">টাস্কস</a>
