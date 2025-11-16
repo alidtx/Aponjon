@@ -2,11 +2,22 @@
 import { Head } from '@inertiajs/vue3'
 import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
 import SideBar from './Partials/SideBar.vue';
+
+ const props= defineProps({
+      user:{
+         type: Object,
+         required:true   
+      }
+ })
+
+
 </script>
 
 
 <template>
-    <CustomerDefaultLayout>
+    <CustomerDefaultLayout
+      :user="props.user"
+    >
         <Head title="হোম"/>
         <div class="max-w-6xl mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">

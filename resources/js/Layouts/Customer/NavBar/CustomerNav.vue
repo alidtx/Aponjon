@@ -1,6 +1,14 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
+
+
+ const props= defineProps({
+      user:{
+         type: Object,
+         required:true   
+      }
+ })
 </script>
 
 
@@ -21,9 +29,9 @@ import { Link } from '@inertiajs/vue3';
                     </a>
                     <div class="relative group">
                         <button class="flex items-center space-x-2">
-                            <img src="https://via.placeholder.com/40" alt="Profile" class="w-8 h-8 rounded-full">
-                            <span class="text-dark">রহিমা</span>
-                            <i class="fas fa-chevron-down text-sm"></i>
+                            <span class="text-dark">{{props.user?.data?.name}}</span>
+                            <img :src="props.user?.data?.avatar || '/img/avatars/avatar.png'" alt="User Avatar"
+                                class="w-8 h-8 rounded-full object-cover border border-gray-300" />
                         </button>
                     </div>
                 </div>

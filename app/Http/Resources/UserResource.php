@@ -17,8 +17,10 @@ class UserResource extends JsonResource
         return [
             'id'=>$this->id,
             'email'=>$this->email,
+            'name'=>$this->name,
             'phone'=>$this->phone,
-            'avatar'=>$this->type,
+            'role'=>$this->role,
+            'avatar'=>$this->avatar,
             'is_verified'=>true,
             'location'=>$this->location,
             'districts'=>new DistrictResource($this->whenLoaded('districts')),
