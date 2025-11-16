@@ -3,9 +3,13 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
 import MenuItem from '@/Layouts/MenuItem.json';
 
-defineProps({
+const props=defineProps({
   canLogin: Boolean,
-  canRegister: Boolean
+  canRegister: Boolean,
+  user:{
+      type:Object,
+      required:true
+    }
 });
 </script>
 
@@ -30,10 +34,10 @@ defineProps({
           <Link v-if="$page.props.auth.user" :href="route('dashboard')"
             class="flex items-center space-x-2 px-4 py-2 text-dark font-medium hover:text-primary rounded-md ring-1 ring-transparent transition">
 
-          <img :src="$page.props.auth.user.avatar || '/img/avatars/avatar.png'" alt="User Avatar"
+          <img :src="props.user.data.avatar" alt="User Avatar"
             class="w-8 h-8 rounded-full object-cover border border-gray-300" />
 
-          <span>আমার একাউন্ট</span>
+          <span>{{ props.user.data.name }}</span>
           </Link>
 
           <template v-else>

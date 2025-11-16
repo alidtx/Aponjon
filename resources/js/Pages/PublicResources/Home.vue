@@ -17,6 +17,10 @@ const props = defineProps({
     },
     siteConfig:{
       type:Object,
+    },
+    user:{
+      type:Object,
+      required:true
     }
 });
 
@@ -31,6 +35,7 @@ provide('siteConfig', props.siteConfig)
             <PublicDefaultLayout
             :canLogin="canLogin"
             :canRegister="canRegister"
+            :user="props.user"
             >
              <Hero/>   
              <Service/>   

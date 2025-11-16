@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'name'=>$this->name,
             'phone'=>$this->phone,
             'role'=>$this->role,
-            'avatar'=>$this->avatar,
+            'avatar' => $this->avatar ?: '/img/avatars/avatar.png',
             'is_verified'=>true,
             'location'=>$this->location,
             'districts'=>new DistrictResource($this->whenLoaded('districts')),
