@@ -30,7 +30,7 @@ import { Link } from '@inertiajs/vue3';
                     <div class="relative group">
                         <button class="flex items-center space-x-2">
                             <span class="text-dark">{{props.user?.data?.name}}</span>
-                            <img :src="props.user?.data?.avatar || '/img/avatars/avatar.png'" alt="User Avatar"
+                            <img :src="props.user?.data?.avatar" alt="User Avatar"
                                 class="w-8 h-8 rounded-full object-cover border border-gray-300" />
                         </button>
                     </div>
