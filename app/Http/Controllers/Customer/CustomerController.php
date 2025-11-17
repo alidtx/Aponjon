@@ -14,12 +14,13 @@ class CustomerController extends Controller
   public function index()
   {
     $customerId = auth()->user()->id;
-
+    // dd($customerId);
     $tasks = [
-      'active' => TaskService::getTaskByStatus('in_progress', $customerId, ['taskers']),
+      'active' => TaskService::getTaskByStatus('in_progress', $customerId, ['taskers', 'bids']),
       'completed' => TaskService::getTaskByStatus('completed', $customerId, ['taskers']),
       'cancelled' => TaskService::getTaskByStatus('cancelled', $customerId, ['taskers']),
     ];
+    // dd($tasks);
     return Inertia::render('Customer/Index', [
       'user' => new UserResource(auth()->user()),
       'tasks' => [

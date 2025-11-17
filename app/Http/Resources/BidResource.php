@@ -22,7 +22,7 @@ class BidResource extends JsonResource
             'proposal'        => $this->proposal,
             'estimated_hours' => $this->estimated_hours,
             'status'          => $this->status,
-            'task'   => new TaskResource($this->whenLoaded('task')),
+            'task'   => new TaskResource($this->whenLoaded('tasks')),
             'tasker' => new UserResource($this->whenLoaded('tasker')),
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),

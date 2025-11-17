@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -36,6 +37,9 @@ class Task extends Model
         return $this->belongsTo(User::class, 'tasker_id');
     }
 
+    public function bids() {
+        return $this->hasMany(Bid::class, 'task_id');
+    }
     public function services()
     {
         return $this->belongsTo(Service::class);
