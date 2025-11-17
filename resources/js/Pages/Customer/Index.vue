@@ -76,12 +76,15 @@ const getStatusInfo = (task) => {
 }
 
 const hasBids = (task) => {
-    return task.bids_count > 0 || (task.bids && task.bids.length > 0) || (task.taskers && task.taskers.length > 0)
+    return task.bid && Array.isArray(task.bid) && task.bid.length > 0
 }
 
-const getBidsCount = (task) => {
-    return task.bids_count || (task.bids ? task.bids.length : 0) || (task.taskers ? task.taskers.length : 0)
-}
+ const getBidsCount = (task) => {
+    if (task.bid && Array.isArray(task.bid)) {
+        return task.bid.length
+    }
+    return 0
+ }
 
 const formatDate = (dateString) => {
     if (!dateString) return null

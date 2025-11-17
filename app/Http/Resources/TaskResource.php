@@ -27,6 +27,7 @@ class TaskResource extends JsonResource
             'customer_notes'       => $this->customer_notes,
             'customer' => new UserResource($this->whenLoaded('customers')),
             'tasker'   => new UserResource($this->whenLoaded('taskers')),
+            'bid'   => BidResource::collection($this->whenLoaded('bids')), 
             'service'  => new ServiceResource($this->whenLoaded('services')),
             'district' => new DistrictResource($this->whenLoaded('districts')),
             'zila'     => new ZilaResource($this->whenLoaded('zilas')),
