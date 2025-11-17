@@ -4,7 +4,7 @@ import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
 import Tips from './Partials/SideBar/Tips.vue';
 import Pricing from './Partials/SideBar/Pricing.vue';
 import Informations from './Partials/SideBar/Informations.vue';
-import Slide from './Partials/Services.vue';
+import Services from './Partials/Services.vue';
 import PageTitle from './Partials/PageTitle.vue';
 </script>
 
@@ -25,7 +25,7 @@ import PageTitle from './Partials/PageTitle.vue';
                         <div class="bg-white rounded-lg shadow-md p-8">
                             <form id="serviceRequestForm">
                                 <!-- Service Selection -->
-                                <Slide />
+                                <Services/>
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
                                     <div class="space-y-6">
@@ -34,7 +34,7 @@ import PageTitle from './Partials/PageTitle.vue';
                                                     class="text-red-500">*</span></label>
                                             <input type="text"
                                                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                                placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" required>
+                                                placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" >
                                         </div>
                                         <div>
                                             <label class="block text-dark font-medium mb-2">বিস্তারিত বর্ণনা <span
