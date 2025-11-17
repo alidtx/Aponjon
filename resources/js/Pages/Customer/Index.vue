@@ -1,7 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/vue3'
 import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
-import SideBar from './Partials/SideBar.vue';
+import SideBar from './Partials/SideBar/SideBar.vue';
 import { ref, computed } from 'vue'
 
 const props = defineProps({

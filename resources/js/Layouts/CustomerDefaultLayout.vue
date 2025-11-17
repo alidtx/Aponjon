@@ -4,7 +4,8 @@ import CustomerNav from '@/Layouts/Customer/NavBar/CustomerNav.vue';
 const props = defineProps({
   user: {
     type: Object,
-    required: true
+    required: false,
+    default:null
   }
 })
 </script>

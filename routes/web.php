@@ -28,6 +28,7 @@ Route::middleware(['auth', 'role:customer','verified'])->group(function () {
 
     Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::get('create-gig', [CustomerController::class, 'createGig'])->name('create.gig');
     }); 
 
 });

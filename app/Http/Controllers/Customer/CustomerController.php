@@ -30,4 +30,11 @@ class CustomerController extends Controller
       ],
     ]);
   }
+  public function createGig()
+  {
+
+    return Inertia::render('Customer/CreateGig',[
+      
+    ]);
+  }
 }
