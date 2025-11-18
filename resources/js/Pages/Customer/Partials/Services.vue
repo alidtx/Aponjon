@@ -2,10 +2,10 @@
 import { ref, computed } from 'vue';
 
 const props = defineProps({
-  serviceCategories: {
-    type: Array,
-    default: () => []
-  }
+    serviceCategories: {
+        type: Array,
+        default: () => []
+    }
 })
 
 const services = computed(() => props.serviceCategories.data || [])
@@ -47,20 +47,24 @@ const selectService = (serviceId) => {
         <div class="relative">
             <div ref="scrollContainer" class="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth py-2"
                 style="scrollbar-width: none; -ms-overflow-style: none;">
-                <div v-for="service in services" :key="service.id" @click="selectService(service.id)" :class="[
-                    'service-option flex-shrink-0 w-48 border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md',
-                    selectedService === service.id
-                        ? 'border-primary bg-blue-50 shadow-md'
-                        : 'border-gray-200 hover:border-primary'
-                ]">
+                <div v-if="services.length > 0" v-for="service in services" :key="service.id"
+                    @click="selectService(service.id)" :class="[
+                        'service-option flex-shrink-0 w-48 border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md',
+                        selectedService === service.id
+                            ? 'border-primary bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-primary'
+                    ]">
                     <div class="flex flex-col items-center text-center">
                         <i :class="service.icon + ' text-2xl text-primary mb-3'"></i>
                         <h4 class="font-bold text-dark text-sm mb-1">{{ service.name }}</h4>
                     </div>
                 </div>
+                <div v-else class="flex-shrink-0 w-full text-center py-8 text-gray-500">
+                    কোনো সেবা পাওয়া যায়নি
+                </div>
             </div>
         </div>
-      <input type="hidden" name="selected_service" :value="selectedService">
+        <input type="hidden" name="selected_service" :value="selectedService">
     </div>
 </template>
 
