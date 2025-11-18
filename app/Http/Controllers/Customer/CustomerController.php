@@ -54,16 +54,18 @@ class CustomerController extends Controller
 
   public function createGig()
   {
-    $categories = Category::select('id', 'name')
+
+    $categories = Category::select('id', 'name', 'icon')
       ->where('is_active', true)
       ->get();
+
     return Inertia::render('Customer/CreateGig', [
+
       'districts' => DistrictResource::collection(District::select('id', 'name')->get()),
       'zilas' => ZilaResource::collection(Zila::select('id', 'name', 'district_id')->get()),
       'upozilas' => UpozilaResource::collection(Upozila::select('id', 'name', 'zila_id')->get()),
       'categories' => CategoryResource::collection($categories),
+      
     ]);
   }
-
-
 }

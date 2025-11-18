@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   serviceCategories: {
@@ -8,21 +8,7 @@ const props = defineProps({
   }
 })
 
-
-
-const services = ref([
-    { id: 1, name: 'ইলেকট্রিক কাজ', icon: 'fas fa-tools' },
-    { id: 2, name: 'প্লাম্বিং কাজ', icon: 'fas fa-faucet' },
-    { id: 3, name: 'ক্লিনিং সার্ভিস', icon: 'fas fa-broom'},
-    { id: 4, name: 'অ্যাসেম্বলি সার্ভিস', icon: 'fas fa-puzzle-piece'},
-    { id: 5, name: 'পেইন্টিং কাজ', icon: 'fas fa-paint-roller'},
-    { id: 6, name: 'এসি সার্ভিস', icon: 'fas fa-wind'},
-    { id: 7, name: 'কার্পেন্টারি', icon: 'fas fa-hammer'},
-    { id: 8, name: 'ইলেকট্রনিক্স', icon: 'fas fa-tv'},
-    { id: 9, name: 'গার্ডেনিং', icon: 'fas fa-leaf'},
-    { id: 10, name: 'মোবাইল রিপেয়ার', icon: 'fas fa-mobile-alt'}
-]);
-
+const services = computed(() => props.serviceCategories.data || [])
 const scrollContainer = ref(null);
 const selectedService = ref(null);
 const scrollLeft = () => {
