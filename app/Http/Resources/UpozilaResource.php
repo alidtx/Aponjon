@@ -16,11 +16,9 @@ class UpozilaResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'email'=>$this->name,
-            'phone'=>$this->slug,
+            'name'=>$this->name,
+            'slug'=>$this->slug,
             'zilas'=> new ZilaResource($this->whenLoaded('zillas')),
-            'tasks'=>new TaskResource($this->whenLoaded(relationship: 'tasks')),
-            'users'=> new UserResource($this->whenLoaded('users')),
              'created_at'=>$this->created_at?->toDateTimeString(),
              'updated_at'=>$this->updated_at?->toDateTimeString()
         ];

@@ -13,6 +13,25 @@ import Services from './Partials/Services.vue';
 import PageTitle from './Partials/PageTitle.vue';
 import { ref } from 'vue'
 
+const props = defineProps({
+  districts: {
+    type: Array,
+    default: () => []  
+  },
+  zilas: {
+    type: Array,
+    default: () => []
+  },
+  upozilas: {
+    type: Array,
+    default: () => []
+  },
+  categories: {
+    type: Array,
+    default: () => []
+  }
+})
+
 const selectedDivision = ref('')
 const selectedDistrict = ref('')
 const selectedUpazila = ref('')
@@ -49,7 +68,9 @@ const districts = [
                         <div class="bg-white rounded-lg shadow-md p-8">
                             <form id="serviceRequestForm" @submit.prevent="submit">
                                 <!-- Service Selection -->
-                                <Services />
+                                <Services 
+                                 :serviceCategories="props.categories"
+                                />
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
                                     <div class="space-y-6">

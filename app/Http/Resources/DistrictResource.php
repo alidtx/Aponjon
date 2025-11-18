@@ -17,11 +17,8 @@ class DistrictResource extends JsonResource
 
      return [
             'id'=>$this->id,
-            'email'=>$this->name,
-            'phone'=>$this->slug,
-            'zilas'=>new ZilaResource($this->whenLoaded('zilas')),
-            'tasks'=>new TaskResource($this->whenLoaded('tasks')),
-            'users'=>new UserResource($this->whenLoaded('users')),
+            'name'=>$this->name,
+            'slug'=>$this->slug,
             'created_at'=>$this->created_at?->toDateTimeString(),  
             'updated_at'=>$this->updated_at?->toDateTimeString(),  
         ];
