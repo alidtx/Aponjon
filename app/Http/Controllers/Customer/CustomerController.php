@@ -3,36 +3,69 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\DistrictResource;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\UpozilaResource;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\ZilaResource;
+use App\Models\Category;
+use App\Models\District;
+use App\Models\Upozila;
+use App\Models\Zila;
 use App\Services\TaskService;
 
 class CustomerController extends Controller
 {
 
   public function index()
-  {
-    $customerId = auth()->user()->id;
-    // dd($customerId);
-    $tasks = [
-      'active' => TaskService::getTaskByStatus('in_progress', $customerId, ['taskers', 'bids']),
-      'completed' => TaskService::getTaskByStatus('completed', $customerId, ['taskers']),
-      'cancelled' => TaskService::getTaskByStatus('cancelled', $customerId, ['taskers']),
-    ];
-    // dd($tasks);
-    return Inertia::render('Customer/Index', [
-      'user' => new UserResource(auth()->user()),
-      'tasks' => [
-        'active' => TaskResource::collection($tasks['active']),
-        'completed' => TaskResource::collection($tasks['completed']),
-        'cancelled' => TaskResource::collection($tasks['cancelled']),
-      ],
-    ]);
-  }
-  public function createGig()
-  {
+{
+    $user = auth()->user();
 
-    return Inertia::render('Customer/CreateGig', []);
-  }
+    if (! $user->isCustomer()) {
+        abort(403, 'Unauthorized');
+    }
+
+    $tasks = [
+        'active' => $user->customerTasks()
+                         ->where('status', 'in_progress')
+                         ->with(['taskers', 'bids'])
+                         ->get(),
+        'completed' => $user->customerTasks()
+                            ->where('status', 'completed')
+                            ->with('taskers')
+                            ->get(),
+        'cancelled' => $user->customerTasks()
+                            ->where('status', 'cancelled')
+                            ->with('taskers')
+                            ->get(),
+    ];
+
+    return Inertia::render('Customer/Index', [
+        'user' => new UserResource($user),
+        'tasks' => [
+            'active' => TaskResource::collection($tasks['active']),
+            'completed' => TaskResource::collection($tasks['completed']),
+            'cancelled' => TaskResource::collection($tasks['cancelled']),
+        ],
+    ]);
+}
+
+public function createGig()
+{
+    $districts   = District::all();
+    $zilas       = Zila::all();
+    $upozilas    = Upozila::all();
+    $categories  = Category::all();
+
+    return Inertia::render('Customer/CreateGig', [
+        'districts'  => DistrictResource::collection($districts),
+        'zilas'      => ZilaResource::collection($zilas),
+        'upozilas'   => UpozilaResource::collection($upozilas),
+        'categories' => CategoryResource::collection($categories),
+    ]);
+}
+
+
 }
