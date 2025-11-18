@@ -1,6 +1,15 @@
 <script setup>
 import { ref } from 'vue';
 
+const props = defineProps({
+  serviceCategories: {
+    type: Array,
+    default: () => []
+  }
+})
+
+
+
 const services = ref([
     { id: 1, name: 'ইলেকট্রিক কাজ', icon: 'fas fa-tools' },
     { id: 2, name: 'প্লাম্বিং কাজ', icon: 'fas fa-faucet' },
