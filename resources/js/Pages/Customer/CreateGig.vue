@@ -98,8 +98,7 @@ const districts = [
                                 <div class="md:col-span-2">
                                     <div>
                                         <InputLabel for="সম্পূর্ণ ঠিকানা" value="সম্পূর্ণ ঠিকানা" required />
-                                        <TextArea class="w-full p-3"
-                                            placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." />
+                                        <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." />
                                     </div>
                                 </div>
                                 <!-- Contact Information -->
@@ -107,23 +106,22 @@ const districts = [
                                     <h3 class="text-xl font-bold text-dark mb-6">যোগাযোগ তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                                <InputLabel for="আপনার নাম" value="আপনার নাম" required />
-                                                <TextInput type="text" class="w-full p-3"
-                                                    placeholder="আপনার নাম" />
+                                            <InputLabel for="আপনার নাম" value="আপনার নাম" required />
+                                            <TextInput type="text" class="w-full p-3" placeholder="আপনার নাম" />
                                         </div>
                                         <div>
-                                                <InputLabel for="মোবাইল নম্বর" value="মোবাইল নম্বর" required />
-                                                <TextInput type="number" class="w-full p-3"
-                                                    placeholder="মোবাইল নম্বর" />
+                                            <InputLabel for="মোবাইল নম্বর" value="মোবাইল নম্বর" required />
+                                            <TextInput type="number" class="w-full p-3" placeholder="মোবাইল নম্বর" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Submit Button -->
-                                 <PrimaryButton class="ml-4 w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
-                        অ্যাকাউন্ট তৈরি করুন
-                    </PrimaryButton>
-                             
+                                <PrimaryButton
+                                    class="ml-4 w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
+                                    অ্যাকাউন্ট তৈরি করুন
+                                </PrimaryButton>
+
                             </form>
                         </div>
                     </div>
