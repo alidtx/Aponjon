@@ -14,15 +14,15 @@ import PageTitle from './Partials/PageTitle.vue';
 
 
 const Options = [
-  { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
-  { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
-  { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
+    { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
+    { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
+    { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
 ]
 
 const districts = [
-  { value: 'Dhaka', label: 'Dhaka' },
-  { value: 'Chottogram', label: 'Chottogram' },
-  { value: 'Khulna', label: 'Khulna' },
+    { value: 'Dhaka', label: 'Dhaka' },
+    { value: 'Chottogram', label: 'Chottogram' },
+    { value: 'Khulna', label: 'Khulna' },
 ]
 </script>
 
@@ -41,7 +41,7 @@ const districts = [
                     <!-- Main Form -->
                     <div class="lg:col-span-2">
                         <div class="bg-white rounded-lg shadow-md p-8">
-                            <form id="serviceRequestForm">
+                            <form id="serviceRequestForm" @submit.prevent="submit">
                                 <!-- Service Selection -->
                                 <Services />
                                 <div class="mb-8">
@@ -49,30 +49,25 @@ const districts = [
                                     <div class="space-y-6">
                                         <div>
                                             <InputLabel for="টাস্কের শিরোনাম" value="টাস্কের শিরোনাম" required />
-                                            <TextInput type="text"
-                                                class="w-full p-3"
+                                            <TextInput type="text" class="w-full p-3"
                                                 placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" />
 
                                         </div>
                                         <div>
                                             <InputLabel for="বিস্তারিত বর্ণনা" value="বিস্তারিত বর্ণনা" required />
-                                            <TextArea
-                                                class="w-full  p-3"
+                                            <TextArea class="w-full  p-3"
                                                 placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..." />
                                         </div>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <InputLabel for="আনুমানিক বাজেট" value="আনুমানিক বাজেট (৳)" required />
-                                                <TextInput type="number"
-                                                    class="w-full p-3"
+                                                <TextInput type="number" class="w-full p-3"
                                                     placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" />
                                             </div>
                                             <div>
-                                                <InputLabel for="জরুরিতা" value="জরুরিতা"/>
-                                                 <SelectInput class="w-full p-3"
-                                                  defaultVal="জরুরিতা নির্বাচন করুন"
-                                                  :options="Options"
-                                                 />  
+                                                <InputLabel for="জরুরিতা" value="জরুরিতা" />
+                                                <SelectInput class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন"
+                                                    :options="Options" />
                                             </div>
                                         </div>
                                     </div>
@@ -83,63 +78,52 @@ const districts = [
                                     <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                                <InputLabel for="বিভাগ" value="বিভাগ"/>
-                                                 <SelectInput class="w-full p-3"
-                                                  defaultVal="বিভাগ নির্বাচন করুন"
-                                                  :options="districts"
-                                                 />  
+                                            <InputLabel for="বিভাগ" value="বিভাগ" />
+                                            <SelectInput class="w-full p-3" defaultVal="বিভাগ নির্বাচন করুন"
+                                                :options="districts" />
                                         </div>
                                         <div>
-                                                <InputLabel for="জেলা" value="জেলা"/>
-                                                 <SelectInput class="w-full p-3"
-                                                  defaultVal="জেলা নির্বাচন করুন"
-                                                  :options="districts"
-                                                 />  
+                                            <InputLabel for="জেলা" value="জেলা" />
+                                            <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন"
+                                                :options="districts" />
                                         </div>
                                         <div>
-                                                <InputLabel for="উপজীলা" value="উপজীলা"/>
-                                                 <SelectInput class="w-full p-3"
-                                                  defaultVal="উপজীলা নির্বাচন করুন"
-                                                  :options="districts"
-                                                 />  
+                                            <InputLabel for="উপজীলা" value="উপজীলা" />
+                                            <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন"
+                                                :options="districts" />
                                         </div>
-                                        <div class="md:col-span-2">
-                                             <div>
-                                            <InputLabel for="বিস্তারিত বর্ণনা" value="বিস্তারিত বর্ণনা" required />
-                                            <TextArea
-                                                class="w-full p-3"
-                                                placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..." />
-                                           </div>
-                                        </div>
+
                                     </div>
                                 </div>
-
+                                <div class="md:col-span-2">
+                                    <div>
+                                        <InputLabel for="সম্পূর্ণ ঠিকানা" value="সম্পূর্ণ ঠিকানা" required />
+                                        <TextArea class="w-full p-3"
+                                            placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." />
+                                    </div>
+                                </div>
                                 <!-- Contact Information -->
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">যোগাযোগ তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label class="block text-dark font-medium mb-2">আপনার নাম <span
-                                                    class="text-red-500">*</span></label>
-                                            <input type="text"
-                                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                                required>
+                                                <InputLabel for="আপনার নাম" value="আপনার নাম" required />
+                                                <TextInput type="text" class="w-full p-3"
+                                                    placeholder="আপনার নাম" />
                                         </div>
                                         <div>
-                                            <label class="block text-dark font-medium mb-2">মোবাইল নম্বর <span
-                                                    class="text-red-500">*</span></label>
-                                            <input type="tel"
-                                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                                required>
+                                                <InputLabel for="মোবাইল নম্বর" value="মোবাইল নম্বর" required />
+                                                <TextInput type="number" class="w-full p-3"
+                                                    placeholder="মোবাইল নম্বর" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Submit Button -->
-                                <button type="submit"
-                                    class="w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
-                                    টাস্ক পোস্ট করুন
-                                </button>
+                                 <PrimaryButton class="ml-4 w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
+                        অ্যাকাউন্ট তৈরি করুন
+                    </PrimaryButton>
+                             
                             </form>
                         </div>
                     </div>
