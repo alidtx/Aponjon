@@ -22,6 +22,7 @@ const Options = [
     { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
     { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
     { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
+    { value: 'অনান্য', label: 'অনান্য' },
 ]
 
 const districts = [
@@ -85,21 +86,21 @@ const districts = [
                                     <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                            <InputLabel for="বিভাগ" value="বিভাগ" />
+                                            <InputLabel for="বিভাগ" value="বিভাগ"  required/>
                                             <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন"
                                                 :options="districts" 
                                                  v-model="selectedDivision"
                                                 />
                                         </div>
                                         <div>
-                                            <InputLabel for="জেলা" value="জেলা" />
+                                            <InputLabel for="জেলা" value="জেলা" required/>
                                             <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন"
                                                 :options="districts" 
                                                 v-model="selectedDistrict"
                                                 />
                                         </div>
                                         <div>
-                                            <InputLabel for="উপজীলা" value="উপজীলা" />
+                                            <InputLabel for="উপজীলা" value="উপজীলা" required/>
                                             <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন"
                                                 :options="districts"
                                                  v-model="selectedUpazila" 
