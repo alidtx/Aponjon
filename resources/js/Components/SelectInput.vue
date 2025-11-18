@@ -4,19 +4,20 @@ import { defineProps, defineEmits } from 'vue'
 const props = defineProps({
   modelValue: {
     type: [String, Number, null],
-    default: null
+    default: ''
   },
   options: {
     type: Array,
     required: true
   },
-   defaultVal: {
-    type: Array,
+  defaultVal: {
+    type: String,
     required: true
   },
   className: {
     type: String,
-    default: 'border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-transparent'
+    default:
+      'border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-transparent'
   }
 })
 
@@ -31,13 +32,14 @@ const updateValue = (e) => {
   <select
     :value="modelValue"
     @change="updateValue"
-    :class="className"
+    :class="[className, modelValue === '' ? 'text-gray-500' : 'text-black']"
   >
-    <option value="">{{ defaultVal }}</option>
+    <option value="" disabled>{{ defaultVal }}</option>
     <option
       v-for="(opt, index) in options"
       :key="index"
       :value="opt.value"
+      class="text-black"
     >
       {{ opt.label }}
     </option>

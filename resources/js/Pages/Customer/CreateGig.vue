@@ -11,7 +11,12 @@ import Pricing from './Partials/SideBar/Pricing.vue';
 import Informations from './Partials/SideBar/Informations.vue';
 import Services from './Partials/Services.vue';
 import PageTitle from './Partials/PageTitle.vue';
+import { ref } from 'vue'
 
+const selectedDivision = ref('')
+const selectedDistrict = ref('')
+const selectedUpazila = ref('')
+const selectedEmergency = ref('')
 
 const Options = [
     { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
@@ -67,7 +72,9 @@ const districts = [
                                             <div>
                                                 <InputLabel for="জরুরিতা" value="জরুরিতা" />
                                                 <SelectInput class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন"
-                                                    :options="Options" />
+                                                    :options="Options" 
+                                                    v-model="selectedEmergency"
+                                                    />
                                             </div>
                                         </div>
                                     </div>
@@ -79,18 +86,24 @@ const districts = [
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
                                             <InputLabel for="বিভাগ" value="বিভাগ" />
-                                            <SelectInput class="w-full p-3" defaultVal="বিভাগ নির্বাচন করুন"
-                                                :options="districts" />
+                                            <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন"
+                                                :options="districts" 
+                                                 v-model="selectedDivision"
+                                                />
                                         </div>
                                         <div>
                                             <InputLabel for="জেলা" value="জেলা" />
                                             <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন"
-                                                :options="districts" />
+                                                :options="districts" 
+                                                v-model="selectedDistrict"
+                                                />
                                         </div>
                                         <div>
                                             <InputLabel for="উপজীলা" value="উপজীলা" />
                                             <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন"
-                                                :options="districts" />
+                                                :options="districts"
+                                                 v-model="selectedUpazila" 
+                                                />
                                         </div>
 
                                     </div>
