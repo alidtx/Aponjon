@@ -11,7 +11,7 @@ import Pricing from './Partials/SideBar/Pricing.vue';
 import Informations from './Partials/SideBar/Informations.vue';
 import Services from './Partials/Services.vue';
 import PageTitle from './Partials/PageTitle.vue';
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   districts: {
@@ -36,6 +36,8 @@ const selectedDivision = ref('')
 const selectedDistrict = ref('')
 const selectedUpazila = ref('')
 const selectedEmergency = ref('')
+const districtss = computed(() => props.districts.data || [])
+console.log(districtss);
 
 const Options = [
     { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
@@ -109,7 +111,7 @@ const districts = [
                                         <div>
                                             <InputLabel for="বিভাগ" value="বিভাগ"  required/>
                                             <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন"
-                                                :options="districts" 
+                                                :options="districtss" 
                                                  v-model="selectedDivision"
                                                 />
                                         </div>

@@ -18,6 +18,15 @@ const props = defineProps({
     type: String,
     default:
       'border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-transparent'
+  },
+
+  labelKey: {
+    type: String,
+    default: 'name'
+  },
+  valueKey: {
+    type: String,
+    default: 'value'
   }
 })
 
@@ -35,13 +44,15 @@ const updateValue = (e) => {
     :class="[className, modelValue === '' ? 'text-gray-500' : 'text-black']"
   >
     <option value="" disabled>{{ defaultVal }}</option>
+
     <option
       v-for="(opt, index) in options"
       :key="index"
-      :value="opt.value"
+      :value="opt[valueKey]"   
       class="text-black"
     >
-      {{ opt.label }}
+      {{ opt[labelKey] }}      
     </option>
   </select>
 </template>
+
