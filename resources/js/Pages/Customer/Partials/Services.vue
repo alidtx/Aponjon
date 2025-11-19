@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 
 const props = defineProps({
     serviceCategories: {
-        type: Array,
+        type: Object,
         default: () => []
     }
 })

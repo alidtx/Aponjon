@@ -15,19 +15,19 @@ import { ref } from 'vue'
 
 const props = defineProps({
   districts: {
-    type: Array,
+    type: Object,
     default: () => []  
   },
   zilas: {
-    type: Array,
+    type: Object,
     default: () => []
   },
   upozilas: {
-    type: Array,
+    type: Object,
     default: () => []
   },
   categories: {
-    type: Array,
+    type: Object,
     default: () => []
   }
 })
