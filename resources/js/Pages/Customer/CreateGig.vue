@@ -57,17 +57,13 @@ const districts = [
     <CustomerDefaultLayout>
 
         <Head title="গিগ তৈরি" />
-        <!-- Service Request Page -->
         <div class="min-h-screen py-8">
             <div class="max-w-6xl mx-auto px-4">
-                <!-- Page Header -->
                 <PageTitle />
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Main Form -->
                     <div class="lg:col-span-2">
                         <div class="bg-white rounded-lg shadow-md p-8">
                             <form id="serviceRequestForm" @submit.prevent="submit">
-                                <!-- Service Selection -->
                                 <Services 
                                  :serviceCategories="props.categories"
                                 />
@@ -101,8 +97,6 @@ const districts = [
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Location Details -->
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -136,7 +130,7 @@ const districts = [
                                         <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." />
                                     </div>
                                 </div>
-                                <!-- Contact Information -->
+
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">যোগাযোগ তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -150,8 +144,6 @@ const districts = [
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Submit Button -->
                                 <PrimaryButton
                                     class="ml-4 w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
                                     অ্যাকাউন্ট তৈরি করুন
@@ -160,16 +152,11 @@ const districts = [
                             </form>
                         </div>
                     </div>
-
-                    <!-- Sidebar - Information & Tips -->
                     <div class="space-y-6">
                         <Informations />
                         <Pricing />
                         <Tips />
                     </div>
-
-
-
                 </div>
             </div>
         </div>
