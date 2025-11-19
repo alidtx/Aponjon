@@ -73,19 +73,25 @@ const districts = [
                                         <div>
                                             <InputLabel for="টাস্কের শিরোনাম" value="টাস্কের শিরোনাম" required />
                                             <TextInput type="text" class="w-full p-3"
-                                                placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" />
+                                                placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং"
+                                                v-model="selectedDivision"
+                                                />
 
                                         </div>
                                         <div>
                                             <InputLabel for="বিস্তারিত বর্ণনা" value="বিস্তারিত বর্ণনা" required />
                                             <TextArea class="w-full  p-3"
-                                                placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..." />
+                                                placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..." 
+                                                v-model="selectedDivision"
+                                                />
                                         </div>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <InputLabel for="আনুমানিক বাজেট" value="আনুমানিক বাজেট (৳)" required />
                                                 <TextInput type="number" class="w-full p-3"
-                                                    placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" />
+                                                    placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" 
+                                                    v-model="selectedDivision"
+                                                    />
                                             </div>
                                             <div>
                                                 <InputLabel for="জরুরিতা" value="জরুরিতা" />
@@ -127,7 +133,9 @@ const districts = [
                                 <div class="md:col-span-2">
                                     <div>
                                         <InputLabel for="সম্পূর্ণ ঠিকানা" value="সম্পূর্ণ ঠিকানা" required />
-                                        <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." />
+                                        <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." 
+                                        v-model="selectedDivision"
+                                        />
                                     </div>
                                 </div>
 
@@ -136,11 +144,15 @@ const districts = [
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <InputLabel for="আপনার নাম" value="আপনার নাম" required />
-                                            <TextInput type="text" class="w-full p-3" placeholder="আপনার নাম" />
+                                            <TextInput type="text" class="w-full p-3" placeholder="আপনার নাম" 
+                                            v-model="selectedDivision"
+                                            />
                                         </div>
                                         <div>
                                             <InputLabel for="মোবাইল নম্বর" value="মোবাইল নম্বর" required />
-                                            <TextInput type="number" class="w-full p-3" placeholder="মোবাইল নম্বর" />
+                                            <TextInput type="number" class="w-full p-3" placeholder="মোবাইল নম্বর" 
+                                            v-model="selectedDivision"
+                                            />
                                         </div>
                                     </div>
                                 </div>
