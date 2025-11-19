@@ -52,20 +52,24 @@ class CustomerController extends Controller
     ]);
   }
 
-  public function createGig()
-  {
+ public function createGig()
+{
+    
+    $categories = Category::where('is_active', true)
+        ->get(['id', 'name', 'icon']);
 
-    $categories = Category::select('id', 'name', 'icon')
-      ->where('is_active', true)
-      ->get();
+
+    $districts = District::with(['zilas:id,name,district_id'])
+        ->get(['id', 'name']);
+      
+    
+    $zilas = Zila::with(['upozilas:id,name,zila_id'])
+        ->get(['id', 'name', 'district_id']);
 
     return Inertia::render('Customer/CreateGig', [
-
-      'districts' => DistrictResource::collection(District::select('id', 'name')->get()),
-      'zilas' => ZilaResource::collection(Zila::select('id', 'name', 'district_id')->get()),
-      'upozilas' => UpozilaResource::collection(Upozila::select('id', 'name', 'zila_id')->get()),
-      'categories' => CategoryResource::collection($categories),
-      
+        'districts' => DistrictResource::collection($districts),
+        'zilas' => ZilaResource::collection($zilas),
+        'categories' => CategoryResource::collection($categories),
     ]);
-  }
+}
 }

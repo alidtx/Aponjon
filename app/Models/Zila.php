@@ -8,21 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Zila extends Model
 {
     use HasFactory;
+    
     protected $fillable = ['name', 'slug', 'district_id'];
 
-    public function districts()
+    public function district()
     {
         return $this->belongsTo(District::class);
     }
 
     public function upozilas()
     {
-
         return $this->hasMany(Upozila::class);
     }
+
     public function tasks()
     {
-
         return $this->hasMany(Task::class);
     }
 
@@ -30,7 +30,4 @@ class Zila extends Model
     {
         return $this->hasMany(User::class);
     }
-
-
-
 }
