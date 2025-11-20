@@ -19,6 +19,7 @@ class ZilaResource extends JsonResource
             'name'=>$this->name,
             'slug'=>$this->slug,
             'districts'=>new DistrictResource($this->whenLoaded('districts')),
+            'upozilas' => UpozilaResource::collection($this->whenLoaded('upozilas')),
             'created_at'=>$this->created_at?->toDateTimeString(),
             'updated_at'=>$this->updated_at?->toDateTimeString(),
         ];

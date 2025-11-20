@@ -19,6 +19,7 @@ class DistrictResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'slug'=>$this->slug,
+            'zilas' => ZilaResource::collection($this->whenLoaded('zilas')),
             'created_at'=>$this->created_at?->toDateTimeString(),  
             'updated_at'=>$this->updated_at?->toDateTimeString(),  
         ];
