@@ -50,11 +50,18 @@ const form = useForm({
     category: ''
 });
 
-const filteredZilas = ref([])
-const filteredUpozilas = ref([])
+const filteredZilaList = ref([]) 
+const filteredUpozilaList = ref([]) 
 
-const getZilasByDistrict = (districtId) => {
-  if (!districtId) {
+const Options = [
+    { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
+    { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
+    { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
+    { value: 'other', label: 'অনান্য' },
+]
+
+const getZilasByDistric=(districtId)=>{
+     if (!districtId) {
     filteredZilas.value = []
     return
   }
@@ -64,7 +71,7 @@ const getZilasByDistrict = (districtId) => {
   const selectedDistrict = districtsArray.find(district => district.id == districtId)
   
   if (selectedDistrict && selectedDistrict.zilas && selectedDistrict.zilas.length > 0) {
-    filteredZilas.value = selectedDistrict.zilas
+    filteredZilaList.value = selectedDistrict.zilas
     return
   }
   
@@ -72,12 +79,11 @@ const getZilasByDistrict = (districtId) => {
     const districtIdField = zila.district_id || zila.district?.id
     return districtIdField == districtId
   })
-  
-  filteredZilas.value = zilas
+  filteredZilaList.value = zilas
 }
 
-const getUpozilasByZila = (zilaId) => {
-  if (!zilaId) {
+const getUpozilasByZila=(zilaId) =>{
+    if (!zilaId) {
     filteredUpozilas.value = []
     return
   }
@@ -85,29 +91,11 @@ const getUpozilasByZila = (zilaId) => {
   const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))  
   const selectedZila = zilasArray.find(zila => zila.id == zilaId)
   if (selectedZila && selectedZila.upozilas) {
-    filteredUpozilas.value = selectedZila.upozilas
+    filteredUpozilaList.value = selectedZila.upozilas
   } else {
-    filteredUpozilas.value = []
+    filteredUpozilaList.value = []
   }
 }
-
-watch(() => form.district_id, (newDistrictId) => {
-  form.zila_id = ''
-  form.upozila_id = ''
-  filteredUpozilas.value = []
-  getZilasByDistrict(newDistrictId)
-})
-watch(() => form.zila_id, (newZilaId) => {
-  form.upozila_id = ''
-  getUpozilasByZila(newZilaId)
-})
-
-const Options = [
-    { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
-    { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
-    { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
-    { value: 'other', label: 'অনান্য' },
-]
 
 const submit = () => {
     form.post(route('customer.gigs.store'), {
@@ -200,6 +188,7 @@ const submit = () => {
                                                 :options="districtsData" 
                                                 labelKey="name"
                                                 valueKey="id"
+                                                @change="getZilasByDistric(form.district_id)"
                                                 v-model="form.district_id"
                                                 :error="form.errors.district_id"
                                             />
@@ -210,15 +199,16 @@ const submit = () => {
                                                 id="zila_id"
                                                 class="w-full p-3" 
                                                 defaultVal="জেলা নির্বাচন করুন" 
-                                                :options="filteredZilas" 
+                                                :options="filteredZilaList" 
                                                 labelKey="name"
                                                 valueKey="id"
+                                                @change="getUpozilasByZila(form.zila_id)"
                                                 v-model="form.zila_id"
                                                 :error="form.errors.zila_id"
-                                                :disabled="!form.district_id || filteredZilas.length === 0"
+                                                :disabled="!form.district_id || filteredZilaList.length === 0"
                                             />
                                             <small class="text-gray-500 text-xs mt-1 block" v-if="form.district_id">
-                                                পাওয়া গেছে: {{ filteredZilas.length }} টি জেলা
+                                                পাওয়া গেছে: {{ filteredZilaList.length }} টি জেলা
                                             </small>
                                         </div>
                                         <div>
@@ -227,15 +217,15 @@ const submit = () => {
                                                 id="upozila_id"
                                                 class="w-full p-3" 
                                                 defaultVal="উপজেলা নির্বাচন করুন" 
-                                                :options="filteredUpozilas" 
+                                                :options="filteredUpozilaList" 
                                                 labelKey="name"
                                                 valueKey="id"
                                                 v-model="form.upozila_id"
                                                 :error="form.errors.upozila_id"
-                                                :disabled="!form.zila_id || filteredUpozilas.length === 0"
+                                                :disabled="!form.zila_id || filteredUpozilaList.length === 0"
                                             />
                                             <small class="text-gray-500 text-xs mt-1 block" v-if="form.zila_id">
-                                                পাওয়া গেছে: {{ filteredUpozilas.length }} টি উপজেলা
+                                                পাওয়া গেছে: {{ filteredUpozilaList.length }} টি উপজেলা
                                             </small>
                                         </div>
                                     </div>
