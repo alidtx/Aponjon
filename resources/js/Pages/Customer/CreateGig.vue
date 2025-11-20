@@ -11,21 +11,31 @@ import Pricing from './Partials/SideBar/Pricing.vue';
 import Informations from './Partials/SideBar/Informations.vue';
 import Services from './Partials/Services.vue';
 import PageTitle from './Partials/PageTitle.vue';
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 
 const props = defineProps({
   districts: {
-    type: Array,
-    default: () => []  
+    type: Object,
+    default: () => ({})  
   },
   zilas: {
-    type: Array,
-    default: () => []
+    type: Object,
+    default: () => ({})
   },
   categories: {
     type: Array,
     default: () => []
   }
+})
+
+const districtsData = computed(() => {
+  const data = props.districts?.data || props.districts
+  return data || []
+})
+
+const allZilasData = computed(() => {
+  const data = props.zilas?.data || props.zilas
+  return data || []
 })
 
 const form = useForm({
@@ -37,35 +47,95 @@ const form = useForm({
     zila_id: '', 
     upozila_id: '', 
     location_address: '', 
-    category:''
+    category: ''
 });
 
-const selectedDivision = ref('')
-const selectedDistrict = ref('')
-const selectedUpazila = ref('')
-const selectedEmergency = ref('')
-const districts = computed(() => props.districts.data || [])
+const filteredZilas = ref([])
+const filteredUpozilas = ref([])
 
+const getZilasByDistrict = (districtId) => {
+  console.log('Getting zilas for district:', districtId)
+  if (!districtId) {
+    filteredZilas.value = []
+    return
+  }
+
+  const districtsArray = JSON.parse(JSON.stringify(districtsData.value))
+  const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
+  const selectedDistrict = districtsArray.find(district => district.id == districtId)
+  
+  if (selectedDistrict && selectedDistrict.zilas && selectedDistrict.zilas.length > 0) {
+    console.log('Found zilas nested in district:', selectedDistrict.zilas)
+    filteredZilas.value = selectedDistrict.zilas
+    return
+  }
+  
+  const zilas = zilasArray.filter(zila => {
+    const districtIdField = zila.district_id || zila.district?.id
+    console.log(`Zila ${zila.id} district relation:`, {
+      district_id: zila.district_id,
+      district: zila.district,
+      computed: districtIdField
+    })
+    return districtIdField == districtId
+  })
+  
+  filteredZilas.value = zilas
+}
+
+const getUpozilasByZila = (zilaId) => {
+  console.log('Getting upozilas for zila:', zilaId)
+  if (!zilaId) {
+    filteredUpozilas.value = []
+    return
+  }
+  
+  const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
+  
+  const selectedZila = zilasArray.find(zila => zila.id == zilaId)
+  console.log('Selected zila for upozilas:', selectedZila)
+  
+  if (selectedZila && selectedZila.upozilas) {
+    filteredUpozilas.value = selectedZila.upozilas
+  } else {
+    filteredUpozilas.value = []
+  }
+  console.log('Filtered upozilas:', filteredUpozilas.value)
+}
+
+watch(() => form.district_id, (newDistrictId) => {
+  form.zila_id = ''
+  form.upozila_id = ''
+  filteredUpozilas.value = []
+  getZilasByDistrict(newDistrictId)
+})
+watch(() => form.zila_id, (newZilaId) => {
+  form.upozila_id = ''
+  getUpozilasByZila(newZilaId)
+})
 
 const Options = [
     { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
     { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
     { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
-    { value: 'অনান্য', label: 'অনান্য' },
+    { value: 'other', label: 'অনান্য' },
 ]
 
-const submit=()=>{
+const submit = () => {
+    console.log('Form data being submitted:', form.data())
     form.post(route('customer.gigs.store'), {
-        
+        onSuccess: () => {
+            form.reset()
+        },
+        onError: (errors) => {
+            console.log('Form errors:', errors)
+        }
     });
 }
 </script>
 
-
-
 <template>
     <CustomerDefaultLayout>
-
         <Head title="গিগ তৈরি" />
         <div class="min-h-screen py-8">
             <div class="max-w-6xl mx-auto px-4">
@@ -75,100 +145,139 @@ const submit=()=>{
                         <div class="bg-white rounded-lg shadow-md p-8">
                             <form id="serviceRequestForm" @submit.prevent="submit">
                                 <Services 
-                                 :serviceCategories="props.categories"
+                                    :serviceCategories="categories"
+                                    v-model="form.category"
                                 />
+                                
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
                                     <div class="space-y-6">
                                         <div>
-                                            <InputLabel for="টাস্কের শিরোনাম" value="টাস্কের শিরোনাম" required />
-                                            <TextInput type="text" class="w-full p-3" name="title"
+                                            <InputLabel for="title" value="টাস্কের শিরোনাম" required />
+                                            <TextInput 
+                                                id="title"
+                                                type="text" 
+                                                class="w-full p-3" 
                                                 placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং"
                                                 v-model="form.title"
-                                                />
-
+                                                :error="form.errors.title"
+                                            />
                                         </div>
                                         <div>
-                                            <InputLabel for="বিস্তারিত বর্ণনা" value="বিস্তারিত বর্ণনা" required />
-                                            <TextArea class="w-full  p-3" name="description"
+                                            <InputLabel for="description" value="বিস্তারিত বর্ণনা" required />
+                                            <TextArea 
+                                                id="description"
+                                                class="w-full p-3" 
                                                 placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..." 
                                                 v-model="form.description"
-                                                />
+                                                :error="form.errors.description"
+                                            />
                                         </div>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
-                                                <InputLabel for="আনুমানিক বাজেট" value="আনুমানিক বাজেট (৳)" required />
-                                                <TextInput type="number" class="w-full p-3" name="budget"
-                                                    placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" 
+                                                <InputLabel for="budget" value="আনুমানিক বাজেট (৳)" required />
+                                                <TextInput 
+                                                    id="budget"
+                                                    type="number" 
+                                                    class="w-full p-3" 
+                                                    placeholder="আনুমানিক বাজেট লিখুন"
                                                     v-model="form.budget"
-                                                    />
+                                                    :error="form.errors.budget"
+                                                />
                                             </div>
                                             <div>
-                                                <InputLabel for="জরুরিতা" value="জরুরিতা"/>
-                                                <SelectInput class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন" name="schedule_for"
+                                                <InputLabel for="schedule_for" value="জরুরিতা"/>
+                                                <SelectInput 
+                                                    id="schedule_for"
+                                                    class="w-full p-3" 
+                                                    defaultVal="জরুরিতা নির্বাচন করুন" 
                                                     :options="Options" 
                                                     labelKey="label"  
                                                     valueKey="value"  
                                                     v-model="form.schedule_for"
-                                                    />
+                                                    :error="form.errors.schedule_for"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                            <InputLabel for="বিভাগ" value="বিভাগ"   required/>
-                                             <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন" name="district_id"
-                                                :options="districts" 
-                                                 v-model="form.district_id"
-                                                />
-                                        </div>
-                                        <div>
-                                            <InputLabel for="জেলা" value="জেলা" required/>
-                                             <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন" name="zila_id"
-                                                :options="districts" 
-                                                v-model="form.zila_id"
-                                                />
-                                        </div>
-                                        <div>
-                                            <InputLabel for="উপজীলা" value="উপজীলা" required/>
-                                           <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন" name="upozila_id"
-                                                :options="districts"
-                                                 v-model="form.upozila_id" 
-                                                />
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="md:col-span-2">
-                                    <div>
-                                        <InputLabel for="সম্পূর্ণ ঠিকানা" value="সম্পূর্ণ ঠিকানা" required />
-                                        <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..."  name="location_address"
-                                        v-model="form.location_address"
-                                        />
-                                    </div>
-                                </div>
-
-                                <!-- <div class="mb-8">
-                                    <h3 class="text-xl font-bold text-dark mb-6">যোগাযোগ তথ্য</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <InputLabel for="মোবাইল নম্বর" value="মোবাইল নম্বর" required />
-                                            <TextInput type="number" class="w-full p-3" placeholder="মোবাইল নম্বর" name=""
-                                            v-model="selectedDivision"
+                                            <InputLabel for="district_id" value="বিভাগ" required/>
+                                            <SelectInput 
+                                                id="district_id"
+                                                class="w-full p-3" 
+                                                defaultVal="বিভাগ নির্বাচন করুন" 
+                                                :options="districtsData" 
+                                                labelKey="name"
+                                                valueKey="id"
+                                                v-model="form.district_id"
+                                                :error="form.errors.district_id"
                                             />
                                         </div>
+                                        <div>
+                                            <InputLabel for="zila_id" value="জেলা" required/>
+                                            <SelectInput 
+                                                id="zila_id"
+                                                class="w-full p-3" 
+                                                defaultVal="জেলা নির্বাচন করুন" 
+                                                :options="filteredZilas" 
+                                                labelKey="name"
+                                                valueKey="id"
+                                                v-model="form.zila_id"
+                                                :error="form.errors.zila_id"
+                                                :disabled="!form.district_id || filteredZilas.length === 0"
+                                            />
+                                            <small class="text-gray-500 text-xs mt-1 block" v-if="form.district_id">
+                                                পাওয়া গেছে: {{ filteredZilas.length }} টি জেলা
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <InputLabel for="upozila_id" value="উপজেলা" required/>
+                                            <SelectInput 
+                                                id="upozila_id"
+                                                class="w-full p-3" 
+                                                defaultVal="উপজেলা নির্বাচন করুন" 
+                                                :options="filteredUpozilas" 
+                                                labelKey="name"
+                                                valueKey="id"
+                                                v-model="form.upozila_id"
+                                                :error="form.errors.upozila_id"
+                                                :disabled="!form.zila_id || filteredUpozilas.length === 0"
+                                            />
+                                            <small class="text-gray-500 text-xs mt-1 block" v-if="form.zila_id">
+                                                পাওয়া গেছে: {{ filteredUpozilas.length }} টি উপজেলা
+                                            </small>
+                                        </div>
                                     </div>
-                                </div> -->
-                                <PrimaryButton type="submit">
-                                    অ্যাকাউন্ট তৈরি করুন
-                                </PrimaryButton>
+                                </div>
+                                
+                                <div class="mb-8">
+                                    <InputLabel for="location_address" value="সম্পূর্ণ ঠিকানা" required />
+                                    <TextArea 
+                                        id="location_address"
+                                        class="w-full p-3" 
+                                        placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." 
+                                        v-model="form.location_address"
+                                        :error="form.errors.location_address"
+                                    />
+                                </div>
 
+                                <PrimaryButton 
+                                    type="submit" 
+                                    :disabled="form.processing"
+                                    class="w-full md:w-auto"
+                                >
+                                    <span v-if="form.processing">সাবমিট হচ্ছে...</span>
+                                    <span v-else>গিগ তৈরি করুন</span>
+                                </PrimaryButton>
                             </form>
                         </div>
                     </div>
+                    
                     <div class="space-y-6">
                         <Informations />
                         <Pricing />
