@@ -23,7 +23,7 @@ const props = defineProps({
     default: () => ({})
   },
   categories: {
-    type: Array,
+    type: Object,
     default: () => []
   }
 })
@@ -54,7 +54,6 @@ const filteredZilas = ref([])
 const filteredUpozilas = ref([])
 
 const getZilasByDistrict = (districtId) => {
-  console.log('Getting zilas for district:', districtId)
   if (!districtId) {
     filteredZilas.value = []
     return
@@ -65,18 +64,12 @@ const getZilasByDistrict = (districtId) => {
   const selectedDistrict = districtsArray.find(district => district.id == districtId)
   
   if (selectedDistrict && selectedDistrict.zilas && selectedDistrict.zilas.length > 0) {
-    console.log('Found zilas nested in district:', selectedDistrict.zilas)
     filteredZilas.value = selectedDistrict.zilas
     return
   }
   
   const zilas = zilasArray.filter(zila => {
     const districtIdField = zila.district_id || zila.district?.id
-    console.log(`Zila ${zila.id} district relation:`, {
-      district_id: zila.district_id,
-      district: zila.district,
-      computed: districtIdField
-    })
     return districtIdField == districtId
   })
   
@@ -84,23 +77,18 @@ const getZilasByDistrict = (districtId) => {
 }
 
 const getUpozilasByZila = (zilaId) => {
-  console.log('Getting upozilas for zila:', zilaId)
   if (!zilaId) {
     filteredUpozilas.value = []
     return
   }
   
-  const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
-  
+  const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))  
   const selectedZila = zilasArray.find(zila => zila.id == zilaId)
-  console.log('Selected zila for upozilas:', selectedZila)
-  
   if (selectedZila && selectedZila.upozilas) {
     filteredUpozilas.value = selectedZila.upozilas
   } else {
     filteredUpozilas.value = []
   }
-  console.log('Filtered upozilas:', filteredUpozilas.value)
 }
 
 watch(() => form.district_id, (newDistrictId) => {
@@ -122,13 +110,11 @@ const Options = [
 ]
 
 const submit = () => {
-    console.log('Form data being submitted:', form.data())
     form.post(route('customer.gigs.store'), {
         onSuccess: () => {
             form.reset()
         },
         onError: (errors) => {
-            console.log('Form errors:', errors)
         }
     });
 }
