@@ -22,10 +22,6 @@ const props = defineProps({
     type: Object,
     default: () => []
   },
-  upozilas: {
-    type: Object,
-    default: () => []
-  },
   categories: {
     type: Object,
     default: () => []
@@ -58,11 +54,7 @@ const Options = [
     { value: 'অনান্য', label: 'অনান্য' },
 ]
 
-const districts = [
-    { value: 'Dhaka', label: 'Dhaka' },
-    { value: 'Chottogram', label: 'Chottogram' },
-    { value: 'Khulna', label: 'Khulna' },
-]
+
 
 const submit=()=>{
     form.post(route('customer.gigs.store'), {
@@ -134,21 +126,21 @@ const submit=()=>{
                                         <div>
                                             <InputLabel for="বিভাগ" value="বিভাগ"   required/>
                                              <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন" name="district_id"
-                                                :options="districtss" 
+                                                :options="districts" 
                                                  v-model="form.district_id"
                                                 />
                                         </div>
                                         <div>
                                             <InputLabel for="জেলা" value="জেলা" required/>
                                              <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন" name="zila_id"
-                                                :options="districtss" 
+                                                :options="districts" 
                                                 v-model="form.zila_id"
                                                 />
                                         </div>
                                         <div>
                                             <InputLabel for="উপজীলা" value="উপজীলা" required/>
                                            <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন" name="upozila_id"
-                                                :options="districtss"
+                                                :options="districts"
                                                  v-model="form.upozila_id" 
                                                 />
                                         </div>
