@@ -33,11 +33,11 @@ const selectService = (serviceId) => {
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-xl font-bold text-dark">সেবা নির্বাচন করুন</h3>
             <div class="flex space-x-2">
-                <button @click="scrollLeft"
+                <button type="button" @click="scrollLeft"
                     class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
                     <i class="fas fa-chevron-left text-gray-600"></i>
                 </button>
-                <button @click="scrollRight"
+                <button type="button" @click="scrollRight"
                     class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors">
                     <i class="fas fa-chevron-right text-gray-600"></i>
                 </button>
@@ -64,7 +64,7 @@ const selectService = (serviceId) => {
                 </div>
             </div>
         </div>
-        <input type="hidden" name="selected_service" :value="selectedService">
+        <input type="hidden" name="category_id" :value="selectedService">
     </div>
 </template>
 

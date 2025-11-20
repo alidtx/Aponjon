@@ -15,6 +15,7 @@ use App\Models\District;
 use App\Models\Upozila;
 use App\Models\Zila;
 use App\Services\TaskService;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -72,4 +73,11 @@ class CustomerController extends Controller
         'categories' => CategoryResource::collection($categories),
     ]);
 }
+public function gigsStore(Request $request) {
+  
+
+}
+
+
+
 }

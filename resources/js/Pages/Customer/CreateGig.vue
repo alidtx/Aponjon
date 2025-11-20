@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -32,12 +32,24 @@ const props = defineProps({
   }
 })
 
+const form = useForm({
+    title: '',
+    description: '',
+    budget: '',
+    schedule_for: '',
+    district_id: '', 
+    zila_id: '', 
+    upozila_id: '', 
+    location_address: '', 
+    category:''
+});
+
 const selectedDivision = ref('')
 const selectedDistrict = ref('')
 const selectedUpazila = ref('')
 const selectedEmergency = ref('')
 const districtss = computed(() => props.districts.data || [])
-console.log(districtss);
+
 
 const Options = [
     { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
@@ -51,6 +63,15 @@ const districts = [
     { value: 'Chottogram', label: 'Chottogram' },
     { value: 'Khulna', label: 'Khulna' },
 ]
+
+const submit=()=>{
+    form.post(route('customer.gigs.store'), {
+        
+    });
+}
+
+
+
 </script>
 
 
@@ -74,32 +95,34 @@ const districts = [
                                     <div class="space-y-6">
                                         <div>
                                             <InputLabel for="টাস্কের শিরোনাম" value="টাস্কের শিরোনাম" required />
-                                            <TextInput type="text" class="w-full p-3"
+                                            <TextInput type="text" class="w-full p-3" name="title"
                                                 placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং"
-                                                v-model="selectedDivision"
+                                                v-model="form.title"
                                                 />
 
                                         </div>
                                         <div>
                                             <InputLabel for="বিস্তারিত বর্ণনা" value="বিস্তারিত বর্ণনা" required />
-                                            <TextArea class="w-full  p-3"
+                                            <TextArea class="w-full  p-3" name="description"
                                                 placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..." 
-                                                v-model="selectedDivision"
+                                                v-model="form.description"
                                                 />
                                         </div>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <InputLabel for="আনুমানিক বাজেট" value="আনুমানিক বাজেট (৳)" required />
-                                                <TextInput type="number" class="w-full p-3"
+                                                <TextInput type="number" class="w-full p-3" name="budget"
                                                     placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" 
-                                                    v-model="selectedDivision"
+                                                    v-model="form.budget"
                                                     />
                                             </div>
                                             <div>
-                                                <InputLabel for="জরুরিতা" value="জরুরিতা" />
-                                                <SelectInput class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন"
+                                                <InputLabel for="জরুরিতা" value="জরুরিতা"/>
+                                                <SelectInput class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন" name="schedule_for"
                                                     :options="Options" 
-                                                    v-model="selectedEmergency"
+                                                    labelKey="label"  
+                                                    valueKey="value"  
+                                                    v-model="form.schedule_for"
                                                     />
                                             </div>
                                         </div>
@@ -109,24 +132,24 @@ const districts = [
                                     <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                            <InputLabel for="বিভাগ" value="বিভাগ"  required/>
-                                            <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন"
+                                            <InputLabel for="বিভাগ" value="বিভাগ"   required/>
+                                             <SelectInput class="w-full p-3 " defaultVal="বিভাগ নির্বাচন করুন" name="district_id"
                                                 :options="districtss" 
-                                                 v-model="selectedDivision"
+                                                 v-model="form.district_id"
                                                 />
                                         </div>
                                         <div>
                                             <InputLabel for="জেলা" value="জেলা" required/>
-                                            <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন"
-                                                :options="districts" 
-                                                v-model="selectedDistrict"
+                                             <SelectInput class="w-full p-3" defaultVal="জেলা নির্বাচন করুন" name="zila_id"
+                                                :options="districtss" 
+                                                v-model="form.zila_id"
                                                 />
                                         </div>
                                         <div>
                                             <InputLabel for="উপজীলা" value="উপজীলা" required/>
-                                            <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন"
-                                                :options="districts"
-                                                 v-model="selectedUpazila" 
+                                           <SelectInput class="w-full p-3" defaultVal="উপজীলা নির্বাচন করুন" name="upozila_id"
+                                                :options="districtss"
+                                                 v-model="form.upozila_id" 
                                                 />
                                         </div>
 
@@ -135,31 +158,24 @@ const districts = [
                                 <div class="md:col-span-2">
                                     <div>
                                         <InputLabel for="সম্পূর্ণ ঠিকানা" value="সম্পূর্ণ ঠিকানা" required />
-                                        <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." 
-                                        v-model="selectedDivision"
+                                        <TextArea class="w-full p-3" placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..."  name="location_address"
+                                        v-model="form.location_address"
                                         />
                                     </div>
                                 </div>
 
-                                <div class="mb-8">
+                                <!-- <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">যোগাযোগ তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <InputLabel for="আপনার নাম" value="আপনার নাম" required />
-                                            <TextInput type="text" class="w-full p-3" placeholder="আপনার নাম" 
-                                            v-model="selectedDivision"
-                                            />
-                                        </div>
-                                        <div>
                                             <InputLabel for="মোবাইল নম্বর" value="মোবাইল নম্বর" required />
-                                            <TextInput type="number" class="w-full p-3" placeholder="মোবাইল নম্বর" 
+                                            <TextInput type="number" class="w-full p-3" placeholder="মোবাইল নম্বর" name=""
                                             v-model="selectedDivision"
                                             />
                                         </div>
                                     </div>
-                                </div>
-                                <PrimaryButton
-                                    class="ml-4 w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
+                                </div> -->
+                                <PrimaryButton type="submit">
                                     অ্যাকাউন্ট তৈরি করুন
                                 </PrimaryButton>
 
