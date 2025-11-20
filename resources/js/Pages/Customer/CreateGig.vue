@@ -245,7 +245,6 @@ const submit = () => {
                                 <PrimaryButton 
                                     type="submit" 
                                     :disabled="form.processing"
-                                    class="w-full md:w-auto"
                                 >
                                     <span v-if="form.processing">সাবমিট হচ্ছে...</span>
                                     <span v-else>গিগ তৈরি করুন</span>
