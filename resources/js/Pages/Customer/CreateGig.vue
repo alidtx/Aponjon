@@ -15,15 +15,15 @@ import { ref, computed } from 'vue'
 
 const props = defineProps({
   districts: {
-    type: Object,
+    type: Array,
     default: () => []  
   },
   zilas: {
-    type: Object,
+    type: Array,
     default: () => []
   },
   categories: {
-    type: Object,
+    type: Array,
     default: () => []
   }
 })
@@ -44,7 +44,7 @@ const selectedDivision = ref('')
 const selectedDistrict = ref('')
 const selectedUpazila = ref('')
 const selectedEmergency = ref('')
-const districtss = computed(() => props.districts.data || [])
+const districts = computed(() => props.districts.data || [])
 
 
 const Options = [
@@ -54,16 +54,11 @@ const Options = [
     { value: 'অনান্য', label: 'অনান্য' },
 ]
 
-
-
 const submit=()=>{
     form.post(route('customer.gigs.store'), {
         
     });
 }
-
-
-
 </script>
 
 
