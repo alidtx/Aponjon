@@ -11,7 +11,7 @@ import Pricing from './Partials/SideBar/Pricing.vue';
 import Informations from './Partials/SideBar/Informations.vue';
 import Services from './Partials/Services.vue';
 import PageTitle from './Partials/PageTitle.vue';
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed} from 'vue'
 
 const props = defineProps({
   districts: {
