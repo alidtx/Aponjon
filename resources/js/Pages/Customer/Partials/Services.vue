@@ -5,9 +5,13 @@ const props = defineProps({
     serviceCategories: {
         type: Object,
         default: () => []
+    },
+     modelValue: {
+        type: [String, Number],
+        default: null
     }
 })
-
+const emit = defineEmits(['update:modelValue'])
 const services = computed(() => props.serviceCategories.data || [])
 const scrollContainer = ref(null);
 const selectedService = ref(null);
@@ -23,8 +27,8 @@ const scrollRight = () => {
     }
 };
 const selectService = (serviceId) => {
-    console.log(serviceId);
     selectedService.value = serviceId;
+    emit('update:modelValue', serviceId);
 };
 </script>
 
@@ -64,7 +68,7 @@ const selectService = (serviceId) => {
                 </div>
             </div>
         </div>
-        <input type="hidden" name="category_id" :value="selectedService">
+      <input type="hidden" name="category_id"  :value="modelValue">
     </div>
 </template>
 

@@ -47,7 +47,7 @@ const form = useForm({
     zila_id: '', 
     upozila_id: '', 
     location_address: '', 
-    category: ''
+    category_id: ''
 });
 
 const filteredZilaList = ref([]) 
@@ -120,7 +120,7 @@ const submit = () => {
                             <form id="serviceRequestForm" @submit.prevent="submit">
                                 <Services 
                                     :serviceCategories="categories"
-                                    v-model="form.category"
+                                     v-model="form.category_id"
                                 />
                                 
                                 <div class="mb-8">

@@ -6,15 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\TaskResource;
-use App\Http\Resources\UpozilaResource;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Category;
 use App\Models\District;
-use App\Models\Upozila;
 use App\Models\Zila;
-use App\Services\TaskService;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -74,7 +71,7 @@ class CustomerController extends Controller
     ]);
 }
 public function gigsStore(Request $request) {
-  
+  dd($request->all());
 
 }
 
