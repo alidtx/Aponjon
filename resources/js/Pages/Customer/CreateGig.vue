@@ -125,7 +125,7 @@ const submit = () => {
                                 v-model="form.category_id" 
                                 :error="form.errors.category_id" />
 
-                                <div class="mb-8">
+                                <div class="mb-4">
                                     <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
                                     <div class="space-y-6">
                                         <div>
@@ -162,7 +162,7 @@ const submit = () => {
                                     </div>
                                 </div>
 
-                                <div class="mb-8">
+                                <div class="mb-4">
                                     <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
@@ -201,7 +201,7 @@ const submit = () => {
                                     </div>
                                 </div>
 
-                                <div class="mb-8">
+                                <div class="mb-4">
                                     <InputLabel for="location_address" value="সম্পূর্ণ ঠিকানা" required />
                                     <TextArea id="location_address" class="w-full p-3"
                                         placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." v-model="form.location_address"
