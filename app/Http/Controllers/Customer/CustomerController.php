@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GigRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\TaskResource;
@@ -70,8 +71,8 @@ class CustomerController extends Controller
         'categories' => CategoryResource::collection($categories),
     ]);
 }
-public function gigsStore(Request $request) {
-  dd($request->all());
+public function gigsStore(GigRequest $request) {
+  // dd($request->all());
 
 }
 
