@@ -10,6 +10,7 @@ use App\Models\Zila;
 use App\Models\Upozila;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Enum;
 
 class TaskFactory extends Factory
 {
@@ -29,7 +30,7 @@ class TaskFactory extends Factory
             'district_id' => District::inRandomOrder()->first()?->id ?? District::factory(),
             'zila_id' => Zila::inRandomOrder()->first()?->id ?? District::factory(),
             'upozila_id' => Upozila::inRandomOrder()->first()?->id ?? Zila::factory(),
-            'scheduled_for' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'emergency' => $this->faker->randomElement(['Emergency', 'Immediate','other']),
             'budget' => $this->faker->randomFloat(2, 100, 10000),
             'status' => $this->faker->randomElement(['posted', 'assigned', 'in_progress', 'completed', 'cancelled', 'disputed']),
             'customer_notes' => $this->faker->optional()->sentence(),

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('district_id')->nullable()->constrained();
             $table->foreignId('zila_id')->nullable()->constrained();
             $table->foreignId('upozila_id')->nullable()->constrained();
-            $table->dateTime('scheduled_for')->nullable();
+            $table->string('emergency');
             $table->decimal('budget', 10, 2);
             $table->enum('status', ['posted', 'assigned', 'in_progress', 'completed', 'cancelled', 'disputed'])->default('posted');
             $table->text('customer_notes')->nullable();
