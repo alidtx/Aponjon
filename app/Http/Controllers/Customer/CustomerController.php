@@ -13,6 +13,7 @@ use App\Http\Resources\ZilaResource;
 use App\Models\Category;
 use App\Models\District;
 use App\Models\Zila;
+use App\Services\TaskService;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -72,8 +73,7 @@ class CustomerController extends Controller
     ]);
 }
 public function gigsStore(GigRequest $request) {
-  dd($request->all());
-
+    TaskService::store($request);
 }
 
 

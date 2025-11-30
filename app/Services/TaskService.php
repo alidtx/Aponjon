@@ -22,4 +22,16 @@ class TaskService
             ->latest() 
             ->get();
     }
+    public static function store($request) {
+         return Task::create([
+           'title'=>$request->title,
+           'description'=>$request->description,
+           'budget'=>$request->budget,
+           'schedule_for'=>$request->schedule_for,
+           'category_id'=>$request->category_id,
+           'district_id'=>$request->district_id,
+           'zila_id'=>$request->zila_id,
+           'upozila_id'=>$request->upozila_id,
+         ]);
+    }
 }
