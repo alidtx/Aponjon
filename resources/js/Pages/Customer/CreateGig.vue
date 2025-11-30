@@ -120,7 +120,10 @@ const submit = () => {
                     <div class="lg:col-span-2">
                         <div class="bg-white rounded-lg shadow-md p-8">
                             <form id="serviceRequestForm" @submit.prevent="submit">
-                                <Services :serviceCategories="categories" v-model="form.category_id" />
+                                <Services 
+                                :serviceCategories="categories" 
+                                v-model="form.category_id" 
+                                :error="form.errors.category_id" />
 
                                 <div class="mb-8">
                                     <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>

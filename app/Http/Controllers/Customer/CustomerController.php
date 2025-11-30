@@ -72,7 +72,7 @@ class CustomerController extends Controller
     ]);
 }
 public function gigsStore(GigRequest $request) {
-  // dd($request->all());
+  dd($request->all());
 
 }
 
