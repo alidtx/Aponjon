@@ -13,25 +13,28 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TaskService
 {
-    public static function getTaskByStatus(string $status, $customerId=null, array $relations=[]) {
+    public static function getTaskByStatus(string $status, $customerId = null, array $relations = [])
+    {
         return Task::with($relations)
             ->when($status !== 'all', function (Builder $query) use ($status, $customerId) {
                 $query->where('status', $status);
                 $query->where('customer_id', $customerId);
             })
-            ->latest() 
+            ->latest()
             ->get();
     }
-    public static function store($request) {
-         return Task::create([
-           'title'=>$request->title,
-           'description'=>$request->description,
-           'budget'=>$request->budget,
-           'schedule_for'=>$request->schedule_for,
-           'category_id'=>$request->category_id,
-           'district_id'=>$request->district_id,
-           'zila_id'=>$request->zila_id,
-           'upozila_id'=>$request->upozila_id,
-         ]);
+    public static function store($request)
+    {   
+        return Task::create([
+            'task_number' => RandomGigNum::generateWithPrefix('GIG'),
+            'title' => $request->title,
+            'description' => $request->description,
+            'budget' => $request->budget,
+            'schedule_for' => $request->schedule_for,
+            'category_id' => $request->category_id,
+            'district_id' => $request->district_id,
+            'zila_id' => $request->zila_id,
+            'upozila_id' => $request->upozila_id,
+        ]);
     }
 }
