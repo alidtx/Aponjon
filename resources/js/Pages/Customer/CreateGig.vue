@@ -1,5 +1,5 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3'
+import { Head, useForm, router } from '@inertiajs/vue3'
 import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -26,6 +26,10 @@ const props = defineProps({
     categories: {
         type: Object,
         default: () => []
+    },
+    success: {
+        type: String,
+        default: ''
     }
 })
 
@@ -53,6 +57,8 @@ const form = useForm({
 
 const filteredZilaList = ref([])
 const filteredUpozilaList = ref([])
+const showSuccessMessage = ref(false)
+const backendMessage = ref('')
 
 const Options = [
     { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
@@ -100,23 +106,102 @@ const getUpozilasByZila = (zilaId) => {
 
 const submit = () => {
     form.post(route('customer.gigs.store'), {
-        onSuccess: () => {
+        onSuccess: (res) => {
+            console.log(res);
+            showSuccessMessage.value = true
+            backendMessage.value = props.success || 'আপনার গিগ সফলভাবে তৈরি হয়েছে!'
             form.reset()
         },
         onError: (errors) => {
         }
     });
 }
+
+const createAnotherGig = () => {
+    showSuccessMessage.value = false
+    backendMessage.value = ''
+}
+
+const goToDashboard = () => {
+    router.visit(route('customer.dashboard'))
+}
 </script>
 
 <template>
     <CustomerDefaultLayout>
-
         <Head title="গিগ তৈরি" />
         <div class="min-h-screen py-8">
             <div class="max-w-6xl mx-auto px-4">
                 <PageTitle />
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Success Message Section -->
+                <div v-if="showSuccessMessage" class="mb-8">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-medium text-green-800">
+                                    সফল!
+                                </h3>
+                                <div class="mt-2 text-sm text-green-700">
+                                    <p>{{ backendMessage }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Boxes -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Create Another Gig Box -->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
+                             @click="createAnotherGig">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                আরেকটি গিগ তৈরি করুন
+                            </h3>
+                            <p class="text-sm text-gray-600">
+                                একই কাস্টমার হিসেবে আরেকটি নতুন গিগ পোস্ট করুন
+                            </p>
+                            <div class="mt-4">
+                                <span class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                                    নতুন গিগ তৈরি করুন
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Go to Dashboard Box -->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
+                             @click="goToDashboard">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                ড্যাশবোর্ডে যান
+                            </h3>
+                            <p class="text-sm text-gray-600">
+                                আপনার ড্যাশবোর্ডে ফিরে যান এবং অন্যান্য গিগগুলো দেখুন
+                            </p>
+                            <div class="mt-4">
+                                <span class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
+                                    ড্যাশবোর্ড দেখুন
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gig Creation Form (Hidden when success message is shown) -->
+                <div v-if="!showSuccessMessage" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2">
                         <div class="bg-white rounded-lg shadow-md p-8">
                             <form id="serviceRequestForm" @submit.prevent="submit">
