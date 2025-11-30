@@ -25,7 +25,7 @@ class GigRequest extends FormRequest
             'title' => 'required|string|max:100',
             'description' => 'required|string',
             'budget' => 'required|numeric|min:1',
-            'schedule_for' => 'required|string|in:normal,urgent,emergency,other',
+            'emergency' => 'required|string|in:normal,urgent,emergency,other',
             'category_id' => 'required|exists:categories,id',
             'district_id' => 'required|exists:districts,id',
             'zila_id' => 'required|exists:zilas,id',
@@ -47,9 +47,9 @@ class GigRequest extends FormRequest
             'budget.numeric' => 'বাজেট একটি সংখ্যা হতে হবে',
             'budget.min' => 'বাজেট ১ টাকার বেশি হতে হবে',
             
-            'schedule_for.required' => 'জরুরিতা নির্বাচন করুন',
-            'schedule_for.string' => 'জরুরিতা বৈধ হতে হবে',
-            'schedule_for.in' => 'বৈধ জরুরিতা নির্বাচন করুন',
+            'emergency.required' => 'জরুরিতা নির্বাচন করুন',
+            'emergency.string' => 'জরুরিতা বৈধ হতে হবে',
+            'emergency.in' => 'বৈধ জরুরিতা নির্বাচন করুন',
             
             'category_id.required' => 'ক্যাটাগরি নির্বাচন করুন',
             'category_id.exists' => 'বৈধ ক্যাটাগরি নির্বাচন করুন',

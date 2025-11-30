@@ -73,8 +73,11 @@ class CustomerController extends Controller
     ]);
 }
 public function gigsStore(GigRequest $request) {
-    // dd($request->all());
     TaskService::store($request);
+       return redirect()->back()->with([
+            'type' => 'success',
+            'message' => 'Gig created successfully.',
+        ]);
 }
 
 

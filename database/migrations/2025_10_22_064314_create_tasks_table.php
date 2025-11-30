@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('task_number')->unique();
             $table->foreignId('customer_id')->constrained('users');
-            $table->foreignId('service_id')->constrained();
+            $table->foreignId('category_id')->constrained();
             $table->foreignId('tasker_id')->nullable()->constrained('users');
             $table->string('title');
             $table->text('description');

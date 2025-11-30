@@ -27,10 +27,12 @@ class TaskService
     {   
         return Task::create([
             'task_number' => RandomGigNum::generateWithPrefix('GIG'),
+            'customer_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
+            'location_address' => $request->location_address,
             'budget' => $request->budget,
-            'schedule_for' => $request->schedule_for,
+            'emergency' => $request->emergency,
             'category_id' => $request->category_id,
             'district_id' => $request->district_id,
             'zila_id' => $request->zila_id,

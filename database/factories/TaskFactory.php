@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\District;
 use App\Models\Task;
 use App\Models\User;
@@ -21,7 +22,7 @@ class TaskFactory extends Factory
         return [
             'task_number' => strtoupper(Str::random(10)), 
             'customer_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
-            'service_id' => Service::inRandomOrder()->first()?->id ?? Service::factory(),
+            'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory(),
             'tasker_id' => User::inRandomOrder()->first()?->id, 
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),

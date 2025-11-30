@@ -43,7 +43,7 @@ const form = useForm({
     title: '',
     description: '',
     budget: '',
-    schedule_for: '',
+    emergency: '',
     district_id: '',
     zila_id: '',
     upozila_id: '',
@@ -151,12 +151,12 @@ const submit = () => {
                                                     <InputError class="mt-2" :message="form.errors.budget" />
                                             </div>
                                             <div>
-                                                <InputLabel for="schedule_for" value="জরুরিতা" />
-                                                <SelectInput id="schedule_for" class="w-full p-3"
+                                                <InputLabel for="emergency" value="জরুরিতা" />
+                                                <SelectInput id="emergency" class="w-full p-3"
                                                     defaultVal="জরুরিতা নির্বাচন করুন" :options="Options"
-                                                    labelKey="label" valueKey="value" v-model="form.schedule_for"
+                                                    labelKey="label" valueKey="value" v-model="form.emergency"
                                                     :error="form.errors.schedule_for" />
-                                                    <InputError class="mt-2" :message="form.errors.schedule_for" />
+                                                    <InputError class="mt-2" :message="form.errors.emergency" />
                                             </div>
                                         </div>
                                     </div>
