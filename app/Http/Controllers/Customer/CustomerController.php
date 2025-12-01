@@ -52,34 +52,32 @@ class CustomerController extends Controller
     ]);
   }
 
- public function createGig()
-{
-    
+  public function createGig()
+  {
+
     $categories = Category::where('is_active', true)
-        ->get(['id', 'name', 'icon']);
+      ->get(['id', 'name', 'icon']);
 
 
     $districts = District::with(['zilas:id,name,district_id'])
-        ->get(['id', 'name']);
-      
-    
+      ->get(['id', 'name']);
+
+
     $zilas = Zila::with(['upozilas:id,name,zila_id'])
-        ->get(['id', 'name', 'district_id']);
+      ->get(['id', 'name', 'district_id']);
 
     return Inertia::render('Customer/CreateGig', [
-        'districts' => DistrictResource::collection($districts),
-        'zilas' => ZilaResource::collection($zilas),
-        'categories' => CategoryResource::collection($categories),
+      'districts' => DistrictResource::collection($districts),
+      'zilas' => ZilaResource::collection($zilas),
+      'categories' => CategoryResource::collection($categories),
     ]);
-}
-public function gigsStore(GigRequest $request) {
+  }
+  public function gigsStore(GigRequest $request)
+  {
     TaskService::store($request);
-       return redirect()->back()->with([
-            'type' => 'success',
-            'message' => 'Gig created successfully.',
-        ]);
-}
-
-
-
+    return redirect()->back()->with([
+      'type' => 'success',
+      'message' => 'আপনার গিগ সফলভাবে তৈরি হয়েছে!',
+    ]);
+  }
 }

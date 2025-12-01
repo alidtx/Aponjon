@@ -107,13 +107,12 @@ const getUpozilasByZila = (zilaId) => {
 const submit = () => {
     form.post(route('customer.gigs.store'), {
         onSuccess: (res) => {
-            console.log(res);
+            if (res.props.flash?.type==='success'){
             showSuccessMessage.value = true
-            backendMessage.value = props.success || 'আপনার গিগ সফলভাবে তৈরি হয়েছে!'
+            backendMessage.value = res.props.flash?.message  || 'আপনার গিগ সফলভাবে তৈরি হয়েছে!'
             form.reset()
+            }
         },
-        onError: (errors) => {
-        }
     });
 }
 
