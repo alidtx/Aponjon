@@ -57,9 +57,9 @@ const shouldShowError = computed(() => {
 </script>
 
 <template>
-    <div class="mb-8">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-bold text-dark">সেবা নির্বাচন করুন</h3>
+    <div class="mb-4">
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xl font-bold text-dark">সেবা নির্বাচন করুন <span class="text-red-500 text-sm font-medium">*</span></h3>
             <div class="flex space-x-2">
                 <button 
                     type="button" 

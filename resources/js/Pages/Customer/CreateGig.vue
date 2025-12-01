@@ -235,7 +235,7 @@ const goToDashboard = () => {
                                                     <InputError class="mt-2" :message="form.errors.budget" />
                                             </div>
                                             <div>
-                                                <InputLabel for="emergency" value="জরুরিতা" />
+                                                <InputLabel for="emergency" value="জরুরিতা" required/>
                                                 <SelectInput id="emergency" class="w-full p-3"
                                                     defaultVal="জরুরিতা নির্বাচন করুন" :options="Options"
                                                     labelKey="label" valueKey="value" v-model="form.emergency"
