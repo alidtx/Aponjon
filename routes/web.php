@@ -17,6 +17,7 @@ Route::get('hh', function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('marketplace', [HomeController::class, 'marketplace'])->name('marketplace');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin', function(){

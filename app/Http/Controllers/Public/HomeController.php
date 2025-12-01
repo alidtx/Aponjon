@@ -18,4 +18,8 @@ class HomeController extends Controller
             'siteConfig' => config('aponjon.siteConfig'),
         ]);
     }
+    public function marketplace()
+    {
+        return Inertia::render('Marketplace/Index');
+    }
 }
