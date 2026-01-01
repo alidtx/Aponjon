@@ -1,6 +1,5 @@
 <script setup>
 import MarketplaceDefaultLayout from '@/Layouts/MarketplaceDefaultLayout.vue';
-import Search from './Partials/Search.vue';
 import PageHeadline from '@/Components/PageHeadline.vue';
 import Stats from './Partials/Stats.vue';
 import SideBar from './Partials/SideBar.vue';
