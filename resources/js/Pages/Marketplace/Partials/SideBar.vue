@@ -1,14 +1,12 @@
 <script setup>
-     
+
 </script>
 
 
 <template>
-     <div class="lg:w-1/4">
+    <div class="lg:w-1/4">
                 <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
                     <h3 class="text-lg font-bold text-dark mb-4">ফিল্টার করুন</h3>
-
-                    <!-- Category Filter -->
                     <div class="mb-6">
                         <label class="block font-medium text-dark mb-3">সেবা ক্যাটাগরি</label>
                         <div class="space-y-2">
@@ -43,8 +41,6 @@
                             </label>
                         </div>
                     </div>
-
-                    <!-- Location Filter -->
                     <div class="mb-6">
                         <label class="block font-medium text-dark mb-3">লোকেশন</label>
                         <select class="w-full p-2 border border-gray-300 rounded-lg">
@@ -83,7 +79,6 @@
                         </div>
                     </div>
 
-                    <!-- Urgency Filter -->
                     <div class="mb-6">
                         <label class="block font-medium text-dark mb-3">জরুরিতা</label>
                         <div class="space-y-2">

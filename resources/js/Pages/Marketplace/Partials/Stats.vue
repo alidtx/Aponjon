@@ -1,9 +1,10 @@
 <script setup>
 
+
 </script>
 
 <template>
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+   <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 <div>
                     <div class="text-2xl font-bold text-primary">১,২৫৪</div>
