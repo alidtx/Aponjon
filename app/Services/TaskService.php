@@ -2,14 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Otp;
 use App\Models\Task;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Random\RandomException;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskService
 {
@@ -39,4 +34,39 @@ class TaskService
             'upozila_id' => $request->upozila_id,
         ]);
     }
+public static function fetchTaskData(int $perPage = 15): LengthAwarePaginator 
+
+{
+        $task = Task::select(
+        'task_number',
+        'category_id',
+        'tasker_id',
+        'title',
+        'description',
+        'location_address',
+        'district_id',
+        'zila_id',
+        'upozila_id',
+        'emergency',
+        'budget'
+        )
+        ->with('category')
+        ->orderBy('id', 'DESC')
+        ->get();
+
+        $collection = collect($task);
+        $currentPage = request()->get('page', 1);
+        $currentPageItems = $collection
+            ->slice(($currentPage - 1) * $perPage, $perPage)
+            ->values();
+
+        return new LengthAwarePaginator(
+            $currentPageItems,
+            $collection->count(),
+            $perPage,
+            $currentPage,
+        );
+       return $task;
+}
+
 }

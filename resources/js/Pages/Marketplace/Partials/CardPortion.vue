@@ -1,6 +1,15 @@
 <script setup>
 import Pagination from '@/Components/Pagination.vue';
 import Search from './Search.vue';
+
+const props=defineProps({
+  cardData: {
+    type: Array,
+    required:true
+  }
+})
+
+console.log(props.cardData.value);
 </script>
 
 

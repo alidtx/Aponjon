@@ -5,6 +5,7 @@ import Stats from './Partials/Stats.vue';
 import SideBar from './Partials/SideBar.vue';
 import CardPortion from './Partials/CardPortion.vue';
 import { Head } from '@inertiajs/vue3'
+import { onMounted, ref } from 'vue'
 
 const props=  defineProps({
   totalTask:{
@@ -25,8 +26,18 @@ const props=  defineProps({
   },
 
 })
+const cardData = ref([])
+console.log(cardData)
+const FetchCardPortionData=async () => {
+    const response = await axios.patch(
+        route('fetch-task-data'),
+    )
+    cardData.value=response.data?.data
+}
 
-
+onMounted(() => {
+    FetchCardPortionData();
+})
 
 </script>
 
@@ -45,7 +56,9 @@ const props=  defineProps({
         />
         <div class="flex flex-col lg:flex-row gap-8">
              <SideBar/>
-            <CardPortion/>
+            <CardPortion 
+             :cardData="cardData"
+            />
         </div>
     </MarketplaceDefaultLayout>
 </template>
