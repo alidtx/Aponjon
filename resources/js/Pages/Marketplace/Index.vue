@@ -5,6 +5,24 @@ import Stats from './Partials/Stats.vue';
 import SideBar from './Partials/SideBar.vue';
 import CardPortion from './Partials/CardPortion.vue';
 import { Head } from '@inertiajs/vue3'
+
+const props=  defineProps({
+  totalTask:{
+   type: Number,
+   required:true
+  },
+  activeTasker:{
+   type: Number,
+   required:true
+  },
+  totalBudget:{
+   type: [Number, String],
+   required:true
+  }
+})
+console.log(props.totalBudget);
+
+
 </script>
 
 <template>
@@ -14,7 +32,11 @@ import { Head } from '@inertiajs/vue3'
         title="সেবার"
         highlight="অনুরোধসমূহ"
         description="বাংলাদেশের বিভিন্ন প্রান্ত থেকে আসা হাজারো সেবার অনুরোধ। আপনার দক্ষতা অনুযায়ী কাজ খুঁজে নিন।"/>        
-        <Stats/>
+        <Stats
+         :totalTask="props.totalTask"
+         :activeTasker="props.activeTasker"
+         :totalBudget="props.totalBudget"
+        />
         <div class="flex flex-col lg:flex-row gap-8">
              <SideBar/>
             <CardPortion/>
