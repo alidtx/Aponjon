@@ -24,9 +24,17 @@ class HomeController extends Controller
     }
     public function marketplace()
     {   
+        $activeTasker=TaskerProfile::select('id', 'verification_status')
+              ->where('verification_status', 'verified')
+              ->count();
+        $completedTasks=Task::select('id','status')
+        ->where('status','completed')
+        ->count();
+
         return Inertia::render('Marketplace/Index',[
               'totalTask'=>Task::select('id')->count(),
-              'activeTasker'=>TaskerProfile::select('id', 'verification_status')->where('verification_status', 'verified')->count(),
+              'activeTasker'=>$activeTasker,
+              'completedTasks'=>$completedTasks,
               'totalBudget'=>Task::sum('budget')
         ]);
     }

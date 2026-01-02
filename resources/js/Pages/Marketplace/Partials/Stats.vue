@@ -4,13 +4,19 @@ import { computed } from 'vue'
 
 const props = defineProps({
   totalTask: Number,
-  activeTasker: Number,
+  activeTasker: Number, 
+  completedTasks: Number, 
   totalBudget: [Number, String],
 })
 
 const roundedBudgetInLakh = computed(() => {
   const budget = Number(props.totalBudget) || 0
   return Math.round(budget) 
+})
+
+const completedTaskPercentage = computed(() => {
+  if (!props.totalTask) return 0
+  return Math.round((props.completedTasks / props.totalTask) * 100)
 })
 
 </script>
@@ -31,7 +37,7 @@ const roundedBudgetInLakh = computed(() => {
                 <div class="text-sm text-gray-600">সক্রিয় টাস্কার</div>
             </div>
             <div>
-                <div class="text-2xl font-bold text-orange-600">৯৪%</div>
+                <div class="text-2xl font-bold text-orange-600">{{completedTaskPercentage}}%</div>
                 <div class="text-sm text-gray-600">সফলতার হার</div>
             </div>
         </div>

@@ -18,9 +18,14 @@ const props=  defineProps({
   totalBudget:{
    type: [Number, String],
    required:true
-  }
+  },
+  completedTasks:{
+   type: Number,
+   required:true
+  },
+
 })
-console.log(props.totalBudget);
+
 
 
 </script>
@@ -36,6 +41,7 @@ console.log(props.totalBudget);
          :totalTask="props.totalTask"
          :activeTasker="props.activeTasker"
          :totalBudget="props.totalBudget"
+         :completedTasks="props.completedTasks"
         />
         <div class="flex flex-col lg:flex-row gap-8">
              <SideBar/>
