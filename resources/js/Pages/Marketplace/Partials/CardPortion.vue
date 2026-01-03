@@ -42,27 +42,38 @@ const timeAgo = (dateTime) => {
     const diffDays = Math.floor(diffHours / 24)
     return `${diffDays} দিন আগে`
 }
-const urgency = (urgency) => {
-    const value = (urgency || '').toString().toLowerCase()
-
-    if (value === 'normal') {
-        return { text: 'সাধারণ', icon: 'fa-circle text-green-400', textColor: 'text-green-600' }
-    }
-
-    if (value === 'urgent') {
-        return { text: 'জরুরি', icon: 'fa-exclamation-circle text-yellow-500', textColor: 'text-orange-600' }
-    }
-
-    if (value === 'emergency') {
-        return { text: 'ইমার্জেন্সি', icon: 'fa-bolt text-red-600', textColor: 'text-red-600' }
-    }
-
-    if (value === 'other') {
-        return { text: 'অন্যান্য', icon: 'fa-info-circle text-blue-500', textColor: 'text-blue-600' }
-    }
-
-    return { text: 'সাধারণ', icon: 'fa-circle text-gray-400', textColor: 'text-red-600' }
+const URGENCY_MAP = {
+    normal: {
+        text: 'সাধারণ',
+        icon: 'fa-circle',
+        border: 'border-green-600',
+        textColor: 'text-green-600',
+        bgColor: 'bg-green-100',
+    },
+    urgent: {
+        text: 'জরুরি',
+        icon: 'fa-exclamation-circle',
+        border: 'border-yellow-500',
+        textColor: 'text-yellow-600',
+        bgColor: 'bg-yellow-100',
+    },
+    emergency: {
+        text: 'ইমার্জেন্সি',
+        icon: 'fa-bolt',
+        border: 'border-red-600',
+        textColor: 'text-red-600',
+        bgColor: 'bg-red-100',
+    },
+    other: {
+        text: 'অন্যান্য',
+        icon: 'fa-info-circle',
+        border: 'border-blue-500',
+        textColor: 'text-blue-600',
+        bgColor: 'bg-blue-100',
+    },
 }
+
+const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.normal
 
 
 
@@ -78,7 +89,10 @@ console.log(props.cardData);
         </div>
         <div v-else class="grid grid-cols-1 gap-6">
             <div v-for="(task, index) in cardData" :key="index"
-                class="bg-white rounded-lg shadow-md border-l-4 border-red-500 hover:shadow-lg transition-shadow">
+            :class="[
+            'bg-white rounded-lg shadow-md border-l-4 hover:shadow-lg transition-shadow',
+            urgency(task.emergency).border
+            ]">
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-4">
                         <div>
@@ -127,12 +141,14 @@ console.log(props.cardData);
 
                     <div class="flex justify-between items-center">
                         <div class="flex space-x-2">
-                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                            <span class=" px-3 py-1 rounded-full text-sm font-medium" 
+                            :class="urgency(task.emergency).bgColor, urgency(task.emergency).textColor"
+                            >
                                 {{ task.category?.name || 'সাধারণ' }}
                             </span>
-                            <span v-if="task.user?.rating"
+                            <span 
                                 class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                                <i class="fas fa-star mr-1"></i>{{ task.user.rating }}+ টাস্কার
+                                <i class="fas fa-star mr-1"></i>8.5+ টাস্কার
                             </span>
                         </div>
                         <div class="flex space-x-2">
