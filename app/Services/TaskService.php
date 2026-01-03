@@ -37,10 +37,12 @@ class TaskService
 public static function fetchTaskData(int $perPage = 15): LengthAwarePaginator 
 
 {
-        $task = Task::select(
-        'task_number',
+          $task = Task::select(
         'category_id',
+        'district_id',
         'tasker_id',
+        'zila_id',
+        'upozila_id',
         'title',
         'description',
         'location_address',
@@ -48,10 +50,11 @@ public static function fetchTaskData(int $perPage = 15): LengthAwarePaginator
         'zila_id',
         'upozila_id',
         'emergency',
-        'budget'
+        'budget',
+        'created_at'
         )
-        ->with('category')
-        ->orderBy('id', 'DESC')
+        ->with('category', 'districts', 'zilas', 'upozilas')
+        // ->orderBy('id', 'DESC')
         ->get();
 
         $collection = collect($task);
@@ -66,7 +69,6 @@ public static function fetchTaskData(int $perPage = 15): LengthAwarePaginator
             $perPage,
             $currentPage,
         );
-       return $task;
 }
 
 }

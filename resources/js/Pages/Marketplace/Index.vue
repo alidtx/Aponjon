@@ -33,6 +33,7 @@ const FetchCardPortionData = async () => {
     const response = await axios.patch(
         route('fetch-task-data'),
     )
+    console.log(response);
     cardData.value = response.data?.data
 }
 

@@ -9,6 +9,64 @@ const props = defineProps({
         required: true
     }
 })
+
+const getLocation = (task) => {
+    return [
+        task.district?.name,
+        task.zila?.name,
+        task.upozila?.name
+    ].filter(Boolean).join(', ')
+}
+
+const timeAgo = (dateTime) => {
+    if (!dateTime) return ''
+
+    const now = new Date()
+    const past = new Date(dateTime.replace(' ', 'T'))
+    const diffSeconds = Math.floor((now - past) / 1000)
+
+    if (diffSeconds < 60) {
+        return `${diffSeconds} সেকেন্ড আগে`
+    }
+
+    const diffMinutes = Math.floor(diffSeconds / 60)
+    if (diffMinutes < 60) {
+        return `${diffMinutes} মিনিট আগে`
+    }
+
+    const diffHours = Math.floor(diffMinutes / 60)
+    if (diffHours < 24) {
+        return `${diffHours} ঘন্ট আগে`
+    }
+
+    const diffDays = Math.floor(diffHours / 24)
+    return `${diffDays} দিন আগে`
+}
+const urgency = (urgency) => {
+    const value = (urgency || '').toString().toLowerCase()
+
+    if (value === 'normal') {
+        return { text: 'সাধারণ', icon: 'fa-circle text-green-400', textColor: 'text-green-600' }
+    }
+
+    if (value === 'urgent') {
+        return { text: 'জরুরি', icon: 'fa-exclamation-circle text-yellow-500', textColor: 'text-orange-600' }
+    }
+
+    if (value === 'emergency') {
+        return { text: 'ইমার্জেন্সি', icon: 'fa-bolt text-red-600', textColor: 'text-red-600' }
+    }
+
+    if (value === 'other') {
+        return { text: 'অন্যান্য', icon: 'fa-info-circle text-blue-500', textColor: 'text-blue-600' }
+    }
+
+    return { text: 'সাধারণ', icon: 'fa-circle text-gray-400', textColor: 'text-red-600' }
+}
+
+
+
+console.log(props.cardData);
 </script>
 
 
@@ -28,20 +86,20 @@ const props = defineProps({
                             <div class="flex items-center text-sm text-gray-600 flex-wrap gap-2">
                                 <span class="flex items-center">
                                     <i class="fas fa-map-marker-alt mr-1"></i>
-                                    {{ task.location }}
+                                    {{ getLocation(task) }}
                                 </span>
                                 <span class="flex items-center">
                                     <i class="fas fa-clock mr-1"></i>
-                                    {{ task.created_at }}
+                                    {{ timeAgo(task.created_at) }}
                                 </span>
-                                <span v-if="task.is_urgent" class="flex items-center text-red-600">
-                                    <i class="fas fa-bolt mr-1"></i>
-                                    ইমার্জেন্সি
+                                <span class="flex items-cente" :class="urgency(task.emergency).textColor">
+                                    <i class="fas mr-1" :class="urgency(task.emergency).icon"></i>
+                                    {{ urgency(task.emergency).text }}
                                 </span>
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="text-2xl font-bold text-dark">৳{{ task.budget }}</div>
+                            <div class="text-2xl font-bold text-dark">৳{{ Math.round(task.budget) }}</div>
                             <div class="text-sm text-gray-600">বাজেট</div>
                         </div>
                     </div>

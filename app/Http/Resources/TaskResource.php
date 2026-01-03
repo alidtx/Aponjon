@@ -24,6 +24,7 @@ class TaskResource extends JsonResource
             'scheduled_for'        => $this->scheduled_for,
             'budget'               => $this->budget,
             'status'               => $this->status,
+            'emergency'               => $this->emergency,
             'customer_notes'       => $this->customer_notes,
             'customer' => new UserResource($this->whenLoaded('customers')),
             'category' => new CategoryResource($this->whenLoaded('category')),
@@ -35,7 +36,7 @@ class TaskResource extends JsonResource
             'upozila'  => new UpozilaResource($this->whenLoaded('upozilas')),
             'orders'  => OrderResource::collection($this->whenLoaded('order')),
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
-            'created_at' => $this->created_at?->toDateTimeString(),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->toDateTimeString(),
         ];
     }

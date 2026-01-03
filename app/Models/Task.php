@@ -52,17 +52,17 @@ class Task extends Model
 
     public function districts()
     {
-        return $this->belongsTo(District::class);
+       return $this->belongsTo(District::class, 'district_id');
     }
 
     public function zilas()
     {
-        return $this->belongsTo(Zila::class);
+       return $this->belongsTo(Zila::class, 'zila_id');
     }
 
     public function upozilas()
     {
-        return $this->belongsTo(Upozila::class);
+      return $this->belongsTo(Upozila::class, 'upozila_id');
     }
 
     public function order()
