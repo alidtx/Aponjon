@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Enum\PaginationLimits;
+use Illuminate\Http\Request;
 
 class TaskService
 {
@@ -34,41 +36,18 @@ class TaskService
             'upozila_id' => $request->upozila_id,
         ]);
     }
-public static function fetchTaskData(int $perPage = 15): LengthAwarePaginator 
 
+public static function getPaginate(Request $request): LengthAwarePaginator 
 {
-          $task = Task::select(
-        'category_id',
-        'district_id',
-        'tasker_id',
-        'zila_id',
-        'upozila_id',
-        'title',
-        'description',
-        'location_address',
-        'district_id',
-        'zila_id',
-        'upozila_id',
-        'emergency',
-        'budget',
-        'created_at'
-        )
-        ->with('category', 'districts', 'zilas', 'upozilas')
-        // ->orderBy('id', 'DESC')
-        ->get();
-
-        $collection = collect($task);
-        $currentPage = request()->get('page', 1);
-        $currentPageItems = $collection
-            ->slice(($currentPage - 1) * $perPage, $perPage)
-            ->values();
-
-        return new LengthAwarePaginator(
-            $currentPageItems,
-            $collection->count(),
-            $perPage,
-            $currentPage,
-        );
+return Task::query()
+    ->select(['id','category_id','title','description','district_id','zila_id','upozila_id','emergency','budget','created_at'
+    ])
+    ->with(['category:id,name','districts:id,name','zilas:id,name','upozilas:id,name',
+    ])
+    ->paginate(
+        perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value,
+        page: $request->current_page ?? 1
+    );
 }
 
 }

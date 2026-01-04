@@ -24,21 +24,11 @@ const props = defineProps({
         type: Number,
         required: true
     },
+    task: {
+        type: Object,
+        required: true
+    },
 
-})
-const cardData = ref([])
-const isLoading = ref(true)
-
-const FetchCardPortionData = async () => {
-    const response = await axios.patch(
-        route('fetch-task-data'),
-    )
-    console.log(response);
-    cardData.value = response.data?.data
-}
-
-onMounted(() => {
-    FetchCardPortionData();
 })
 
 </script>
@@ -52,7 +42,7 @@ onMounted(() => {
             :completedTasks="props.completedTasks" />
         <div class="flex flex-col lg:flex-row gap-8">
             <SideBar />
-            <CardPortion :cardData="cardData" :loading="isLoading" />
+            <CardPortion :cardData="props.task?.data" />
         </div>
     </MarketplaceDefaultLayout>
 </template>

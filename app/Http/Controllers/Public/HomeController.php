@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enum\PaginationLimits;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function marketplace()
+    public function marketplace(Request $request)
     {
         $activeTasker = TaskerProfile::select('id', 'verification_status')
             ->where('verification_status', 'verified')
@@ -38,11 +39,8 @@ class HomeController extends Controller
             'totalTask' => Task::select('id')->count(),
             'activeTasker' => $activeTasker,
             'completedTasks' => $completedTasks,
-            'totalBudget' => Task::sum('budget')
+            'totalBudget' => Task::sum('budget'),
+            'task'=>TaskResource::collection(TaskService::getPaginate($request))
         ]);
-    }
-    public function FetchTasks(Request $request)
-    {
-        return TaskResource::collection(TaskService::fetchTaskData($request->per_page ?? 15));
     }
 }
