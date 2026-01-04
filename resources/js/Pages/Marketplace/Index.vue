@@ -42,7 +42,7 @@ const props = defineProps({
             :completedTasks="props.completedTasks" />
         <div class="flex flex-col lg:flex-row gap-8">
             <SideBar />
-            <CardPortion :cardData="props.task?.data" />
+            <CardPortion :cardData="props.task" />
         </div>
     </MarketplaceDefaultLayout>
 </template>

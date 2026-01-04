@@ -84,11 +84,11 @@ console.log(props.cardData);
 <template>
     <div class="lg:w-3/4">
         <Search />
-        <div v-if="!cardData || cardData.length === 0" class="text-center py-8">
+        <div v-if="!cardData.data || cardData.data.length === 0" class="text-center py-8">
             <p class="text-gray-600">লোড হচ্ছে বা কোন ডেটা নেই...</p>
         </div>
         <div v-else class="grid grid-cols-1 gap-6">
-            <div v-for="(task, index) in cardData" :key="index"
+            <div v-for="(task, index) in cardData.data" :key="index"
             :class="[
             'bg-white rounded-lg shadow-md border-l-4 hover:shadow-lg transition-shadow',
             urgency(task.emergency).border
