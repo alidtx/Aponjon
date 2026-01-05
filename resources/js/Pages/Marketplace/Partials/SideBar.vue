@@ -1,145 +1,116 @@
 <script setup>
-import {onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
-import Checkbox from '@/Components/Checkbox.vue';
+import Checkbox from '@/Components/Checkbox.vue'
 import axios from 'axios'
 
 const props = defineProps({
-   query: {
+    query: {
         type: Object,
         required: true
     }
-
-
 })
 
-const category = ref({ data: [] }); 
+const category = ref({ data: [] })
 const loading = ref(false)
 const error = ref(null)
-const slug = ref(props.query?.slug ?? false)
-const fetchCategoryList = async () => {
-    try {
-        const response = await axios.get(route('category'), {})
-        category.value = response.data
+const slug = ref(
+    props.query?.slug ? [].concat(props.query.slug) : []
+)
 
+const fetchCategoryList = async () => {
+    loading.value = true
+    try {
+        const response = await axios.get(route('category'))
+        category.value = response.data
     } catch (err) {
-        error.value = 'Failed to fetch catetory list.'
+        error.value = 'Failed to fetch category list.'
     } finally {
         loading.value = false
     }
 }
-const getFilteredResults = (currentPage = 1) => {
-    const data = getQuery(currentPage)
 
+const getFilteredResults = (currentPage = 1) => {
     router.visit(route('marketplace'), {
-        data: data,
+        data: getQuery(currentPage),
+        preserveState: true,
+        replace: true,
     })
 }
 
-const getQuery = (currentPage = null) => {
+const getQuery = (currentPage = 1) => {
     const data = {
-        current_page: currentPage ?? 1,
+        current_page: currentPage,
     }
-    if (slug.value) data.slug = slug.value
+
+    if (slug.value.length) {
+        data.slug = slug.value
+    }
+
     return data
 }
 
-onMounted(() => {
-    fetchCategoryList()
-})
-</script>
+const resetCategory = () => {
+    slug.value = []
+}
 
+onMounted(fetchCategoryList)
+</script>
 
 <template>
     <div class="lg:w-1/4">
         <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
             <h3 class="text-lg font-bold text-dark mb-4">ফিল্টার করুন</h3>
             <div class="mb-6">
-                <label class="block font-medium text-dark mb-3">সেবা ক্যাটাগরি</label>
-                <div class="space-y-2">
+                <label class="block font-medium text-dark mb-3">
+                    সেবা ক্যাটাগরি
+                </label>
+
+                <div class="space-y-2 mb-6">
                     <label class="flex items-center">
-                        <Checkbox class="rounded text-primary" checked/>
-                        <span class="ml-2 text-gray-700">সকল ক্যাটাগরি</span>
-                    </label>
-                    <label class="flex items-center" 
-                     v-for="(item, index) in category.data" 
-                            :key="item.id || index"
-                    >  
-                        <Checkbox class="rounded text-primary"  
-                        v-model:checked="slug"
+                        <Checkbox
+                            class="rounded text-primary"
+                            :checked="slug.length === 0"
+                            @change="resetCategory"
                         />
-                        <span class="ml-2 text-gray-700">{{ item.name }}</span>
-                        <span class="ml-auto text-gray-500"> ({{ item.task?.length || 0 }})</span>
-                    </label>
-                    
-                </div>
-            </div>
-            <div class="mb-6">
-                <label class="block font-medium text-dark mb-3">লোকেশন</label>
-                <select class="w-full p-2 border border-gray-300 rounded-lg">
-                    <option value="">সকল এলাকা</option>
-                    <option value="dhaka">ঢাকা</option>
-                    <option value="chattogram">চট্টগ্রাম</option>
-                    <option value="khulna">খুলনা</option>
-                    <option value="rajshahi">রাজশাহী</option>
-                </select>
-            </div>
-
-            <!-- Budget Filter -->
-            <div class="mb-6">
-                <label class="block font-medium text-dark mb-3">বাজেট রেঞ্জ</label>
-                <div class="space-y-2">
-                    <label class="flex items-center">
-                        <input type="radio" name="budget" class="text-primary" checked>
-                        <span class="ml-2 text-gray-700">সকল বাজেট</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="budget" class="text-primary">
-                        <span class="ml-2 text-gray-700">৳৫০০ এর নিচে</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="budget" class="text-primary">
-                        <span class="ml-2 text-gray-700">৳৫০০ - ৳১,০০০</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="budget" class="text-primary">
-                        <span class="ml-2 text-gray-700">৳১,০০০ - ৳২,০০০</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="budget" class="text-primary">
-                        <span class="ml-2 text-gray-700">৳২,০০০+</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block font-medium text-dark mb-3">জরুরিতা</label>
-                <div class="space-y-2">
-                    <label class="flex items-center">
-                        <input type="checkbox" class="rounded text-primary" checked>
-                        <span class="ml-2 text-gray-700">সকল</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="checkbox" class="rounded text-primary">
-                        <span class="ml-2 text-red-600">
-                            <i class="fas fa-bolt mr-1"></i>ইমার্জেন্সি
+                        <span class="ml-2 text-gray-700">
+                            ফিল্টার রিসেট
                         </span>
                     </label>
-                    <label class="flex items-center">
-                        <input type="checkbox" class="rounded text-primary">
-                        <span class="ml-2 text-orange-600">
-                            <i class="fas fa-exclamation-circle mr-1"></i>জরুরি
+                    <label
+                        class="flex items-center"
+                        v-for="item in category.data"
+                        :key="item.id"
+                    >
+                        <Checkbox
+                            class="rounded text-primary"
+                            :value="item.slug"
+                            v-model:checked="slug"
+                        />
+                        <span class="ml-2 text-gray-700">
+                            {{ item.name }}
+                        </span>
+                        <span class="ml-auto text-gray-500">
+                            ({{ item.task?.length || 0 }})
                         </span>
                     </label>
-                    <label class="flex items-center">
-                        <input type="checkbox" class="rounded text-primary">
-                        <span class="ml-2 text-green-600">সাধারণ</span>
-                    </label>
-                </div>
-            </div>
 
-            <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
-            @click="getFilteredResults()"
+                </div>
+                 <!-- Location Filter -->
+                    <div class="mb-6">
+                        <label class="block font-medium text-dark mb-3">লোকেশন</label>
+                        <select class="w-full p-2 border border-gray-300 rounded-lg">
+                            <option value="">সকল এলাকা</option>
+                            <option value="dhaka">ঢাকা</option>
+                            <option value="chattogram">চট্টগ্রাম</option>
+                            <option value="khulna">খুলনা</option>
+                            <option value="rajshahi">রাজশাহী</option>
+                        </select>
+                    </div>
+            </div>
+            <button
+                class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
+                @click="getFilteredResults()"
             >
                 ফিল্টার প্রয়োগ করুন
             </button>

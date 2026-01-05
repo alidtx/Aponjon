@@ -29,36 +29,45 @@ class TaskService
     }
 
     public static function getPaginate(Request $request): LengthAwarePaginator
-    {  
-        $category=$request->query('category');
-        return Task::query()
-            ->select([
-                'id',
-                'category_id',
-                'title',
-                'description',
-                'district_id',
-                'zila_id',
-                'upozila_id',
-                'emergency',
-                'budget',
-                'created_at'
-            ])
-            ->with([
-                'category:id,name',
-                'districts:id,name',
-                'zilas:id,name',
-                'upozilas:id,name',
-            ])
-            ->when(! is_null($category),  function($query) use ($category) {
-                $query->where('slug', 'like', "{%$category%}");
-            })
-            ->orderByDesc('id')
-            ->latest()
-            ->paginate(
-                perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value,
-            );
-    }
+{
+    $slug = $request->query('slug');
+
+    return Task::query()
+        ->select([
+            'id',
+            'category_id',
+            'title',
+            'description',
+            'district_id',
+            'zila_id',
+            'upozila_id',
+            'emergency',
+            'budget',
+            'created_at'
+        ])
+        ->with([
+            'category:id,name,slug',
+            'districts:id,name',
+            'zilas:id,name',
+            'upozilas:id,name',
+        ])
+        ->when(!empty($slug), function ($query) use ($slug) {
+
+            $query->whereHas('category', function ($q) use ($slug) {
+                if (is_array($slug)) {
+                    $q->whereIn('slug', $slug);
+                } else {
+                    $q->where('slug', 'LIKE', "%{$slug}%");
+                }
+            });
+
+        })
+        ->orderByDesc('id')
+        ->paginate(
+            perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value
+        );
+}
+
     public static function category()
 
     {
