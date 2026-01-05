@@ -87,10 +87,6 @@ const URGENCY_MAP = {
 }
 
 const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.normal
-
-
-
-console.log(props.cardData);
 </script>
 
 
