@@ -27,9 +27,7 @@ const props = defineProps({
         type: Object,
         required: true
     },
-
 })
-
 </script>
 
 <template>
@@ -40,7 +38,7 @@ const props = defineProps({
         <Stats :totalTask="props.totalTask" :activeTasker="props.activeTasker" :totalBudget="props.totalBudget"
             :completedTasks="props.completedTasks" />
         <div class="flex flex-col lg:flex-row gap-8">
-            <SideBar />
+            <SideBar/>
             <CardPortion 
             :cardData="props.task"
              />

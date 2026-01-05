@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Task;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enum\PaginationLimits;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class TaskService
@@ -47,8 +48,19 @@ class TaskService
                 'zilas:id,name',
                 'upozilas:id,name',
             ])
+            ->orderByDesc('id')
             ->paginate(
                 perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value,
             );
+    }
+    public static function category()
+
+    {
+        $categories = Category::select('id', 'name', 'slug')
+            ->with(['task:id,category_id'])
+            ->where('is_active', true)
+            ->get();
+
+        return $categories;
     }
 }

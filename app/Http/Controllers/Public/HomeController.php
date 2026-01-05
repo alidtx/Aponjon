@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Public;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
+use App\Models\Category;
 use App\Models\Task;
 use App\Models\TaskerProfile;
 use App\Services\TaskService;
@@ -39,7 +41,12 @@ class HomeController extends Controller
             'activeTasker' => $activeTasker,
             'completedTasks' => $completedTasks,
             'totalBudget' => Task::sum('budget'),
-            'task'=>TaskResource::collection(TaskService::getPaginate($request))
+            'task' => TaskResource::collection(TaskService::getPaginate($request))
         ]);
+    }
+
+    public function category()
+    {
+        return CategoryResource::collection(TaskService::category());
     }
 }

@@ -22,6 +22,7 @@ class CategoryResource extends JsonResource
             'icon'        => $this->icon,
             'is_active'   => $this->is_active,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
+            'task' => TaskResource::collection($this->whenLoaded('task')),
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
         ];
