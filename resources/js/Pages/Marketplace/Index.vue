@@ -5,7 +5,6 @@ import Stats from './Partials/Stats.vue';
 import SideBar from './Partials/SideBar.vue';
 import CardPortion from './Partials/CardPortion.vue';
 import { Head } from '@inertiajs/vue3'
-import { onMounted, ref } from 'vue'
 
 const props = defineProps({
     totalTask: {

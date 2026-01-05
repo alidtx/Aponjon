@@ -1,7 +1,6 @@
 <script setup>
-import Pagination from '@/Components/Pagination.vue';
 import Search from './Search.vue';
-import { watch, ref } from 'vue'
+import {ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { TailwindPagination } from 'laravel-vue-pagination'
 
