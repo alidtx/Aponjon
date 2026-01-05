@@ -1,14 +1,28 @@
 <script setup>
 import Pagination from '@/Components/Pagination.vue';
 import Search from './Search.vue';
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
+import { router } from '@inertiajs/vue3'
+import { TailwindPagination } from 'laravel-vue-pagination'
 
 const props = defineProps({
     cardData: {
-        type: Array,
+        type: Object,
         required: true
-    }
+    },
 })
+
+
+const perPage = ref(props.cardData?.per_page ?? 15)
+
+const getFilteredResults = (page = 1) => {
+    router.visit(route('marketplace'), {
+        data: {
+            page: page,
+            per_page: parseInt(perPage.value),
+        },
+    })
+}
 
 const getLocation = (task) => {
     return [
@@ -163,7 +177,13 @@ console.log(props.cardData);
                 </div>
             </div>
         </div>
-
-        <Pagination />
+        <div class="flex justify-center items-center space-x-2 mt-8">
+          <TailwindPagination
+          :data="props.cardData"
+          @pagination-change-page="getFilteredResults"
+          :limit="1"
+          class="mx-5"
+         />
+        </div>
     </div>
 </template>

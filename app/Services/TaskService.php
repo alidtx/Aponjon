@@ -3,25 +3,14 @@
 namespace App\Services;
 
 use App\Models\Task;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enum\PaginationLimits;
 use Illuminate\Http\Request;
 
 class TaskService
 {
-    public static function getTaskByStatus(string $status, $customerId = null, array $relations = [])
-    {
-        return Task::with($relations)
-            ->when($status !== 'all', function (Builder $query) use ($status, $customerId) {
-                $query->where('status', $status);
-                $query->where('customer_id', $customerId);
-            })
-            ->latest()
-            ->get();
-    }
     public static function store($request)
-    {   
+    {
         return Task::create([
             'task_number' => RandomGigNum::generateWithPrefix('GIG'),
             'customer_id' => auth()->id(),
@@ -37,17 +26,29 @@ class TaskService
         ]);
     }
 
-public static function getPaginate(Request $request): LengthAwarePaginator 
-{
-return Task::query()
-    ->select(['id','category_id','title','description','district_id','zila_id','upozila_id','emergency','budget','created_at'
-    ])
-    ->with(['category:id,name','districts:id,name','zilas:id,name','upozilas:id,name',
-    ])
-    ->paginate(
-        perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value,
-        page: $request->current_page ?? 1
-    );
-}
-
+    public static function getPaginate(Request $request): LengthAwarePaginator
+    {
+        return Task::query()
+            ->select([
+                'id',
+                'category_id',
+                'title',
+                'description',
+                'district_id',
+                'zila_id',
+                'upozila_id',
+                'emergency',
+                'budget',
+                'created_at'
+            ])
+            ->with([
+                'category:id,name',
+                'districts:id,name',
+                'zilas:id,name',
+                'upozilas:id,name',
+            ])
+            ->paginate(
+                perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value,
+            );
+    }
 }
