@@ -28,7 +28,8 @@ class HomeController extends Controller
     }
 
     public function marketplace(Request $request)
-    {
+    {    
+        // dd($request->all());
         $activeTasker = TaskerProfile::select('id', 'verification_status')
             ->where('verification_status', 'verified')
             ->count();
@@ -41,6 +42,7 @@ class HomeController extends Controller
             'activeTasker' => $activeTasker,
             'completedTasks' => $completedTasks,
             'totalBudget' => Task::sum('budget'),
+            'query'=>$request->query(),
             'task' => TaskResource::collection(TaskService::getPaginate($request))
         ]);
     }

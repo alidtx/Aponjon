@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enum\PaginationLimits;
 use App\Models\Category;
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
 
 class TaskService
@@ -28,7 +29,8 @@ class TaskService
     }
 
     public static function getPaginate(Request $request): LengthAwarePaginator
-    {
+    {  
+        $category=$request->query('category');
         return Task::query()
             ->select([
                 'id',
@@ -48,7 +50,11 @@ class TaskService
                 'zilas:id,name',
                 'upozilas:id,name',
             ])
+            ->when(! is_null($category),  function($query) use ($category) {
+                $query->where('slug', 'like', "{%$category%}");
+            })
             ->orderByDesc('id')
+            ->latest()
             ->paginate(
                 perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value,
             );

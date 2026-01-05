@@ -27,6 +27,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    query: {
+        type: Object,
+        required: true
+    },
 })
 </script>
 
@@ -38,7 +42,9 @@ const props = defineProps({
         <Stats :totalTask="props.totalTask" :activeTasker="props.activeTasker" :totalBudget="props.totalBudget"
             :completedTasks="props.completedTasks" />
         <div class="flex flex-col lg:flex-row gap-8">
-            <SideBar/>
+            <SideBar
+            :query="props.query"
+            />
             <CardPortion 
             :cardData="props.task"
              />

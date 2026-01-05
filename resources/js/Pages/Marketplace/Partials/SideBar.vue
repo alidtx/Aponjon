@@ -1,11 +1,22 @@
 <script setup>
 import {onMounted, ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 import Checkbox from '@/Components/Checkbox.vue';
 import axios from 'axios'
 
-const category = ref({ data: [] }); // Initialize as object with data property
+const props = defineProps({
+   query: {
+        type: Object,
+        required: true
+    }
+
+
+})
+
+const category = ref({ data: [] }); 
 const loading = ref(false)
 const error = ref(null)
+const slug = ref(props.query?.slug ?? false)
 const fetchCategoryList = async () => {
     try {
         const response = await axios.get(route('category'), {})
@@ -16,6 +27,21 @@ const fetchCategoryList = async () => {
     } finally {
         loading.value = false
     }
+}
+const getFilteredResults = (currentPage = 1) => {
+    const data = getQuery(currentPage)
+
+    router.visit(route('marketplace'), {
+        data: data,
+    })
+}
+
+const getQuery = (currentPage = null) => {
+    const data = {
+        current_page: currentPage ?? 1,
+    }
+    if (slug.value) data.slug = slug.value
+    return data
 }
 
 onMounted(() => {
@@ -39,7 +65,9 @@ onMounted(() => {
                      v-for="(item, index) in category.data" 
                             :key="item.id || index"
                     >  
-                        <Checkbox class="rounded text-primary"  :value="item.slug"/>
+                        <Checkbox class="rounded text-primary"  
+                        v-model:checked="slug"
+                        />
                         <span class="ml-2 text-gray-700">{{ item.name }}</span>
                         <span class="ml-auto text-gray-500"> ({{ item.task?.length || 0 }})</span>
                     </label>
@@ -110,7 +138,9 @@ onMounted(() => {
                 </div>
             </div>
 
-            <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium">
+            <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
+            @click="getFilteredResults()"
+            >
                 ফিল্টার প্রয়োগ করুন
             </button>
         </div>
