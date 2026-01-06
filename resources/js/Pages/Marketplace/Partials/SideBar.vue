@@ -79,7 +79,7 @@ onMounted(fetchCategoryList)
                     সেবা ক্যাটাগরি
                 </label>
 
-                <div class="space-y-2 mb-6">
+                <div class="space-y-2 mb-6 max-h-60 overflow-y-auto custom-scrollbar">
                     <label class="flex items-center">
                         <Checkbox
                             class="rounded text-primary"
@@ -130,3 +130,30 @@ onMounted(fetchCategoryList)
         </div>
     </div>
 </template>
+
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+</style>
