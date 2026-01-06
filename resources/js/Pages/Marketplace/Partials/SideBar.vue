@@ -50,8 +50,13 @@ const getQuery = (currentPage = 1) => {
     return data
 }
 
-const resetCategory = () => {
+const resetFilters = () => {
     slug.value = []
+    router.visit(route('marketplace'), {
+        data: {},          
+        preserveState: true,
+        replace: true,
+    })
 }
 
 onMounted(fetchCategoryList)
@@ -60,7 +65,15 @@ onMounted(fetchCategoryList)
 <template>
     <div class="lg:w-1/4">
         <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
-            <h3 class="text-lg font-bold text-dark mb-4">ফিল্টার করুন</h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-dark">ফিল্টার করুন</h3>
+                <button 
+                    @click="resetFilters"
+                    class="text-sm text-primary hover:text-blue-700 font-medium"
+                >
+                    সব ফিল্টার রিসেট
+                </button>
+            </div>
             <div class="mb-6">
                 <label class="block font-medium text-dark mb-3">
                     সেবা ক্যাটাগরি
@@ -71,10 +84,10 @@ onMounted(fetchCategoryList)
                         <Checkbox
                             class="rounded text-primary"
                             :checked="slug.length === 0"
-                            @change="resetCategory"
+                            @change="slug = []"
                         />
                         <span class="ml-2 text-gray-700">
-                            ফিল্টার রিসেট
+                             সব ক্যাটাগরি
                         </span>
                     </label>
                     <label
