@@ -18,6 +18,20 @@ const slug = ref(
     props.query?.slug ? [].concat(props.query.slug) : []
 )
 
+const scrollBox = ref(null)
+let scrollTimer = null
+
+const handleScroll = () => {
+    if (!scrollBox.value) return
+
+    scrollBox.value.classList.add('scrolling')
+
+    clearTimeout(scrollTimer)
+    scrollTimer = setTimeout(() => {
+        scrollBox.value.classList.remove('scrolling')
+    }, 700)
+}
+
 const fetchCategoryList = async () => {
     loading.value = true
     try {
@@ -79,7 +93,10 @@ onMounted(fetchCategoryList)
                     সেবা ক্যাটাগরি
                 </label>
 
-                <div class="space-y-2 mb-6 max-h-60 overflow-y-auto custom-scrollbar">
+                <div class="space-y-2 mb-6 max-h-60 overflow-y-auto custom-scrollbar"
+                ref="scrollBox"
+                @scroll="handleScroll"
+                >
                     <label class="flex items-center">
                         <Checkbox
                             class="rounded text-primary"
@@ -137,23 +154,22 @@ onMounted(fetchCategoryList)
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+    background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background-color: rgba(0, 0, 0, 0);
     border-radius: 4px;
+    transition: background-color 0.25s ease;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #a1a1a1;
+.custom-scrollbar.scrolling::-webkit-scrollbar-thumb {
+    background-color: rgba(193, 193, 193, 0.9);
 }
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.2s;
+
+.custom-scrollbar.scrolling::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(161, 161, 161, 1);
 }
-.fade-enter, .fade-leave-to {
-    opacity: 0;
-}
+
 
 </style>
