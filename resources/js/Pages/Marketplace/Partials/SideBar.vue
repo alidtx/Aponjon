@@ -12,6 +12,8 @@ const props = defineProps({
 })
 
 const category = ref({ data: [] })
+const DistrictWiseList = ref({ data: [] })
+const ZilaWiseList = ref({ data: [] })
 const loading = ref(false)
 const error = ref(null)
 const slug = ref(
@@ -39,6 +41,31 @@ const fetchCategoryList = async () => {
         category.value = response.data
     } catch (err) {
         error.value = 'Failed to fetch category list.'
+    } finally {
+        loading.value = false
+    }
+}
+
+const fetchDistrictList = async () => {
+    loading.value = true
+    try {
+        const response = await axios.get(route('district-Wise-zila'))
+        DistrictWiseList.value = response.data
+    } catch (err) {
+        error.value = 'Failed to fetch district list.'
+    } finally {
+        loading.value = false
+    }
+}
+
+const fetchZilaList = async () => {
+    loading.value = true
+    try {
+        const response = await axios.get(route('Zila-Wise-upozila'))
+        console.log(response)
+        ZilaWiseList.value = response.data
+    } catch (err) {
+        error.value = 'Failed to fetch zila list.'
     } finally {
         loading.value = false
     }
@@ -73,7 +100,11 @@ const resetFilters = () => {
     })
 }
 
-onMounted(fetchCategoryList)
+onMounted(() => {
+    fetchCategoryList()
+    fetchDistrictList()
+    fetchZilaList()
+})
 </script>
 
 <template>

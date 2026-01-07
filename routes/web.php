@@ -19,6 +19,8 @@ Route::get('hh', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('marketplace', [HomeController::class, 'marketplace'])->name('marketplace');
 Route::get('category', [HomeController::class, 'category'])->name('category');
+Route::get('district-Wise-zila', [HomeController::class, 'districtWiseZila'])->name('district-Wise-zila');
+Route::get('Zila-Wise-upozila', [HomeController::class, 'ZilaWiseUpozila'])->name('Zila-Wise-upozila');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin', function(){

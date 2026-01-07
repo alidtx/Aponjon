@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\DistrictResource;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
-use App\Models\Category;
+use App\Http\Resources\ZilaResource;
 use App\Models\Task;
 use App\Models\TaskerProfile;
 use App\Services\TaskService;
@@ -28,7 +29,7 @@ class HomeController extends Controller
     }
 
     public function marketplace(Request $request)
-    {    
+    {
 
         $activeTasker = TaskerProfile::select('id', 'verification_status')
             ->where('verification_status', 'verified')
@@ -42,7 +43,7 @@ class HomeController extends Controller
             'activeTasker' => $activeTasker,
             'completedTasks' => $completedTasks,
             'totalBudget' => Task::sum('budget'),
-            'query'=>$request->query(),
+            'query' => $request->query(),
             'task' => TaskResource::collection(TaskService::getPaginate($request))
         ]);
     }
@@ -50,5 +51,14 @@ class HomeController extends Controller
     public function category()
     {
         return CategoryResource::collection(TaskService::category());
+    }
+    public function districtWiseZila()
+    {
+        return  DistrictResource::collection(TaskService::districtWiseZila());
+    }
+
+    public function ZilaWiseUpozila()
+    {
+        return  ZilaResource::collection(TaskService::zilaWiseUpozila());
     }
 }
