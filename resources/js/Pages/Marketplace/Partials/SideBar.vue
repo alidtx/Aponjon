@@ -27,8 +27,14 @@ const error = ref(null)
 const slug = ref(
     props.query?.slug ? [].concat(props.query.slug) : []
 )
-
 const scrollBox = ref(null)
+const selectedDistrict = ref(null)
+const selectedZila = ref(null)
+const zilas = ref(null)
+const showZila=ref(false)
+const showUpozila=ref(false)
+const query = ref('')
+
 let scrollTimer = null
 
 const handleScroll = () => {
@@ -70,7 +76,6 @@ const fetchZilaList = async () => {
     loading.value = true
     try {
         const response = await axios.get(route('Zila-Wise-upozila'))
-        console.log(response)
         ZilaWiseList.value = response.data
     } catch (err) {
         error.value = 'Failed to fetch zila list.'
@@ -78,11 +83,28 @@ const fetchZilaList = async () => {
         loading.value = false
     }
 }
+const handleDistrictChange = async (district) => {
+    if(district && district.zilas )
+    {
+      showZila.value=true
+      zilas.value=district.zilas
+    }
+}
+const handleUpozilaChange = async (zila) => {
+    
+    if(zila && zila.upozilas )
+    {
+      showUpozila.value=true
+      upozilas.value=zila.upozilas
+    }
+}
 
-const selectedDistrict = ref(null)
-const query = ref('')
+
+
 
 const districts = computed(() => DistrictWiseList.value?.data ?? [])
+const upozilas = computed(() => ZilaWiseList.value?.data ?? [])
+
 
 const filteredDistricts = computed(() => {
     if (query.value === '') return districts.value
@@ -91,6 +113,24 @@ const filteredDistricts = computed(() => {
         item.name.toLowerCase().includes(query.value.toLowerCase())
     )
 })
+
+const filteredZilas = computed(() => {
+    if (query.value === '') return zilas.value
+
+    return zilas.value.filter((item) =>
+        item.name.toLowerCase().includes(query.value.toLowerCase())
+    )
+})
+const filteredUpozilas = computed(() => {
+    if (query.value === '') return upozilas.value
+
+    return upozilas.value.filter((item) =>
+        item.name.toLowerCase().includes(query.value.toLowerCase())
+    )
+})
+
+
+
 const getFilteredResults = (currentPage = 1) => {
     router.visit(route('marketplace'), {
         data: getQuery(currentPage),
@@ -163,7 +203,7 @@ onMounted(() => {
                 <div class="mb-6">
                     <label class="block font-medium text-dark mb-3">লোকেশন</label>
                     <div>
-                        <Combobox v-model="selectedDistrict">
+                        <Combobox v-model="selectedDistrict" @update:modelValue="handleDistrictChange">
                             <div class="relative mt-1">
                                 <div
                                     class="relative w-full cursor-default overflow-hidden rounded-lg border border-gray-300 bg-white text-left sm:text-sm">
@@ -173,7 +213,9 @@ onMounted(() => {
                                     <ComboboxInput
                                         class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                                         :displayValue="(item) => item?.name ?? ''"
-                                        @change="query = $event.target.value" />
+                                        @change="query = $event.target.value" 
+                                        
+                                        />
                                     <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" />
                                     </ComboboxButton>
@@ -211,6 +253,7 @@ onMounted(() => {
 
                     </div>
                 </div>
+                <!-- Zila -->
                 <div class="mb-6">
                    <div>
                     <transition
@@ -219,10 +262,118 @@ onMounted(() => {
                         enter-from-class="opacity-0 transform -translate-y-4"
                         leave-to-class="opacity-0 transform -translate-y-4"
                     >  
-                    fff
+                    <div v-if="showZila" class="relative">
+                        <Combobox v-model="selectedZila" @update:modelValue="handleUpozilaChange">
+                            <div class="relative mt-1">
+                                <div
+                                    class="relative w-full cursor-default overflow-hidden rounded-lg border border-gray-300 bg-white text-left sm:text-sm">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+                                    </div>
+                                    <ComboboxInput
+                                        class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                                        :displayValue="(item) => item?.name ?? ''"
+                                        @change="query = $event.target.value" />
+                                    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" />
+                                    </ComboboxButton>
+                                </div>
+
+                                <TransitionRoot leave="transition ease-in duration-100" leaveFrom="opacity-100"
+                                    leaveTo="opacity-0" @after-leave="query = ''">
+                                    <ComboboxOptions
+                                        class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                        <div v-if="filteredZilas.length === 0 && query !== ''"
+                                            class="relative cursor-default select-none px-4 py-2 text-gray-700">
+                                            Nothing found.
+                                        </div>
+
+                                        <ComboboxOption v-for="zila in filteredZilas" :key="zila.id"
+                                            :value="zila" v-slot="{ selected, active }">
+                                            <li class="relative cursor-default select-none py-2 pl-10 pr-4" :class="{
+                                                'bg-teal-600 text-white': active,
+                                                'text-gray-900': !active,
+                                            }">
+                                                <span class="block truncate" :class="{ 'font-medium': selected }">
+                                                    {{ zila.name }}
+                                                </span>
+
+                                                <span v-if="selected"
+                                                    class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                                    <CheckIcon class="h-5 w-5" />
+                                                </span>
+                                            </li>
+                                        </ComboboxOption>
+                                    </ComboboxOptions>
+                                </TransitionRoot>
+                            </div>
+                        </Combobox>
+
+                    </div>
                      </transition>
                  </div>
                 </div>
+ <!-- Upozila -->
+                <div class="mb-6">
+                   <div>
+                    <transition
+                        enter-active-class="transition-all duration-300 ease-out"
+                        leave-active-class="transition-all duration-200 ease-in"
+                        enter-from-class="opacity-0 transform -translate-y-4"
+                        leave-to-class="opacity-0 transform -translate-y-4"
+                    >  
+                    <div v-if="showUpozila" class="relative">
+                        <Combobox v-model="selectedUpozila" >
+                            <div class="relative mt-1">
+                                <div
+                                    class="relative w-full cursor-default overflow-hidden rounded-lg border border-gray-300 bg-white text-left sm:text-sm">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+                                    </div>
+                                    <ComboboxInput
+                                        class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                                        :displayValue="(item) => item?.name ?? ''"
+                                        @change="query = $event.target.value" />
+                                    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" />
+                                    </ComboboxButton>
+                                </div>
+
+                                <TransitionRoot leave="transition ease-in duration-100" leaveFrom="opacity-100"
+                                    leaveTo="opacity-0" @after-leave="query = ''">
+                                    <ComboboxOptions
+                                        class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                        <div v-if="filteredUpozilas.length === 0 && query !== ''"
+                                            class="relative cursor-default select-none px-4 py-2 text-gray-700">
+                                            Nothing found.
+                                        </div>
+
+                                        <ComboboxOption v-for="upozila in filteredUpozilas" :key="upozila.id"
+                                            :value="zila" v-slot="{ selected, active }">
+                                            <li class="relative cursor-default select-none py-2 pl-10 pr-4" :class="{
+                                                'bg-teal-600 text-white': active,
+                                                'text-gray-900': !active,
+                                            }">
+                                                <span class="block truncate" :class="{ 'font-medium': selected }">
+                                                    {{ upozila.name }}
+                                                </span>
+
+                                                <span v-if="selected"
+                                                    class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                                    <CheckIcon class="h-5 w-5" />
+                                                </span>
+                                            </li>
+                                        </ComboboxOption>
+                                    </ComboboxOptions>
+                                </TransitionRoot>
+                            </div>
+                        </Combobox>
+
+                    </div>
+                     </transition>
+                 </div>
+                </div>
+                
             </div>
             <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
                 @click="getFilteredResults()">
