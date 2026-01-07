@@ -1,9 +1,17 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 import Checkbox from '@/Components/Checkbox.vue'
 import axios from 'axios'
-
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxButton,
+    ComboboxOptions,
+    ComboboxOption,
+    TransitionRoot,
+} from '@headlessui/vue'
+import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 const props = defineProps({
     query: {
         type: Object,
@@ -71,6 +79,18 @@ const fetchZilaList = async () => {
     }
 }
 
+const selectedDistrict = ref(null)
+const query = ref('')
+
+const districts = computed(() => DistrictWiseList.value?.data ?? [])
+
+const filteredDistricts = computed(() => {
+    if (query.value === '') return districts.value
+
+    return districts.value.filter((item) =>
+        item.name.toLowerCase().includes(query.value.toLowerCase())
+    )
+})
 const getFilteredResults = (currentPage = 1) => {
     router.visit(route('marketplace'), {
         data: getQuery(currentPage),
@@ -94,7 +114,7 @@ const getQuery = (currentPage = 1) => {
 const resetFilters = () => {
     slug.value = []
     router.visit(route('marketplace'), {
-        data: {},          
+        data: {},
         preserveState: true,
         replace: true,
     })
@@ -112,10 +132,7 @@ onMounted(() => {
         <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold text-dark">ফিল্টার করুন</h3>
-                <button 
-                    @click="resetFilters"
-                    class="text-sm text-primary hover:text-blue-700 font-medium"
-                >
+                <button @click="resetFilters" class="text-sm text-primary hover:text-blue-700 font-medium">
                     সব ফিল্টার রিসেট
                 </button>
             </div>
@@ -124,30 +141,16 @@ onMounted(() => {
                     সেবা ক্যাটাগরি
                 </label>
 
-                <div class="space-y-2 mb-6 max-h-60 overflow-y-auto custom-scrollbar"
-                ref="scrollBox"
-                @scroll="handleScroll"
-                >
+                <div class="space-y-2 mb-6 max-h-60 overflow-y-auto custom-scrollbar" ref="scrollBox"
+                    @scroll="handleScroll">
                     <label class="flex items-center">
-                        <Checkbox
-                            class="rounded text-primary"
-                            :checked="slug.length === 0"
-                            @change="slug = []"
-                        />
+                        <Checkbox class="rounded text-primary" :checked="slug.length === 0" @change="slug = []" />
                         <span class="ml-2 text-gray-700">
-                             সব ক্যাটাগরি
+                            সব ক্যাটাগরি
                         </span>
                     </label>
-                    <label
-                        class="flex items-center"
-                        v-for="item in category.data"
-                        :key="item.id"
-                    >
-                        <Checkbox
-                            class="rounded text-primary"
-                            :value="item.slug"
-                            v-model:checked="slug"
-                        />
+                    <label class="flex items-center" v-for="item in category.data" :key="item.id">
+                        <Checkbox class="rounded text-primary" :value="item.slug" v-model:checked="slug" />
                         <span class="ml-2 text-gray-700">
                             {{ item.name }}
                         </span>
@@ -157,22 +160,60 @@ onMounted(() => {
                     </label>
 
                 </div>
-                 <!-- Location Filter -->
-                    <div class="mb-6">
-                        <label class="block font-medium text-dark mb-3">লোকেশন</label>
-                        <select class="w-full p-2 border border-gray-300 rounded-lg">
-                            <option value="">সকল এলাকা</option>
-                            <option value="dhaka">ঢাকা</option>
-                            <option value="chattogram">চট্টগ্রাম</option>
-                            <option value="khulna">খুলনা</option>
-                            <option value="rajshahi">রাজশাহী</option>
-                        </select>
+                <div class="mb-6">
+                    <label class="block font-medium text-dark mb-3">লোকেশন</label>
+                    <div>
+                        <Combobox v-model="selectedDistrict">
+                            <div class="relative mt-1">
+                                <div
+                                    class="relative w-full cursor-default overflow-hidden rounded-lg border border-gray-300 bg-white text-left sm:text-sm">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+                                    </div>
+                                    <ComboboxInput
+                                        class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                                        :displayValue="(item) => item?.name ?? ''"
+                                        @change="query = $event.target.value" />
+                                    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" />
+                                    </ComboboxButton>
+                                </div>
+
+                                <TransitionRoot leave="transition ease-in duration-100" leaveFrom="opacity-100"
+                                    leaveTo="opacity-0" @after-leave="query = ''">
+                                    <ComboboxOptions
+                                        class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                        <div v-if="filteredDistricts.length === 0 && query !== ''"
+                                            class="relative cursor-default select-none px-4 py-2 text-gray-700">
+                                            Nothing found.
+                                        </div>
+
+                                        <ComboboxOption v-for="district in filteredDistricts" :key="district.id"
+                                            :value="district" v-slot="{ selected, active }">
+                                            <li class="relative cursor-default select-none py-2 pl-10 pr-4" :class="{
+                                                'bg-teal-600 text-white': active,
+                                                'text-gray-900': !active,
+                                            }">
+                                                <span class="block truncate" :class="{ 'font-medium': selected }">
+                                                    {{ district.name }}
+                                                </span>
+
+                                                <span v-if="selected"
+                                                    class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                                    <CheckIcon class="h-5 w-5" />
+                                                </span>
+                                            </li>
+                                        </ComboboxOption>
+                                    </ComboboxOptions>
+                                </TransitionRoot>
+                            </div>
+                        </Combobox>
+
                     </div>
+                </div>
             </div>
-            <button
-                class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
-                @click="getFilteredResults()"
-            >
+            <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
+                @click="getFilteredResults()">
                 ফিল্টার প্রয়োগ করুন
             </button>
         </div>
@@ -201,6 +242,4 @@ onMounted(() => {
 .custom-scrollbar.scrolling::-webkit-scrollbar-thumb:hover {
     background-color: rgba(161, 161, 161, 1);
 }
-
-
 </style>
