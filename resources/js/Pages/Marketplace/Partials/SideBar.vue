@@ -211,6 +211,18 @@ onMounted(() => {
 
                     </div>
                 </div>
+                <div class="mb-6">
+                   <div>
+                    <transition
+                        enter-active-class="transition-all duration-300 ease-out"
+                        leave-active-class="transition-all duration-200 ease-in"
+                        enter-from-class="opacity-0 transform -translate-y-4"
+                        leave-to-class="opacity-0 transform -translate-y-4"
+                    >  
+                    fff
+                     </transition>
+                 </div>
+                </div>
             </div>
             <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
                 @click="getFilteredResults()">
