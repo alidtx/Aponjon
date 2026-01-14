@@ -22,6 +22,7 @@ const props = defineProps({
 const category = ref({ data: [] })
 const DistrictWiseList = ref({ data: [] })
 const ZilaWiseList = ref({ data: [] })
+const filteredUpozilaList = ref([])
 const loading = ref(false)
 const error = ref(null)
 const slug = ref(
@@ -39,7 +40,7 @@ let scrollTimer = null
 
 
 const districts = computed(() => DistrictWiseList.value?.data ?? [])
-const upozilas = computed(() => ZilaWiseList.value?.data ?? [])
+const allZilasData = computed(() => ZilaWiseList.value?.data ?? [])
 
 const handleScroll = () => {
     if (!scrollBox.value) return
@@ -94,16 +95,19 @@ const handleDistrictChange = async (district) => {
       zilas.value=district.zilas
     }
 }
-const handleUpozilaChange = async (zilaId) => {
-     console.log(zilaId.id)
-     showUpozila.value=true
+const handleUpozilaChange = async (zila) => {
+     if(zila){showUpozila.value=true} 
+  const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
+     
+    const selectedZila = zilasArray.find(zila => zila.id == zila.id)
+    console.log(selectedZila.upozilas);
+    if (selectedZila && selectedZila.upozilas) {
+        filteredUpozilaList.value = selectedZila.upozilas
+    } else {
+        filteredUpozilaList.value = []
+    }
+     
 }
-
-
-
-
-
-
 
 const filteredDistricts = computed(() => {
     if (query.value === '') return districts.value
@@ -121,9 +125,9 @@ const filteredZilas = computed(() => {
     )
 })
 const filteredUpozilas = computed(() => {
-    if (query.value === '') return upozilas.value
+    if (query.value === '') return filteredUpozilaList.value
 
-    return upozilas.value.filter((item) =>
+    return filteredUpozilaList.value.filter((item) =>
         item.name.toLowerCase().includes(query.value.toLowerCase())
     )
 })
