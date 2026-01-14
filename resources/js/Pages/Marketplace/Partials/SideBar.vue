@@ -97,10 +97,8 @@ const handleDistrictChange = async (district) => {
 }
 const handleUpozilaChange = async (zila) => {
      if(zila){showUpozila.value=true} 
-  const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
-     
+    const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
     const selectedZila = zilasArray.find(zila => zila.id == zila.id)
-    console.log(selectedZila.upozilas);
     if (selectedZila && selectedZila.upozilas) {
         filteredUpozilaList.value = selectedZila.upozilas
     } else {
@@ -131,8 +129,6 @@ const filteredUpozilas = computed(() => {
         item.name.toLowerCase().includes(query.value.toLowerCase())
     )
 })
-
-
 
 const getFilteredResults = (currentPage = 1) => {
     router.visit(route('marketplace'), {
@@ -352,7 +348,7 @@ onMounted(() => {
                                         </div>
 
                                         <ComboboxOption v-for="upozila in filteredUpozilas" :key="upozila.id"
-                                            :value="zila" v-slot="{ selected, active }">
+                                            :value="upozila" v-slot="{ selected, active }">
                                             <li class="relative cursor-default select-none py-2 pl-10 pr-4" :class="{
                                                 'bg-teal-600 text-white': active,
                                                 'text-gray-900': !active,
