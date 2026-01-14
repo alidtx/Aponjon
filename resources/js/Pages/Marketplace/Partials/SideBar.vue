@@ -30,12 +30,16 @@ const slug = ref(
 const scrollBox = ref(null)
 const selectedDistrict = ref(null)
 const selectedZila = ref(null)
+const selectedUpozila = ref(null)
 const zilas = ref(null)
 const showZila=ref(false)
 const showUpozila=ref(false)
 const query = ref('')
-
 let scrollTimer = null
+
+
+const districts = computed(() => DistrictWiseList.value?.data ?? [])
+const upozilas = computed(() => ZilaWiseList.value?.data ?? [])
 
 const handleScroll = () => {
     if (!scrollBox.value) return
@@ -90,20 +94,15 @@ const handleDistrictChange = async (district) => {
       zilas.value=district.zilas
     }
 }
-const handleUpozilaChange = async (zila) => {
-    
-    if(zila && zila.upozilas )
-    {
-      showUpozila.value=true
-      upozilas.value=zila.upozilas
-    }
+const handleUpozilaChange = async (zilaId) => {
+     console.log(zilaId.id)
+     showUpozila.value=true
 }
 
 
 
 
-const districts = computed(() => DistrictWiseList.value?.data ?? [])
-const upozilas = computed(() => ZilaWiseList.value?.data ?? [])
+
 
 
 const filteredDistricts = computed(() => {
