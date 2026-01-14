@@ -108,23 +108,28 @@ const handleUpozilaChange = async (zila) => {
 }
 
 const filteredDistricts = computed(() => {
-    if (query.value === '') return districts.value
-
+    if (query.value === '' || query.value.length < 3) {
+        showZila.value=false
+        return [] 
+    }
     return districts.value.filter((item) =>
         item.name.toLowerCase().includes(query.value.toLowerCase())
     )
 })
 
 const filteredZilas = computed(() => {
-    if (query.value === '') return zilas.value
-
+    if (query.value === '' || query.value.length < 3) {
+        showUpozila.value=false
+        return [] 
+    }
     return zilas.value.filter((item) =>
         item.name.toLowerCase().includes(query.value.toLowerCase())
     )
 })
 const filteredUpozilas = computed(() => {
-    if (query.value === '') return filteredUpozilaList.value
-
+    if (query.value === '' || query.value.length < 3) {
+        return [] 
+    }
     return filteredUpozilaList.value.filter((item) =>
         item.name.toLowerCase().includes(query.value.toLowerCase())
     )
@@ -213,6 +218,7 @@ onMounted(() => {
                                         class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                                         :displayValue="(item) => item?.name ?? ''"
                                         @change="query = $event.target.value" 
+                                        placeholder="বিভাগ দিয়ে খুজুন"
                                         
                                         />
                                     <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -272,7 +278,9 @@ onMounted(() => {
                                     <ComboboxInput
                                         class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                                         :displayValue="(item) => item?.name ?? ''"
-                                        @change="query = $event.target.value" />
+                                        @change="query = $event.target.value" 
+                                        placeholder="জীলা দিয়ে খুজুন"
+                                        />
                                     <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" />
                                     </ComboboxButton>
@@ -332,7 +340,9 @@ onMounted(() => {
                                     <ComboboxInput
                                         class="w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                                         :displayValue="(item) => item?.name ?? ''"
-                                        @change="query = $event.target.value" />
+                                        @change="query = $event.target.value" 
+                                        placeholder="উপজীলা দিয়ে খুজুন"
+                                        />
                                     <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" />
                                     </ComboboxButton>
