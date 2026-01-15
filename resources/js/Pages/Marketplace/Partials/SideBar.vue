@@ -150,13 +150,22 @@ const getQuery = (currentPage = 1) => {
 
     if (slug.value.length) {
         data.slug = slug.value
+    }    
+    if (selectedDistrict.value) {
+        data.district = selectedDistrict.value.name
+    }
+    if (selectedZila.value) {
+        data.zila = selectedZila.value.name
+    }
+    if (selectedUpozila.value) {
+        data.upozila = selectedUpozila.value.name
     }
 
     return data
 }
 
 const resetFilters = () => {
-    slug.value = []
+    slug.value = [] 
     router.visit(route('marketplace'), {
         data: {},
         preserveState: true,
@@ -205,7 +214,7 @@ onMounted(() => {
 
                 </div>
                 <div class="mb-6">
-                    <label class="block font-medium text-dark mb-3">লোকেশন</label>
+                    <label class="block font-medium text-dark mb-3">লোকেশন অনুযায়ী খুঁজুন (বিভাগ / জেলা / উপজেলা)</label>
                     <div>
                         <Combobox v-model="selectedDistrict" @update:modelValue="handleDistrictChange">
                             <div class="relative mt-1">
