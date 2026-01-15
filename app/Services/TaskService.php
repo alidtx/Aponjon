@@ -32,8 +32,14 @@ class TaskService
     public static function getPaginate(Request $request): LengthAwarePaginator
     {
         $slug = $request->query('slug');
+        $district = $request->query('district');
+        $zila = $request->query('zila');
+        $upozila = $request->query('upozila');
 
-        return Task::query()
+        $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIFTEEN->value);
+        $perPage = max(1, min(100, $perPage));
+
+        $query = Task::query()
             ->select([
                 'id',
                 'category_id',
@@ -51,21 +57,59 @@ class TaskService
                 'districts:id,name',
                 'zilas:id,name',
                 'upozilas:id,name',
-            ])
-            ->when(!empty($slug), function ($query) use ($slug) {
+            ]);
 
-                $query->whereHas('category', function ($q) use ($slug) {
-                    if (is_array($slug)) {
-                        $q->whereIn('slug', $slug);
-                    } else {
-                        $q->where('slug', 'LIKE', "%{$slug}%");
-                    }
-                });
-            })
+        self::applyCategoryFilter($query, $slug);
+        self::applyLocationFilter($query, 'district', $district, 'districts');
+        self::applyLocationFilter($query, 'zila', $zila, 'zilas');
+        self::applyLocationFilter($query, 'upozila', $upozila, 'upozilas');
+
+        return $query
             ->orderByDesc('id')
-            ->paginate(
-                perPage: $request->per_page ?? PaginationLimits::PER_PAGE_FIFTEEN->value
-            );
+            ->paginate($perPage);
+    }
+    private static function applyCategoryFilter($query, $slug): void
+    {
+        if (empty($slug)) {
+            return;
+        }
+
+        if (is_array($slug)) {
+            $slugs = array_filter(array_map('trim', $slug));
+            if (!empty($slugs)) {
+                $query->whereHas('category', function ($q) use ($slugs) {
+                    $q->whereIn('slug', $slugs);
+                });
+            }
+        } else {
+            $slug = trim($slug);
+            if (!empty($slug)) {
+                $query->whereHas('category', function ($q) use ($slug) {
+                    $q->where('slug', 'LIKE', '%' . $slug . '%');
+                });
+            }
+        }
+    }
+
+
+    private static function applyLocationFilter($query, string $field, $value, string $relation): void
+    {
+        if (empty($value)) {
+            return;
+        }
+
+        $value = trim($value);
+        if (empty($value)) {
+            return;
+        }
+
+        $query->whereHas($relation, function ($q) use ($value) {
+            if (is_numeric($value)) {
+                $q->where('id', $value);
+            } else {
+                $q->where('name', 'LIKE', '%' . $value . '%');
+            }
+        });
     }
 
     public static function category()
