@@ -108,31 +108,95 @@ const handleUpozilaChange = async (zila) => {
 }
 
 const filteredDistricts = computed(() => {
-    if (query.value === '' || query.value.length < 3) {
-        showZila.value=false
-        return [] 
+    const q = query.value
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, ' ')
+
+    if (q.length < 2) {
+        showZila.value = false
+        return []
     }
-    return districts.value.filter((item) =>
-        item.name.toLowerCase().includes(query.value.toLowerCase())
-    )
+
+    showZila.value = true
+
+    const keywords = q.split(' ')
+
+    return districts.value
+        .filter(item => {
+            const searchableText = `
+                ${item.name ?? ''}
+                ${item.bn_name ?? ''} //will be adjusted with backend letter
+            `.toLowerCase()
+            return keywords.every(word => searchableText.includes(word))
+        })
+        .sort((a, b) => {
+            const aStarts = a.name.toLowerCase().startsWith(q)
+            const bStarts = b.name.toLowerCase().startsWith(q)
+
+            return bStarts - aStarts
+        })
 })
 
 const filteredZilas = computed(() => {
-    if (query.value === '' || query.value.length < 3) {
-        showUpozila.value=false
-        return [] 
+    const q = query.value
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, ' ')
+
+    if (q.length < 2) {
+        showUpozila.value = false
+        return []
     }
-    return zilas.value.filter((item) =>
-        item.name.toLowerCase().includes(query.value.toLowerCase())
-    )
+
+    showUpozila.value = true
+
+    const keywords = q.split(' ')
+
+    return zilas.value
+        .filter(item => {
+            const searchableText = `
+                ${item.name ?? ''}
+                ${item.bn_name ?? ''}
+            `.toLowerCase()
+            return keywords.every(word => searchableText.includes(word))
+        })
+        .sort((a, b) => {
+            const aStarts = a.name.toLowerCase().startsWith(q)
+            const bStarts = b.name.toLowerCase().startsWith(q)
+
+            return bStarts - aStarts
+        })
 })
 const filteredUpozilas = computed(() => {
-    if (query.value === '' || query.value.length < 3) {
-        return [] 
+    const q = query.value
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, ' ')
+
+    if (q.length < 2) {
+        return []
     }
-    return filteredUpozilaList.value.filter((item) =>
-        item.name.toLowerCase().includes(query.value.toLowerCase())
-    )
+
+    const keywords = q.split(' ')
+
+    return filteredUpozilaList.value
+        .filter(item => {
+            const searchableText = `
+                ${item.name ?? ''}
+                ${item.bn_name ?? ''}
+                ${item.code ?? ''}
+                ${item.zila?.name ?? ''}
+                ${item.district?.name ?? ''}
+            `.toLowerCase()
+            return keywords.every(word => searchableText.includes(word))
+        })
+        .sort((a, b) => {
+            const aStarts = a.name.toLowerCase().startsWith(q)
+            const bStarts = b.name.toLowerCase().startsWith(q)
+
+            return bStarts - aStarts
+        })
 })
 
 const getFilteredResults = (currentPage = 1) => {
