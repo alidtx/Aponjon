@@ -35,6 +35,7 @@ class TaskService
         $district = $request->query('district');
         $zila = $request->query('zila');
         $upozila = $request->query('upozila');
+        $keyword = $request->query('keyword');
 
         $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIFTEEN->value);
         $perPage = max(1, min(100, $perPage));
@@ -63,6 +64,7 @@ class TaskService
         self::applyLocationFilter($query, 'district', $district, 'districts');
         self::applyLocationFilter($query, 'zila', $zila, 'zilas');
         self::applyLocationFilter($query, 'upozila', $upozila, 'upozilas');
+        self::applyKeywordFilter($query, $keyword);
 
         return $query
             ->orderByDesc('id')
@@ -91,6 +93,27 @@ class TaskService
         }
     }
 
+   private static function applyKeywordFilter($query, $value): void
+{
+    if (empty($value)) {
+        return;
+    }
+
+    $value = trim($value);
+
+    if ($value === '') {
+        return;
+    }
+
+    $query->where(function ($q) use ($value) {
+        if (is_numeric($value)) {
+            $q->where('id', (int) $value);
+        } else {
+            $q->where('title', 'LIKE', "%{$value}%")
+              ->orWhere('description', 'LIKE', "%{$value}%");
+        }
+    });
+}
 
     private static function applyLocationFilter($query, string $field, $value, string $relation): void
     {

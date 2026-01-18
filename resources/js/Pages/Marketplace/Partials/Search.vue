@@ -1,5 +1,43 @@
 <script setup>
+import TextInput from '@/Components/TextInput.vue'
+import { ref, watch } from 'vue'
+import { router } from '@inertiajs/vue3'
 
+const search = ref('')
+const loading = ref(false)
+
+let debounceTimer = null
+
+watch(search, (value) => {
+    clearTimeout(debounceTimer)
+
+    debounceTimer = setTimeout(() => {
+        loadMarketplace()
+    }, 400)
+})
+
+const loadMarketplace = () => {
+    loading.value = true
+
+    router.visit(route('marketplace'), {
+        data: buildQuery(),
+        preserveState: true,
+        replace: true,
+        onFinish: () => {
+            loading.value = false
+        },
+    })
+}
+
+const buildQuery = () => {
+    const query = {}
+
+    if (search.value && search.value.length >= 5) {
+        query.keyword = search.value
+    }
+
+    return query
+}
 </script>
 
 <template>
@@ -14,14 +52,17 @@
                             <select class="border border-gray-300 rounded-lg p-2">
                                 <option value="newest">নতুন প্রথম</option>
                                 <option value="oldest">পুরানো প্রথম</option>
-                                <option value="budget_high">বাজেট (উচ্চ থেকে низкий)</option>
+                                <option value="budget_high">বাজেট (উচ্চ থেকে নিম্ন)</option>
                                 <option value="budget_low">বাজেট (নিম্ন থেকে উচ্চ)</option>
                                 <option value="urgent">জরুরি প্রথম</option>
                             </select>
                         </div>
                         <div class="relative">
-                            <input type="text" placeholder="টাস্ক খুঁজুন..."
-                                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-64">
+                            <TextInput
+                             class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-64"
+                              v-model="search"
+                             placeholder="টাস্ক খুঁজুন..."
+                            />
                             <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                         </div>
                     </div>

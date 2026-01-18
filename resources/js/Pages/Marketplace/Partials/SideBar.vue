@@ -36,6 +36,7 @@ const zilas = ref(null)
 const showZila=ref(false)
 const showUpozila=ref(false)
 const query = ref('')
+ console.log(query.value);
 let scrollTimer = null
 
 
@@ -112,7 +113,7 @@ const filteredDistricts = computed(() => {
         .toLowerCase()
         .trim()
         .replace(/\s+/g, ' ')
-
+      console.log(q);
     if (q.length < 2) {
         showZila.value = false
         return []

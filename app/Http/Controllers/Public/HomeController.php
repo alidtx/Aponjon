@@ -30,7 +30,6 @@ class HomeController extends Controller
 
     public function marketplace(Request $request)
     {
-
         $activeTasker = TaskerProfile::select('id', 'verification_status')
             ->where('verification_status', 'verified')
             ->count();
