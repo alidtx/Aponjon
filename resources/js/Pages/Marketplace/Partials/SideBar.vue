@@ -36,7 +36,6 @@ const zilas = ref(null)
 const showZila=ref(false)
 const showUpozila=ref(false)
 const query = ref('')
- console.log(query.value);
 let scrollTimer = null
 
 
