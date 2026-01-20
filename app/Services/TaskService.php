@@ -36,6 +36,7 @@ class TaskService
         $zila = $request->query('zila');
         $upozila = $request->query('upozila');
         $keyword = $request->query('keyword');
+        $sort = $request->query('sort');
 
         $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIFTEEN->value);
         $perPage = max(1, min(100, $perPage));
@@ -65,10 +66,8 @@ class TaskService
         self::applyLocationFilter($query, 'zila', $zila, 'zilas');
         self::applyLocationFilter($query, 'upozila', $upozila, 'upozilas');
         self::applyKeywordFilter($query, $keyword);
-
-        return $query
-            ->orderByDesc('id')
-            ->paginate($perPage);
+        self::applySorting($query, $sort);
+        return $query->paginate($perPage);
     }
     private static function applyCategoryFilter($query, $slug): void
     {
@@ -113,6 +112,17 @@ class TaskService
               ->orWhere('description', 'LIKE', "%{$value}%");
         }
     });
+}
+private static function applySorting($query, string $sort=null): void
+{
+    match ($sort) {
+        'newest'     => $query->orderBy('created_at', 'desc'),
+        'oldest'     => $query->orderBy('created_at', 'asc'),
+        'budget_high' => $query->orderBy('budget', 'desc'),
+        'budget_low'  => $query->orderBy('budget', 'asc'),
+        'urgent'  => $query->where('emergency', 'emergency'),
+         default => $query->orderByDesc('id'),
+    };
 }
 
     private static function applyLocationFilter($query, string $field, $value, string $relation): void
