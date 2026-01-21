@@ -180,7 +180,7 @@ const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.
                                 </button>
                                 <button
                                     class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 font-medium">
-                                    বিড দিন
+                                    বিস্তারিত দেখুন
                                 </button>
                             </div>
                         </div>
