@@ -5,6 +5,14 @@ import BreadCrumb from './Partials/BreadCrumb.vue';
 import TaskDetail from './Partials/TaskDetail.vue';
 import SideBar from './Partials/SideBar.vue';
 import RelatedTask from './Partials/RelatedTask.vue';
+
+const props = defineProps({
+    taskDetails: {
+        type: Object,
+        required: true
+    },
+})
+
 </script>
 
 
@@ -14,7 +22,9 @@ import RelatedTask from './Partials/RelatedTask.vue';
     <main class="max-w-7xl mx-auto px-4 py-8">
         <BreadCrumb/>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <TaskDetail/>
+           <TaskDetail
+           :details="props.taskDetails"
+           />
            <SideBar/>
         </div>
     </main>
