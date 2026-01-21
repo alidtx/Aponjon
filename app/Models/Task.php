@@ -15,6 +15,7 @@ class Task extends Model
         'category_id',
         'tasker_id',
         'title',
+        'slug',
         'description',
         'location_address',
         'location_coordinates',  // string or point handled with package

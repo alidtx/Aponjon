@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained();
             $table->foreignId('tasker_id')->nullable()->constrained('users');
             $table->string('title');
+            $table->string('slug');
             $table->text('description');
             $table->string('location_address');
             $table->string('location_coordinates')->nullable();  //will add point data type with it pakage $table->point('location_coordinates');
