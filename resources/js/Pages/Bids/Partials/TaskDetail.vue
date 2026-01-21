@@ -1,4 +1,5 @@
 <script setup>
+import Accordion from '@/Components/Accordion.vue'
 
 const props = defineProps({
     details: {
@@ -74,6 +75,9 @@ const getLocation = (location) => {
         location.upozila?.name
     ].filter(Boolean).join(', ')
 }
+
+
+
 </script>
 
 
@@ -174,15 +178,7 @@ const getLocation = (location) => {
                     </ul>
                 </div>
 
-                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p class="font-medium text-yellow-800 mb-2">বিশেষ নির্দেশনা:</p>
-                    <ul class="list-disc pl-5 space-y-1 text-yellow-700">
-                        <li>স্থানীয় ইলেকট্রিক সাপ্লাই কোম্পানির রেগুলেশন অনুসরণ করতে হবে</li>
-                        <li>সব কাজের ছবি তুলে রাখতে হবে</li>
-                        <li>সামগ্রী সরবরাহ করা হবে না, শুধুমাত্র শ্রম</li>
-                        <li>কাজ শেষ হবার পর ইলেকট্রিক বিল্ডিং কোড সার্টিফিকেট প্রয়োজন</li>
-                    </ul>
-                </div>
+                <Accordion/>
             </div>
 
             <!-- Requirements -->
