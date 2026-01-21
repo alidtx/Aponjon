@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
@@ -18,10 +19,11 @@ Route::get('hh', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('marketplace', [HomeController::class, 'marketplace'])->name('marketplace');
-Route::get('task-details/{slug}',[HomeController::class, 'taskDetails'])->name('task-details');
 Route::get('category', [HomeController::class, 'category'])->name('category');
 Route::get('district-Wise-zila', [HomeController::class, 'districtWiseZila'])->name('district-Wise-zila');
 Route::get('Zila-Wise-upozila', [HomeController::class, 'ZilaWiseUpozila'])->name('Zila-Wise-upozila');
+
+Route::get('/tasks/{task:slug}',[BidController::class, 'show'])->name('tasks.show');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin', function(){

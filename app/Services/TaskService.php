@@ -46,6 +46,7 @@ class TaskService
                 'id',
                 'category_id',
                 'title',
+                'slug',
                 'description',
                 'district_id',
                 'zila_id',
