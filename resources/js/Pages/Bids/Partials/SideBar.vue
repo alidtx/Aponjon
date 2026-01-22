@@ -4,7 +4,7 @@ import { computed } from 'vue';
 const props = defineProps({
     bids: {
         type: Array,
-       default: () => []
+        default: () => []
     },
     budget: {
         type: Number,
@@ -12,30 +12,55 @@ const props = defineProps({
     }
 })
 
-const lowestAmount = computed(() => {
-  if (!props.bids.length) return null
+const timeAgo = (dateTime) => {
+    if (!dateTime) return ''
 
-  return Math.min(
-    ...props.bids.map(bid => Number(bid.amount))
-  )
+    const now = new Date()
+    const past = new Date(dateTime.replace(' ', 'T'))
+    const diffSeconds = Math.floor((now - past) / 1000)
+
+    if (diffSeconds < 60) {
+        return `${diffSeconds} সেকেন্ড আগে`
+    }
+
+    const diffMinutes = Math.floor(diffSeconds / 60)
+    if (diffMinutes < 60) {
+        return `${diffMinutes} মিনিট আগে`
+    }
+
+    const diffHours = Math.floor(diffMinutes / 60)
+    if (diffHours < 24) {
+        return `${diffHours} ঘন্ট আগে`
+    }
+
+    const diffDays = Math.floor(diffHours / 24)
+    return `${diffDays} দিন আগে`
+}
+
+const lowestAmount = computed(() => {
+    if (!props.bids.length) return null
+
+    return Math.min(
+        ...props.bids.map(bid => Number(bid.amount))
+    )
 })
 
 const highestAmount = computed(() => {
-  if (!props.bids.length) return null
+    if (!props.bids.length) return null
 
-  return Math.max(
-    ...props.bids.map(bid => Number(bid.amount))
-  )
+    return Math.max(
+        ...props.bids.map(bid => Number(bid.amount))
+    )
 })
 
 const averageBid = computed(() => {
-  if (!props.bids.length) return null
+    if (!props.bids.length) return null
 
-  const total = props.bids.reduce((sum, bid) => {
-    return sum + Number(bid.amount)
-  }, 0)
+    const total = props.bids.reduce((sum, bid) => {
+        return sum + Number(bid.amount)
+    }, 0)
 
-  return (total / props.bids.length).toFixed(2)
+    return (total / props.bids.length).toFixed(2)
 })
 
 </script>
@@ -61,7 +86,7 @@ const averageBid = computed(() => {
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-700">সর্বনিম্ন বিড:</span>
-                    <span class="font-bold text-green-600">৳{{Math.round(lowestAmount)}}</span>
+                    <span class="font-bold text-green-600">৳{{ Math.round(lowestAmount) }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-700">সর্বোচ্চ বিড:</span>
@@ -106,84 +131,48 @@ const averageBid = computed(() => {
             </h3>
 
             <div class="space-y-4 custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
-                <!-- Bid 1 -->
-                <div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-user text-green-600"></i>
-                            </div>
-                            <div>
-                                <p class="font-medium text-dark">করিম উদ্দিন</p>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
-                                    <span>৪.৯ • ৫৪ কাজ</span>
+
+                <!-- If bids exist -->
+                <div v-if="props.bids && props.bids.length > 0">
+                    <div v-for="(bid, index) in props.bids" :key="index"
+                        class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-dark">{{ bid.tasker?.name || 'Unknown' }}</p>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                        <span>৪.৯ • ৫৪ কাজ</span>
+                                    </div>
                                 </div>
                             </div>
+                            <span class="font-bold text-green-600">৳{{ Math.round(bid.amount) }}</span>
                         </div>
-                        <span class="font-bold text-green-600">৳১,২০০</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-2">আজ কাজ শুরু করতে পারব। ১০ বছর অভিজ্ঞতা আছে।</p>
-                    <div class="flex items-center text-gray-600 text-sm">
-                        <i class="far fa-clock mr-1"></i>
-                        <span>২ ঘন্টা • আজ</span>
+                        <p class="text-gray-700 text-sm mb-2">{{ bid.proposal }}</p>
+                        <div class="flex items-center text-gray-600 text-sm">
+                            <i class="far fa-clock mr-1"></i>
+                            <span>{{ timeAgo(bid.created_at) }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Bid 2 -->
-                <div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-user text-blue-600"></i>
-                            </div>
-                            <div>
-                                <p class="font-medium text-dark">সালাম মিয়া</p>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
-                                    <span>৪.৭ • ১২৩ কাজ</span>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="font-bold text-primary">৳১,৫০০</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-2">আগামীকাল শুরু করতে পারব। সব ধরনের ইলেকট্রিক কাজে অভিজ্ঞ।</p>
-                    <div class="flex items-center text-gray-600 text-sm">
-                        <i class="far fa-clock mr-1"></i>
-                        <span>৩ ঘন্টা • আগামীকাল</span>
-                    </div>
+                <!-- If no bids -->
+                <div v-else class="text-center py-8">
+                    <p class="text-gray-600">এই কাজের কোন বিড পাওায়া যায়নী</p>
                 </div>
 
-                <!-- Bid 3 -->
-                <div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-user text-purple-600"></i>
-                            </div>
-                            <div>
-                                <p class="font-medium text-dark">রফিকুল ইসলাম</p>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
-                                    <span>৪.৫ • ৮৭ কাজ</span>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="font-bold text-purple-600">৳১,৮০০</span>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-2">আজই শুরু করতে পারি। ডিপ্লোমা ইলেকট্রিক্যাল ইঞ্জিনিয়ার।</p>
-                    <div class="flex items-center text-gray-600 text-sm">
-                        <i class="far fa-clock mr-1"></i>
-                        <span>৪ ঘন্টা • আজ</span>
-                    </div>
-                </div>
             </div>
 
-            <button
+            <!-- Show button only if more than 2 bids -->
+            <button v-if="props.bids && props.bids.length > 5"
                 class="w-full mt-4 py-2 border border-primary text-primary rounded-lg hover:bg-blue-50 font-medium transition-colors">
                 সব বিড দেখুন
             </button>
         </div>
+
 
         <!-- Client Stats -->
         <div class="bg-white rounded-lg shadow-md p-6 animate-fade-in">

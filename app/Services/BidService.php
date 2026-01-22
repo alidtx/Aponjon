@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BidService
 {
-    public static function findTaskDetails($slug)
+    public static function findTaskDetails($id,$slug)
     {
       return Task::select([
             'id',
@@ -26,12 +26,12 @@ class BidService
             ->with([
                 'category:id,name',
                 'customers:id,name',
-                'bids:id,task_id,tasker_id,amount',
+                'bids:id,task_id,tasker_id,amount,proposal,created_at',
+                'bids.tasker:id,name,avatar',
                 'districts:id,name',
                 'zilas:id,name',
                 'upozilas:id,name',
             ])
-            ->whereSlug($slug)
-            ->firstOrFail();
+            ->findOrFail($id);
     }
 }

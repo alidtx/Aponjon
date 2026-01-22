@@ -10,11 +10,11 @@ use Inertia\Inertia;
 
 class BidController extends Controller
 {
-    public function show(Request $request, $slug)
+    public function show(Request $request,$id, $slug)
     {
         return Inertia::render('Bids/Index', [
             'taskDetails' => TaskResource::make(
-                BidService::findTaskDetails($slug)
+                BidService::findTaskDetails($id,$slug)
             )
         ]);
     }
