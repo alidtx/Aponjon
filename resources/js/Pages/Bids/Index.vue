@@ -5,6 +5,7 @@ import BreadCrumb from './Partials/BreadCrumb.vue';
 import TaskDetail from './Partials/TaskDetail.vue';
 import SideBar from './Partials/SideBar.vue';
 import RelatedTask from './Partials/RelatedTask.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     taskDetails: {
@@ -12,6 +13,9 @@ const props = defineProps({
         required: true
     },
 })
+
+const budget = computed(() => props.taskDetails.data?.budget)
+
 
 </script>
 
@@ -25,7 +29,10 @@ const props = defineProps({
            <TaskDetail
            :details="props.taskDetails"
            />
-           <SideBar/>
+           <SideBar
+           :bids="props.taskDetails.data?.bid"
+           :budget="budget"
+           />
         </div>
     </main>
     <RelatedTask/>

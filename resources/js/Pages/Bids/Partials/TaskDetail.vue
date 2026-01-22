@@ -110,11 +110,11 @@ const getLocation = (location) => {
                         </span>
                         <span class="flex items-center">
                             <i class="far fa-clock mr-1"></i>
-                            {{ timeAgo(props.details.data.created_at) }}
+                            {{ timeAgo(props.details.data?.created_at) }}
                         </span>
                         <span class="flex items-center">
                             <i class="fas fa-gavel mr-1"></i>
-                            ১২টি বিড
+                             {{ props.details.data?.bid?.length }} টি বিড
                         </span>
                     </div>
                 </div>
@@ -135,8 +135,6 @@ const getLocation = (location) => {
                         </div>
                     </div>
                 </div>
-
-                <!-- Urgent Info Box -->
                 <div 
                  :class="[
                     'border rounded-lg p-4 mb-6',
@@ -154,8 +152,6 @@ const getLocation = (location) => {
                 </div>
             </div>
         </div>
-
-        <!-- Task Description -->
         <div class="bg-white rounded-lg shadow-md p-6 animate-fade-in">
             <h2 class="text-xl font-bold text-dark mb-4 flex items-center">
                 <i class="fas fa-align-left text-primary mr-3"></i>
@@ -163,25 +159,9 @@ const getLocation = (location) => {
             </h2>
 
             <div class="prose max-w-none text-gray-700 mb-6">
-                <p class="mb-4">আমার নতুন ফ্ল্যাটে ইলেকট্রিক ওয়্যারিং করতে হবে। ৩ বেডরুম, ১ লিভিং রুম, ১ কিচেন এবং ২
-                    বাথরুম আছে। পুরো ফ্ল্যাটের জন্য নতুন ওয়্যারিং সিস্টেম তৈরি করতে হবে। বাসার মেইন electric line
-                    সমস্যা। পুরো ফ্ল্যাটে কারেন্ট নেই। জরুরিভাবে মেরামত প্রয়োজন।</p>
-
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <p class="font-medium text-dark mb-2">কাজের অন্তর্ভুক্ত:</p>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>সব রুমে লাইট পয়েন্ট বসানো</li>
-                        <li>পাওয়ার পয়েন্ট (সকেট) বসানো</li>
-                        <li>ফ্যান/লাইট সুইচিং সিস্টেম</li>
-                        <li>জরুরী লাইট এবং ব্যাকআপ সিস্টেম</li>
-                        <li>কিচেনের জন্য আলাদা লাইন</li>
-                    </ul>
-                </div>
-
+                 {{ props.details.data?.description }}
                 <Accordion/>
             </div>
-
-            <!-- Requirements -->
             <div class="mt-6">
                 <h3 class="text-lg font-semibold text-dark mb-3">প্রয়োজনীয়তা:</h3>
                 <div class="flex flex-wrap gap-2">
