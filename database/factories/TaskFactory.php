@@ -37,6 +37,7 @@ class TaskFactory extends Factory
             'budget' => $this->faker->randomFloat(2, 100, 10000),
             'status' => $this->faker->randomElement(['posted', 'assigned', 'in_progress', 'completed', 'cancelled', 'disputed']),
             'customer_notes' => $this->faker->optional()->sentence(),
+            'bidding_ends_at'  => now()->addDays(rand(1, 7)),
         ];
     }
 }
