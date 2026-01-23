@@ -1,5 +1,7 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue'
+import { computed } from 'vue'
+
 
 const props = defineProps({
     details: {
@@ -54,6 +56,39 @@ const timeLeft = (dateTime) => {
 }
 
 
+const finishDate = computed(() => {
+    const biddingEndsAt = props.details.data?.bidding_ends_at
+    const emergency = props.details.data?.emergency
+
+    if (!biddingEndsAt || !emergency) return 'নির্ধারিত নয়'
+
+    const endTime = new Date(biddingEndsAt)
+    let hoursToAdd = 0
+
+    switch (emergency) {
+        case 'normal':
+            hoursToAdd = 48
+            break
+        case 'urgent':
+            hoursToAdd = 24
+            break
+        case 'emergency':
+            hoursToAdd = 12
+            break
+        default:
+            return 'নির্ধারিত নয়'
+    }
+
+    endTime.setHours(endTime.getHours() + hoursToAdd)
+
+    return endTime.toLocaleString('bn-BD', {
+        day: 'numeric',
+        month: 'long',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+    })
+})
 const URGENCY_MAP = {
     normal: {
         text: 'সাধারণ',
@@ -231,7 +266,7 @@ const getLocation = (location) => {
                             <div class="absolute -left-9 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
                             <div>
                                 <p class="font-semibold text-dark">কাজ শেষের তারিখ</p>
-                                <p class="text-gray-600 text-sm">আজ রাত ১০টার মধ্যে</p>
+                                <p class="text-gray-600 text-sm">  {{ finishDate }}</p>
                             </div>
                         </div>
                     </div>
@@ -254,7 +289,7 @@ const getLocation = (location) => {
                     <div class="space-y-3">
                         <div class="flex items-center text-gray-700">
                             <i class="fas fa-road w-6 text-blue-600"></i>
-                            <span class="ml-3">মিরপুর সেকশন ১০</span>
+                            <span class="ml-3">{{ props.details.data?.location_address }}</span>
                         </div>
                         <div class="flex items-center text-gray-700">
                             <i class="fas fa-building w-6 text-green-600"></i>
