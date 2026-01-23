@@ -3,18 +3,18 @@
 namespace App\Services;
 
 use App\Models\Task;
-use Illuminate\Http\Request;
+
 
 class BidService
 {
-    public static function findTaskDetails($id,$slug)
+    public static function findTaskDetails($id, $slug)
     {
-      return Task::select([
+        return Task::select([
             'id',
             'slug',
             'title',
             'description',
-            'emergency', 
+            'emergency',
             'budget',
             'category_id',
             'customer_id',
@@ -26,7 +26,19 @@ class BidService
             ->with([
                 'category:id,name',
                 'customers:id,name',
-                'bids:id,task_id,tasker_id,amount,proposal,status,created_at',
+                'bids' => function ($query) {
+                    $query->select([
+                        'id',
+                        'task_id',
+                        'tasker_id',
+                        'amount',
+                        'proposal',
+                        'status',
+                        'created_at'
+                    ])
+                        ->latest()
+                        ->take(5);
+                },
                 'bids.tasker:id,name,avatar',
                 'districts:id,name',
                 'zilas:id,name',
