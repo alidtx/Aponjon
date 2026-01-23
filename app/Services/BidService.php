@@ -26,7 +26,7 @@ class BidService
             ->with([
                 'category:id,name',
                 'customers:id,name',
-                'bids:id,task_id,tasker_id,amount,proposal,created_at',
+                'bids:id,task_id,tasker_id,amount,proposal,status,created_at',
                 'bids.tasker:id,name,avatar',
                 'districts:id,name',
                 'zilas:id,name',

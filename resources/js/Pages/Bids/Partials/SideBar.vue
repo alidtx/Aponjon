@@ -100,7 +100,7 @@ const averageBid = computed(() => {
 
             <button
                 class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-                <i class="fas fa-gavel mr-3"></i>বিড দিন
+                <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
             </button>
 
             <div class="mt-4 text-center">
@@ -127,7 +127,7 @@ const averageBid = computed(() => {
         <div class="bg-white rounded-lg shadow-md p-6 animate-fade-in">
             <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
                 <i class="fas fa-history text-primary mr-3"></i>
-                সাম্প্রতিক বিড
+                সাম্প্রতিক কাজের আবেদন গুলো
             </h3>
 
             <div class="space-y-4 custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
@@ -161,15 +161,15 @@ const averageBid = computed(() => {
 
                 <!-- If no bids -->
                 <div v-else class="text-center py-8">
-                    <p class="text-gray-600">এই কাজের কোন বিড পাওায়া যায়নী</p>
+                    <p class="text-gray-600">এখনো কেউ আবেদন করেনি! সুযোগ হাতছাড়া না করে এখনই আবেদন করুন।</p>
                 </div>
 
             </div>
 
             <!-- Show button only if more than 2 bids -->
-            <button v-if="props.bids && props.bids.length > 5"
+            <button 
                 class="w-full mt-4 py-2 border border-primary text-primary rounded-lg hover:bg-blue-50 font-medium transition-colors">
-                সব বিড দেখুন
+                সব কাজ দেখুন
             </button>
         </div>
 
