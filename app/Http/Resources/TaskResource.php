@@ -27,6 +27,7 @@ class TaskResource extends JsonResource
             'status'               => $this->status,
             'emergency'               => $this->emergency,
             'customer_notes'       => $this->customer_notes,
+            'bidding_ends_at'       => $this->bidding_ends_at,
             'customer' => new UserResource($this->whenLoaded('customers')),
             'category' => new CategoryResource($this->whenLoaded('category')),
             'tasker'   => new UserResource($this->whenLoaded('taskers')),

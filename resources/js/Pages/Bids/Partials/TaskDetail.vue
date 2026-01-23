@@ -33,6 +33,27 @@ const timeAgo = (dateTime) => {
     return `${diffDays} দিন আগে`
 }
 
+const timeLeft = (dateTime) => {
+    if (!dateTime) return 'সময় পাওয়া যায়নি'
+
+    const now = new Date()
+    const end = new Date(dateTime.replace(' ', 'T'))
+    const diffSeconds = Math.floor((end - now) / 1000)
+
+    if (diffSeconds <= 0) return 'শেষ হয়েছে'
+
+    const days = Math.floor(diffSeconds / 86400)
+    const hours = Math.floor((diffSeconds % 86400) / 3600)
+    const minutes = Math.floor((diffSeconds % 3600) / 60)
+    const seconds = diffSeconds % 60
+
+    if (days > 0) return `${days} দিন ${hours} ঘন্টা বাকি`
+    if (hours > 0) return `${hours} ঘন্টা ${minutes} মিনিট বাকি`
+    if (minutes > 0) return `${minutes} মিনিট ${seconds} সেকেন্ড বাকি`
+    return `${seconds} সেকেন্ড বাকি`
+}
+
+
 const URGENCY_MAP = {
     normal: {
         text: 'সাধারণ',
@@ -196,14 +217,14 @@ const getLocation = (location) => {
                             <div class="absolute -left-9 w-6 h-6 bg-primary rounded-full border-4 border-white"></div>
                             <div>
                                 <p class="font-semibold text-dark">টাস্ক পোস্ট করা</p>
-                                <p class="text-gray-600 text-sm">৩০ মিনিট আগে</p>
+                                <p class="text-gray-600 text-sm">{{ timeAgo(props.details.data?.created_at) }}</p>
                             </div>
                         </div>
                         <div class="mb-6 relative">
                             <div class="absolute -left-9 w-6 h-6 bg-accent rounded-full border-4 border-white"></div>
                             <div>
                                 <p class="font-semibold text-dark">বিড গ্রহণ</p>
-                                <p class="text-gray-600 text-sm">আজ সন্ধ্যা ৬টার মধ্যে</p>
+                                <p class="text-gray-600 text-sm">{{ timeLeft(props.details.data?.bidding_ends_at) }}</p>
                             </div>
                         </div>
                         <div class="relative">

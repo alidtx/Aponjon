@@ -21,6 +21,9 @@ class BidService
             'district_id',
             'zila_id',
             'upozila_id',
+            'bidding_ends_at',
+            'location_address',
+            'location_coordinates',
             'created_at'
         ])
             ->with([

@@ -26,6 +26,7 @@ class Task extends Model
         'budget',
         'status',
         'customer_notes',
+        'bidding_ends_at',
     ];
 
     public function customers()
