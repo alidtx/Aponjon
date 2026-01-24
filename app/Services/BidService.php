@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Order;
 use App\Models\Task;
 
 
@@ -36,7 +37,7 @@ class BidService
                                     'id',
                                     'customer_id',
                                     'status',
-                                   )
+                                )
                                     ->latest();
                             }
                         ]);
@@ -61,5 +62,30 @@ class BidService
                 'upozilas:id,name',
             ])
             ->findOrFail($id);
+    }
+    public static function paymentCompletionRate($taskId)
+    {
+        $task = Task::with([
+            'customers.customerTasks' => function ($q) {
+                $q->select('id', 'customer_id', 'status')
+                    ->where('status', 'completed');
+            }
+        ])->where('id', $taskId)->firstOrFail();
+
+        $customerTasks = $task->customers->customerTasks;
+
+        $totalCompletedTasks = $customerTasks->count();
+
+        if ($totalCompletedTasks === 0) {
+            return 0;
+        }
+
+        $taskIds = $customerTasks->pluck('id');
+
+        $paidTasksCount = Order::whereIn('task_id', $taskIds)
+            ->where('payment_status', 'paid')
+            ->count();
+
+        return round(($paidTasksCount / $totalCompletedTasks) * 100, 2);
     }
 }

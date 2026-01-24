@@ -16,6 +16,10 @@ const props = defineProps({
         type: Number,
         default:0
     },
+    paymentCompletionRate: {
+        type: Number,
+        default:0
+    },
 })
 
 const budget = computed(() => props.taskDetails.data?.budget)
@@ -39,6 +43,7 @@ const customerTask = computed(() => props.taskDetails.data?.customer?.customer_t
            :budget="budget"
            :totalTaskCount="totalTaskCount"
            :customerTask="customerTask"
+           :paymentCompletionRate="paymentCompletionRate"
            />
         </div>
     </main>

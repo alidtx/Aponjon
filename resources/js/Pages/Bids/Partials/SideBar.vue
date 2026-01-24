@@ -17,6 +17,10 @@ const props = defineProps({
     totalTaskCount: {
         type: Number,
         default:0
+    },
+    paymentCompletionRate: {
+        type: Number,
+        default:0
     }
 })
 
@@ -217,7 +221,7 @@ const averageBid = computed(() => {
             <div class="space-y-4">
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-gray-700 text-sm">টাস্ক পোস্ট</span>
+                        <span class="text-gray-700 text-sm">টোটাল কাজ পোস্ট করেছেন</span>
                         <span class="font-medium text-dark text-sm">{{props.customerTask?.length}}টি</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -237,11 +241,11 @@ const averageBid = computed(() => {
 
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-gray-700 text-sm">পেমেন্ট গতি</span>
-                        <span class="font-medium text-dark text-sm">দ্রুত</span>
+                        <span class="text-gray-700 text-sm">পেমেন্ট করার হার</span>
+                        <span class="font-medium text-dark text-sm">{{paymentCompletionRate}}%</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-accent rounded-full" style="width: 85%"></div>
+                        <div class="h-full bg-accent rounded-full" :style="{ width: paymentCompletionRate  + '%' }"></div>
                     </div>
                 </div>
             </div>
