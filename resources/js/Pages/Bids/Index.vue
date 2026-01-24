@@ -12,9 +12,14 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    totalTaskCount: {
+        type: Number,
+        default:0
+    },
 })
 
 const budget = computed(() => props.taskDetails.data?.budget)
+const customerTask = computed(() => props.taskDetails.data?.customer?.customer_tasks)
 
 
 </script>
@@ -32,6 +37,8 @@ const budget = computed(() => props.taskDetails.data?.budget)
            <SideBar
            :bids="props.taskDetails.data?.bid"
            :budget="budget"
+           :totalTaskCount="totalTaskCount"
+           :customerTask="customerTask"
            />
         </div>
     </main>

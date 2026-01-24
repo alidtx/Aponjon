@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import {computed} from 'vue';
 
 const props = defineProps({
     bids: {
@@ -9,7 +9,40 @@ const props = defineProps({
     budget: {
         type: Number,
         default: 0
+    },
+    customerTask: {
+        type: Array,
+        default: () => []
+    },
+    totalTaskCount: {
+        type: Number,
+        default:0
     }
+})
+
+const completedTaskCount = computed(() => {
+    if (!Array.isArray(props.customerTask)) return 0
+
+    return props.customerTask.filter(
+        task => task?.status === 'completed'
+    ).length
+})
+
+const completedPercentage = computed(() => {
+    if (!props.totalTaskCount) return 0
+
+    return Math.round(
+        (completedTaskCount.value / props.customerTask.length) * 100
+    )
+})
+const customerTaskPercentage = computed(() => {
+    if (!props.totalTaskCount || props.totalTaskCount === 0) {
+        return 0
+    }
+
+    return Math.round(
+        (props.customerTask.length / props.totalTaskCount) * 100
+    )
 })
 
 const timeAgo = (dateTime) => {
@@ -185,20 +218,20 @@ const averageBid = computed(() => {
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-gray-700 text-sm">টাস্ক পোস্ট</span>
-                        <span class="font-medium text-dark text-sm">৪৫টি</span>
+                        <span class="font-medium text-dark text-sm">{{props.customerTask?.length}}টি</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-primary rounded-full" style="width: 90%"></div>
+                        <div class="h-full bg-primary rounded-full" :style="{ width: customerTaskPercentage + '%' }"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-gray-700 text-sm">সফলতার হার</span>
-                        <span class="font-medium text-dark text-sm">৯৬%</span>
+                        <span class="font-medium text-dark text-sm">{{completedPercentage}}%</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-green-500 rounded-full" style="width: 96%"></div>
+                        <div class="h-full bg-green-500 rounded-full" :style="{ width: completedPercentage  + '%' }"></div>
                     </div>
                 </div>
 

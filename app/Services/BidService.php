@@ -28,7 +28,20 @@ class BidService
         ])
             ->with([
                 'category:id,name',
-                'customers:id,name',
+                'customers' => function ($query) {
+                    $query->select('id', 'name')
+                        ->with([
+                            'customerTasks' => function ($q) {
+                                $q->select(
+                                    'id',
+                                    'customer_id',
+                                    'status',
+                                   )
+                                    ->latest();
+                            }
+                        ]);
+                },
+
                 'bids' => function ($query) {
                     $query->select([
                         'id',
