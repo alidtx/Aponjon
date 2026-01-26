@@ -1,5 +1,6 @@
 <script setup>
 import {computed} from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     bids: {
@@ -21,6 +22,13 @@ const props = defineProps({
     paymentCompletionRate: {
         type: Number,
         default:0
+    },
+   currentTask: {
+        type: Object,
+        default: () => ({
+            id: null,
+            slug: null
+        })
     }
 })
 
@@ -134,11 +142,11 @@ const averageBid = computed(() => {
                     <span class="font-bold text-primary">৳{{ Math.round(averageBid) }}</span>
                 </div>
             </div>
-
-            <button
-                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-                <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
-            </button>
+             
+            <Link :href="route('bid.submit.form',{ id: currentTask.id, slug: currentTask.slug })"  
+             class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+              <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
+            </Link>
 
             <div class="mt-4 text-center">
                 <p class="text-gray-600 text-sm">

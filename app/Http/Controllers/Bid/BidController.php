@@ -21,4 +21,7 @@ class BidController extends Controller
             )
         ]);
     }
+    public function bidSubmitForm ()  {
+      return Inertia::render('BidSubmitForm/Index');
+    }
 }

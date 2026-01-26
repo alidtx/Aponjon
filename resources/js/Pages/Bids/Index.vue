@@ -1,7 +1,7 @@
 <script setup>
 import MarketplaceDefaultLayout from '@/Layouts/MarketplaceDefaultLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import BreadCrumb from './Partials/BreadCrumb.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 import TaskDetail from './Partials/TaskDetail.vue';
 import SideBar from './Partials/SideBar.vue';
 import RelatedTask from './Partials/RelatedTask.vue';
@@ -24,6 +24,7 @@ const props = defineProps({
 
 const budget = computed(() => props.taskDetails.data?.budget)
 const customerTask = computed(() => props.taskDetails.data?.customer?.customer_tasks)
+const currentTask = computed(() => ({id: props.taskDetails.data?.id, slug: props.taskDetails.data?.slug}))
 
 
 </script>
@@ -32,8 +33,8 @@ const customerTask = computed(() => props.taskDetails.data?.customer?.customer_t
 <template>
    <MarketplaceDefaultLayout>
     <Head title="টাস্কের বিস্তারিত"/>
+    <Breadcrumb/>
     <main class="max-w-7xl mx-auto px-4 py-8">
-        <BreadCrumb/>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
            <TaskDetail
            :details="props.taskDetails"
@@ -44,6 +45,7 @@ const customerTask = computed(() => props.taskDetails.data?.customer?.customer_t
            :totalTaskCount="totalTaskCount"
            :customerTask="customerTask"
            :paymentCompletionRate="paymentCompletionRate"
+           :currentTask="currentTask"
            />
         </div>
     </main>

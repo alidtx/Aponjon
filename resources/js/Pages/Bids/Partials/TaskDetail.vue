@@ -124,6 +124,15 @@ const URGENCY_MAP = {
     },
 }
 const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.normal
+const importantNotices = [
+  'স্থানীয় ইলেকট্রিক সাপ্লাই কোম্পানির রেগুলেশন অনুসরণ করতে হবে',
+  'সব কাজের ছবি তুলে রাখতে হবে',
+  'সামগ্রী সরবরাহ করা হবে না, শুধুমাত্র শ্রম',
+  'কাজ শেষ হবার পর ইলেকট্রিক বিল্ডিং কোড সার্টিফিকেট প্রয়োজন'
+]
+
+
+
 const getLocation = (location) => {
     return [
         location.district?.name,
@@ -139,20 +148,17 @@ const getLocation = (location) => {
 
 <template>
     <div class="lg:col-span-2 space-y-6">
-        <div 
-        :class="[
-                    'bg-white rounded-lg shadow-md border-l-4 hover:shadow-lg transition-shadow duration-300',
-                    urgency(props.details.data.emergency).border
-                ]"
-        
-        >
+        <div :class="[
+            'bg-white rounded-lg shadow-md border-l-4 hover:shadow-lg transition-shadow duration-300',
+            urgency(props.details.data.emergency).border
+        ]">
             <div class="p-6">
                 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
                     <div class="flex items-center space-x-3">
                         <span class=""
-                        :class="['status-emergency px-4 py-1.5 rounded-full text-sm font-medium',urgency(props.details.data.emergency).textColor]"
-                        >
-                             <i class="fas mr-1" :class="urgency(props.details.data.emergency).icon"></i>{{ urgency(props.details.data.emergency).text }}
+                            :class="['status-emergency px-4 py-1.5 rounded-full text-sm font-medium', urgency(props.details.data.emergency).textColor]">
+                            <i class="fas mr-1" :class="urgency(props.details.data.emergency).icon"></i>{{
+                                urgency(props.details.data.emergency).text }}
                         </span>
                         <span class="category-electrical px-4 py-1.5 rounded-full text-sm font-medium">
                             <i class="fas fa-bolt mr-2"></i>{{ props.details.data.category.name }}
@@ -170,7 +176,7 @@ const getLocation = (location) => {
                         </span>
                         <span class="flex items-center">
                             <i class="fas fa-gavel mr-1"></i>
-                             {{ props.details.data?.bid?.length }} টি বিড
+                            {{ props.details.data?.bid?.length }} টি বিড
                         </span>
                     </div>
                 </div>
@@ -191,17 +197,15 @@ const getLocation = (location) => {
                         </div>
                     </div>
                 </div>
-                <div 
-                 :class="[
+                <div :class="[
                     'border rounded-lg p-4 mb-6',
                     urgency(props.details.data.emergency).bgColor, urgency(props.details.data.emergency).border
-                ]"
-                
-                >
+                ]">
                     <div class="flex items-center">
                         <i class="fas mr-2" :class="urgency(props.details.data.emergency).icon"></i>
                         <div>
-                            <p :class="['font-medium',urgency(props.details.data.emergency).textColor]">{{ urgency(props.details.data.emergency).text }}</p>
+                            <p :class="['font-medium', urgency(props.details.data.emergency).textColor]">{{
+                                urgency(props.details.data.emergency).text }}</p>
                             <p class="text-red-700 text-sm">{{ urgency(props.details.data.emergency).notice }}</p>
                         </div>
                     </div>
@@ -215,8 +219,8 @@ const getLocation = (location) => {
             </h2>
 
             <div class="prose max-w-none text-gray-700 mb-6">
-                 {{ props.details.data?.description }}
-                <Accordion/>
+                {{ props.details.data?.description }}
+                <Accordion title="বিশেষ নির্দেশনা" :items="importantNotices" />
             </div>
             <div class="mt-6">
                 <h3 class="text-lg font-semibold text-dark mb-3">প্রয়োজনীয়তা:</h3>
@@ -266,7 +270,7 @@ const getLocation = (location) => {
                             <div class="absolute -left-9 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
                             <div>
                                 <p class="font-semibold text-dark">কাজ শেষের তারিখ</p>
-                                <p class="text-gray-600 text-sm">  {{ finishDate }}</p>
+                                <p class="text-gray-600 text-sm"> {{ finishDate }}</p>
                             </div>
                         </div>
                     </div>
