@@ -10,6 +10,7 @@ return [
 
   'siteConfig' => [
     'name' => env('APONJON_FULL_NAME', 'আপনজন'),
+    'scam_policy'=>env('scam_policy', 'এই প্ল্যাটফর্মে কোন ফ্রড বা প্রতারণামূলক কাজের অনুমতি নেই। লঙ্ঘনের জন্য আইনগত ব্যবস্থা নেওয়া হবে।'),
     'address' => [
       'head_office' => [
         'address_line' => env('APPONJON_HEAD_OFFICE_ADDRESS', 'ঢাকা বাড্ডা, বাংলাদেশ')
@@ -60,5 +61,8 @@ return [
     ],
 
   ],
+  'market_place'=>[
+    'footer'=>''
+  ]
 
 ];

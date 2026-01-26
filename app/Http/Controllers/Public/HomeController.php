@@ -43,6 +43,7 @@ class HomeController extends Controller
             'completedTasks' => $completedTasks,
             'totalBudget' => Task::sum('budget'),
             'query' => $request->query(),
+            'siteConfig' => config('aponjon.siteConfig'),
             'task' => TaskResource::collection(TaskService::getPaginate($request))
         ]);
     }
