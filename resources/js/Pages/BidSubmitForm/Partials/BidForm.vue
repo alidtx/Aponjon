@@ -15,7 +15,7 @@ const advices = [
             <!-- Bid Form Container -->
             <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
                 <!-- Form Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 md:p-8">
+                <div class="bg-primary text-white p-6 md:p-8 rounded-lg shadow-md">
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">বিড সাবমিট করুন</h2>
