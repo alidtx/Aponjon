@@ -24,7 +24,6 @@ class HomeController extends Controller
             'user' => auth()->check() ? new UserResource(auth()->user()) : null,
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
-            'siteConfig' => config('aponjon.siteConfig'),
         ]);
     }
 
@@ -43,7 +42,6 @@ class HomeController extends Controller
             'completedTasks' => $completedTasks,
             'totalBudget' => Task::sum('budget'),
             'query' => $request->query(),
-            'siteConfig' => config('aponjon.siteConfig'),
             'task' => TaskResource::collection(TaskService::getPaginate($request))
         ]);
     }

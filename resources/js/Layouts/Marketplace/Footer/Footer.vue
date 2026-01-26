@@ -1,6 +1,8 @@
 <script setup>
-import { inject } from 'vue';
-const siteConfig = inject('siteConfig')
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage()
+const siteConfig = page.props.siteConfig
 </script>
 
 

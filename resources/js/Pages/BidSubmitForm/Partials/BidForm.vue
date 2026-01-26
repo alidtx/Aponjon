@@ -1,12 +1,11 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue';
+import { usePage } from '@inertiajs/vue3';
 
-const advices = [
-  'আপনার অভিজ্ঞতা এবং পূর্বের কাজের উদাহরণ দিন',
-  'আপনি কি কি সরঞ্জাম ব্যবহার করবেন তা উল্লেখ করুন',
-  'সময়মতো কাজ শেষ করার প্রতিশ্রুতি দিন',
-  'গ্রাহককে আকৃষ্ট করার জন্য বিশেষ অফার যোগ করুন'
-]
+const page = usePage()
+
+
+const bidAvices = page.props.bid_advices
 
 </script>
 
@@ -253,7 +252,7 @@ const advices = [
                                   class="w-full p-5 border-2 border-gray-300 rounded-xl focus:border-blue-500 text-gray-800 transition-colors" 
                                   placeholder="আপনি কিভাবে এই কাজটি করবেন? আপনার অভিজ্ঞতা, টুলস, বা বিশেষ অফার সম্পর্কে লিখুন..."></textarea>
 
-                        <Accordion title="পরামর্শ: কিভাবে একটি ভালো প্রস্তাবনা লিখবেন" :items="advices"/>
+                        <Accordion :title="bidAvices.label" :items="bidAvices.items"/>
                     </div>
 
                     <!-- Submit Section -->

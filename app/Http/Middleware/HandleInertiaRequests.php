@@ -38,6 +38,9 @@ class HandleInertiaRequests extends Middleware
             'message' => fn () => $request->session()->get('message'),
             'type' => fn () => $request->session()->get('type'),
         ],
+        'siteConfig' =>config('aponjon.siteConfig'),
+        'special_notice' =>config('aponjon.market_place.special_notice'),
+        'bid_advices' =>config('aponjon.market_place.bid_advices')
     ];
 }
 

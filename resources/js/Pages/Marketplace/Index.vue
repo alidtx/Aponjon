@@ -5,7 +5,6 @@ import Stats from './Partials/Stats.vue';
 import SideBar from './Partials/SideBar.vue';
 import CardPortion from './Partials/CardPortion.vue';
 import { Head } from '@inertiajs/vue3'
-import { provide } from 'vue';
 
 const props = defineProps({
     totalTask: {
@@ -32,11 +31,8 @@ const props = defineProps({
         type: Object,
         required: true
     },
-    siteConfig:{
-      type:Object,
-    },
 })
-provide('siteConfig', props.siteConfig)
+
 </script>
 
 <template>

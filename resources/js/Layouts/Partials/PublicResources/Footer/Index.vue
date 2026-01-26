@@ -1,8 +1,10 @@
 <script setup>
-import { inject } from 'vue'
 import MenuItem from '@/Layouts/MenuItem.json';
+import { usePage } from '@inertiajs/vue3';
+const page = usePage()
+const siteConfig = page.props.siteConfig
 
-const siteConfig = inject('siteConfig')
+
 
 </script>
 

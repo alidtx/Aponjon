@@ -1,7 +1,11 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue'
 import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
+const page = usePage()
+const special_notice = page.props.special_notice
+console.log(special_notice)
 
 const props = defineProps({
     details: {
@@ -124,13 +128,6 @@ const URGENCY_MAP = {
     },
 }
 const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.normal
-const importantNotices = [
-  'স্থানীয় ইলেকট্রিক সাপ্লাই কোম্পানির রেগুলেশন অনুসরণ করতে হবে',
-  'সব কাজের ছবি তুলে রাখতে হবে',
-  'সামগ্রী সরবরাহ করা হবে না, শুধুমাত্র শ্রম',
-  'কাজ শেষ হবার পর ইলেকট্রিক বিল্ডিং কোড সার্টিফিকেট প্রয়োজন'
-]
-
 
 
 const getLocation = (location) => {
@@ -220,7 +217,7 @@ const getLocation = (location) => {
 
             <div class="prose max-w-none text-gray-700 mb-6">
                 {{ props.details.data?.description }}
-                <Accordion title="বিশেষ নির্দেশনা" :items="importantNotices" />
+                <Accordion :title="special_notice.label" :items="special_notice.items" />
             </div>
             <div class="mt-6">
                 <h3 class="text-lg font-semibold text-dark mb-3">প্রয়োজনীয়তা:</h3>
