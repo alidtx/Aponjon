@@ -3,6 +3,7 @@ import {computed} from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useTimeAgo } from '@/composables/useTimeAgo'
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
+import { findPercentage } from '@/composables/findPercentage';
 
 const props = defineProps({
     bids: {
@@ -39,25 +40,12 @@ const completedTaskCount = computed(() => {
 
     return props.customerTask.filter(
         task => task?.status === 'completed'
-    ).length
-})
-
-const completedPercentage = computed(() => {
-    if (!props.totalTaskCount) return 0
-
-    return Math.round(
-        (completedTaskCount.value / props.customerTask.length) * 100
     )
 })
-const customerTaskPercentage = computed(() => {
-    if (!props.totalTaskCount || props.totalTaskCount === 0) {
-        return 0
-    }
 
-    return Math.round(
-        (props.customerTask.length / props.totalTaskCount) * 100
-    )
-})
+const successRate=findPercentage(completedTaskCount.value, props.customerTask.length)
+const TaskPercentage=findPercentage(props.customerTask, props.totalTaskCount)
+const average=useBidsAverageAmount(props.bids)
 
 const lowestAmount = computed(() => {
     if (!props.bids.length) return null
@@ -74,7 +62,7 @@ const highestAmount = computed(() => {
         ...props.bids.map(bid => Number(bid.amount))
     )
 })
-const average=useBidsAverageAmount(props.bids)
+
 
 </script>
 
@@ -201,17 +189,17 @@ const average=useBidsAverageAmount(props.bids)
                         <span class="font-medium text-dark text-sm">{{props.customerTask?.length}}টি</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-primary rounded-full" :style="{ width: customerTaskPercentage + '%' }"></div>
+                        <div class="h-full bg-primary rounded-full" :style="{ width: TaskPercentage + '%' }"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-gray-700 text-sm">সফলতার হার</span>
-                        <span class="font-medium text-dark text-sm">{{completedPercentage}}%</span>
+                        <span class="font-medium text-dark text-sm">{{successRate}}%</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-green-500 rounded-full" :style="{ width: completedPercentage  + '%' }"></div>
+                        <div class="h-full bg-green-500 rounded-full" :style="{ width: successRate  + '%' }"></div>
                     </div>
                 </div>
 

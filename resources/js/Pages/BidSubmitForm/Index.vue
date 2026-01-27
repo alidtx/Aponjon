@@ -11,6 +11,10 @@ const props=defineProps({
    bidDetails:{
     type:Object,
     required:true
+   },
+   totalBid:{
+    type:Number,
+    default:0
    }
 })
 
@@ -33,7 +37,10 @@ const props=defineProps({
                <BidForm
                :bidDetails="props.bidDetails"
                 />
-               <SideBar/>
+               <SideBar
+               :bidDetails="props.bidDetails"
+               :totalBid="totalBid"
+               />
             </div>
         </main>
 

@@ -1,4 +1,21 @@
-<script setup></script>
+<script setup>
+ import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
+ import { findPercentage } from '@/composables/findPercentage'; 
+
+const props=defineProps({
+   bidDetails:{
+    type:Object,
+    required:true
+   },
+    totalBid:{
+    type:Number,
+    default:0
+   }
+})
+
+const average=useBidsAverageAmount(props.bidDetails.data?.bid)
+const percentage=findPercentage( props.bidDetails.data?.bid, props.totalBid)
+</script>
 
 <template>
         <div class="lg:col-span-1">
@@ -58,17 +75,17 @@
                     <div>
                         <div class="flex justify-between mb-2">
                             <span class="text-gray-700">মোট বিড</span>
-                            <span class="font-bold text-blue-600">১২ টি</span>
+                            <span class="font-bold text-blue-600">{{props.bidDetails.data?.bid.length}}টি</span>
                         </div>
                         <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500" style="width: 100%"></div>
+                            <div class="h-full bg-blue-500" :style="{ width: percentage + '%' }"></div>
                         </div>
                     </div>
                     
                     <div>
                         <div class="flex justify-between mb-2">
                             <span class="text-gray-700">গড় বিড মূল্য</span>
-                            <span class="font-bold text-green-600">৳৩,২০০</span>
+                            <span class="font-bold text-green-600">৳{{ average }}</span>
                         </div>
                         <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div class="h-full bg-green-500" style="width: 80%"></div>
