@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { useTimeLeft } from '@/composables/useTimeLeft'
 import { useTimeAgo } from '@/composables/useTimeAgo'
+import { useLocation } from '@/composables/geoLocation'
 
 const page = usePage()
 const special_notice = page.props.special_notice
@@ -92,17 +93,6 @@ const URGENCY_MAP = {
 }
 const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.normal
 
-
-const getLocation = (location) => {
-    return [
-        location.district?.name,
-        location.zila?.name,
-        location.upozila?.name
-    ].filter(Boolean).join(', ')
-}
-
-
-
 </script>
 
 
@@ -151,7 +141,7 @@ const getLocation = (location) => {
                         <p class="font-medium text-dark">{{ props.details.data.customer.name }}</p>
                         <div class="flex items-center text-sm text-gray-600">
                             <i class="fas fa-map-marker-alt mr-1"></i>
-                            <span>{{ getLocation(props.details.data) }}</span>
+                            <span>{{ useLocation(props.details.data) }}</span>
                             <i class="fas fa-star text-yellow-400 ml-4 mr-1"></i>
                             <span>৪.৮ (১২৩ রিভিউ)</span>
                         </div>
