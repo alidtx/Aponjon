@@ -1,6 +1,8 @@
 <script setup>
 import {computed} from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { useTimeAgo } from '@/composables/useTimeAgo'
+import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
 
 const props = defineProps({
     bids: {
@@ -97,16 +99,7 @@ const highestAmount = computed(() => {
         ...props.bids.map(bid => Number(bid.amount))
     )
 })
-
-const averageBid = computed(() => {
-    if (!props.bids.length) return null
-
-    const total = props.bids.reduce((sum, bid) => {
-        return sum + Number(bid.amount)
-    }, 0)
-
-    return (total / props.bids.length).toFixed(2)
-})
+const average=useBidsAverageAmount(props.bids)
 
 </script>
 
@@ -139,7 +132,7 @@ const averageBid = computed(() => {
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-700">গড় বিড:</span>
-                    <span class="font-bold text-primary">৳{{ Math.round(averageBid) }}</span>
+                    <span class="font-bold text-primary">৳{{ average }}</span>
                 </div>
             </div>
              
@@ -199,7 +192,7 @@ const averageBid = computed(() => {
                         <p class="text-gray-700 text-sm mb-2">{{ bid.proposal }}</p>
                         <div class="flex items-center text-gray-600 text-sm">
                             <i class="far fa-clock mr-1"></i>
-                            <span>{{ timeAgo(bid.created_at) }}</span>
+                            <span>{{useTimeAgo(bid.created_at) }}</span>
                         </div>
                     </div>
                 </div>

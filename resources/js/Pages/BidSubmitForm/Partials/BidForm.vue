@@ -4,6 +4,7 @@ import { usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { useTimeLeft } from '@/composables/useTimeLeft'
 import { useTimeAgo } from '@/composables/useTimeAgo'
+import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
 
 const page = usePage()
 const bidAvices = page.props.bid_advices
@@ -22,23 +23,11 @@ const shortAddress = computed(() => {
     return address.split(' ').slice(0, 3).join(' ')
 })
 
-const average = computed(() => {
-    const bids = props.bidDetails.data?.bid
-     
-    if (!bids || bids.length === 0) return 0
-
-    const totalAmount = bids.reduce((sum, bid) => {
-        return sum + Number(bid.amount || 0)
-    }, 0)
-    return Math.round(totalAmount/bids.length);
-})
-
-
 const deadline = ref(props.bidDetails.data?.bidding_ends_at)
 const createdAt  = ref(props.bidDetails.data?.created_at)
 const timeLeft = useTimeLeft(deadline)
 const timeAgo = useTimeAgo(createdAt)
-
+const average=useBidsAverageAmount(props.bidDetails.data?.bid);
 </script>
 
 <template>
