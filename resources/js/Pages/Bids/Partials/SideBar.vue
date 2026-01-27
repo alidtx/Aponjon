@@ -59,31 +59,6 @@ const customerTaskPercentage = computed(() => {
     )
 })
 
-const timeAgo = (dateTime) => {
-    if (!dateTime) return ''
-
-    const now = new Date()
-    const past = new Date(dateTime.replace(' ', 'T'))
-    const diffSeconds = Math.floor((now - past) / 1000)
-
-    if (diffSeconds < 60) {
-        return `${diffSeconds} সেকেন্ড আগে`
-    }
-
-    const diffMinutes = Math.floor(diffSeconds / 60)
-    if (diffMinutes < 60) {
-        return `${diffMinutes} মিনিট আগে`
-    }
-
-    const diffHours = Math.floor(diffMinutes / 60)
-    if (diffHours < 24) {
-        return `${diffHours} ঘন্ট আগে`
-    }
-
-    const diffDays = Math.floor(diffHours / 24)
-    return `${diffDays} দিন আগে`
-}
-
 const lowestAmount = computed(() => {
     if (!props.bids.length) return null
 
