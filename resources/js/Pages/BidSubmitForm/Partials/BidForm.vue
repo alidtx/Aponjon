@@ -3,6 +3,7 @@ import Accordion from '@/Components/Accordion.vue';
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { useTimeLeft } from '@/composables/useTimeLeft'
+import { useTimeAgo } from '@/composables/useTimeAgo'
 
 const page = usePage()
 
@@ -13,9 +14,11 @@ const props=defineProps({
    }
 })
 const deadline = ref(props.bidDetails.data?.bidding_ends_at)
+const createdAt  = ref(props.bidDetails.data?.created_at)
 
 const bidAvices = page.props.bid_advices
 const timeLeft = useTimeLeft(deadline)
+const timeAgo = useTimeAgo(createdAt)
 
 </script>
 
@@ -39,7 +42,7 @@ const timeLeft = useTimeLeft(deadline)
                         </div>
                         <div class="text-right hidden md:block">
                             <div class="text-blue-200 text-sm">টাস্ক পোস্ট হয়েছে</div>
-                            <div class="text-white font-bold">২ ঘন্টা আগে</div>
+                            <div class="text-white font-bold">{{ timeAgo }}</div>
                         </div>
                     </div>
                     

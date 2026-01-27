@@ -8,7 +8,7 @@ export function useTimeLeft(dateTime) {
         const end = new Date(dateTime.value.replace(' ', 'T'))
         const diffSeconds = Math.floor((end - now) / 1000)
 
-        if (diffSeconds <= 0) return 'শেষ হয়েছে'
+        if (diffSeconds <= 0) return 'সময় শেষ হয়েছে'
 
         const days = Math.floor(diffSeconds / 86400)
         const hours = Math.floor((diffSeconds % 86400) / 3600)

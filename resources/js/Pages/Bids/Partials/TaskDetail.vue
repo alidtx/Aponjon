@@ -3,6 +3,7 @@ import Accordion from '@/Components/Accordion.vue'
 import { computed, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { useTimeLeft } from '@/composables/useTimeLeft'
+import { useTimeAgo } from '@/composables/useTimeAgo'
 
 const page = usePage()
 const special_notice = page.props.special_notice
@@ -15,31 +16,9 @@ const props = defineProps({
     },
 })
 const deadline = ref(props.details.data?.bidding_ends_at)
+const createdAt  = ref(props.details.data?.created_at)
 const timeLeft = useTimeLeft(deadline)
-const timeAgo = (dateTime) => {
-    if (!dateTime) return ''
-
-    const now = new Date()
-    const past = new Date(dateTime.replace(' ', 'T'))
-    const diffSeconds = Math.floor((now - past) / 1000)
-
-    if (diffSeconds < 60) {
-        return `${diffSeconds} সেকেন্ড আগে`
-    }
-
-    const diffMinutes = Math.floor(diffSeconds / 60)
-    if (diffMinutes < 60) {
-        return `${diffMinutes} মিনিট আগে`
-    }
-
-    const diffHours = Math.floor(diffMinutes / 60)
-    if (diffHours < 24) {
-        return `${diffHours} ঘন্ট আগে`
-    }
-
-    const diffDays = Math.floor(diffHours / 24)
-    return `${diffDays} দিন আগে`
-}
+const timeAgo = useTimeAgo(createdAt)
 
 
 
@@ -153,7 +132,7 @@ const getLocation = (location) => {
                         </span>
                         <span class="flex items-center">
                             <i class="far fa-clock mr-1"></i>
-                            {{ timeAgo(props.details.data?.created_at) }}
+                            {{ timeAghi2 }}
                         </span>
                         <span class="flex items-center">
                             <i class="fas fa-gavel mr-1"></i>
@@ -237,7 +216,7 @@ const getLocation = (location) => {
                             <div class="absolute -left-9 w-6 h-6 bg-primary rounded-full border-4 border-white"></div>
                             <div>
                                 <p class="font-semibold text-dark">টাস্ক পোস্ট করা</p>
-                                <p class="text-gray-600 text-sm">{{ timeAgo(props.details.data?.created_at) }}</p>
+                                <p class="text-gray-600 text-sm">{{ timeAgo }}</p>
                             </div>
                         </div>
                         <div class="mb-6 relative">
