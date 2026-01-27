@@ -11,20 +11,20 @@ use Inertia\Inertia;
 
 class BidController extends Controller
 {
-    public function show(Request $request,$id, $slug)
+    public function show(Request $request,$taskId, $slug)
     {
         return Inertia::render('Bids/Index', [
             'totalTaskCount'=>Task::count(),
-            'paymentCompletionRate'=>BidService::paymentCompletionRate($id),
+            'paymentCompletionRate'=>BidService::paymentCompletionRate($taskId),
             'taskDetails' => TaskResource::make(
-                BidService::findTaskDetails($id,$slug)
+                BidService::findTaskDetails($taskId,$slug)
             )
         ]);
     }
-    public function showBidSubmissionForm (Request $request, $id , $slug)  {
+    public function showBidSubmissionForm (Request $request, $taskId , $slug)  {
       return Inertia::render('BidSubmitForm/Index',[
          'bidDetails' => TaskResource::make(
-                BidService::bidDetails($id,$slug)
+                BidService::bidDetails($taskId,$slug)
             )
       ]);
     }

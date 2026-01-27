@@ -8,7 +8,7 @@ use App\Models\Task;
 
 class BidService
 {
-    public static function findTaskDetails($id, $slug)
+    public static function findTaskDetails($taskId, $slug)
     {
         return Task::select([
             'id',
@@ -61,7 +61,7 @@ class BidService
                 'zilas:id,name',
                 'upozilas:id,name',
             ])
-            ->findOrFail($id);
+            ->findOrFail($taskId);
     }
     public static function bidDetails($taskId, $slug)
     {

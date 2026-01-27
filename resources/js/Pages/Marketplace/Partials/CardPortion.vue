@@ -180,7 +180,7 @@ const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.
                                 <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                                     <i class="far fa-heart"></i>
                                 </button>
-                                <Link :href="route('tasks.show',{ id: task.id, slug: task.slug })" 
+                                <Link :href="route('tasks.show',{ taskId: task.id, slug: task.slug })" 
                                     class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 font-medium">
                                     বিস্তারিত দেখুন
                                 </Link>

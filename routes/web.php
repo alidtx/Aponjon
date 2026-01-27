@@ -23,8 +23,8 @@ Route::get('category', [HomeController::class, 'category'])->name('category');
 Route::get('district-Wise-zila', [HomeController::class, 'districtWiseZila'])->name('district-Wise-zila');
 Route::get('Zila-Wise-upozila', [HomeController::class, 'ZilaWiseUpozila'])->name('Zila-Wise-upozila');
 
-Route::get('/tasks/{id}/{slug}',[BidController::class, 'show'])->name('tasks.show');
-Route::get('/show-bid-submit-form/{id}/{slug}',[BidController::class, 'showBidSubmissionForm'])->name('show.bid.submit.form');
+Route::get('/tasks/{taskId}/{slug}',[BidController::class, 'show'])->name('tasks.show');
+Route::get('/show-bid-submit-form/{taskId}/{slug}',[BidController::class, 'showBidSubmissionForm'])->name('show.bid.submit.form');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin', function(){
