@@ -30,7 +30,9 @@ const props=defineProps({
         </div>
         <main class="max-w-7xl mx-auto px-4 py-8">
             <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 grid-responsive">
-               <BidForm/>
+               <BidForm
+               :bidDetails="props.bidDetails"
+                />
                <SideBar/>
             </div>
         </main>

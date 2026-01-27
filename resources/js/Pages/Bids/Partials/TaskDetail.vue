@@ -1,11 +1,12 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
+import { useTimeLeft } from '@/composables/useTimeLeft'
 
 const page = usePage()
 const special_notice = page.props.special_notice
-console.log(special_notice)
+
 
 const props = defineProps({
     details: {
@@ -13,7 +14,8 @@ const props = defineProps({
         required: true
     },
 })
-
+const deadline = ref(props.details.data?.bidding_ends_at)
+const timeLeft = useTimeLeft(deadline)
 const timeAgo = (dateTime) => {
     if (!dateTime) return ''
 
@@ -39,25 +41,7 @@ const timeAgo = (dateTime) => {
     return `${diffDays} দিন আগে`
 }
 
-const timeLeft = (dateTime) => {
-    if (!dateTime) return 'সময় পাওয়া যায়নি'
 
-    const now = new Date()
-    const end = new Date(dateTime.replace(' ', 'T'))
-    const diffSeconds = Math.floor((end - now) / 1000)
-
-    if (diffSeconds <= 0) return 'শেষ হয়েছে'
-
-    const days = Math.floor(diffSeconds / 86400)
-    const hours = Math.floor((diffSeconds % 86400) / 3600)
-    const minutes = Math.floor((diffSeconds % 3600) / 60)
-    const seconds = diffSeconds % 60
-
-    if (days > 0) return `${days} দিন ${hours} ঘন্টা বাকি`
-    if (hours > 0) return `${hours} ঘন্টা ${minutes} মিনিট বাকি`
-    if (minutes > 0) return `${minutes} মিনিট ${seconds} সেকেন্ড বাকি`
-    return `${seconds} সেকেন্ড বাকি`
-}
 
 
 const finishDate = computed(() => {
@@ -260,7 +244,7 @@ const getLocation = (location) => {
                             <div class="absolute -left-9 w-6 h-6 bg-accent rounded-full border-4 border-white"></div>
                             <div>
                                 <p class="font-semibold text-dark">বিড গ্রহণ</p>
-                                <p class="text-gray-600 text-sm">{{ timeLeft(props.details.data?.bidding_ends_at) }}</p>
+                                <p class="text-gray-600 text-sm">{{ timeLeft }}</p>
                             </div>
                         </div>
                         <div class="relative">

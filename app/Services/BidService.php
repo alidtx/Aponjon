@@ -67,6 +67,7 @@ class BidService
     {
        return Task::select([
             'id',
+            'task_number',
             'slug',
             'title',
             'description',

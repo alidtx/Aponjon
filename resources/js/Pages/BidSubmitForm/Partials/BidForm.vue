@@ -1,11 +1,21 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue';
 import { usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { useTimeLeft } from '@/composables/useTimeLeft'
 
 const page = usePage()
 
+const props=defineProps({
+   bidDetails:{
+    type:Object,
+    required:true
+   }
+})
+const deadline = ref(props.bidDetails.data?.bidding_ends_at)
 
 const bidAvices = page.props.bid_advices
+const timeLeft = useTimeLeft(deadline)
 
 </script>
 
@@ -20,10 +30,10 @@ const bidAvices = page.props.bid_advices
                             <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">বিড সাবমিট করুন</h2>
                             <div class="flex flex-wrap items-center gap-2 mb-4">
                                 <span class="text-blue-100 bg-blue-800 bg-opacity-30 px-3 py-1 rounded-full text-sm font-medium">
-                                    <i class="fas fa-bolt mr-1"></i> টাস্ক #T-2456
+                                    <i class="fas fa-bolt mr-1"></i> কাজের নংঃ {{ props.bidDetails.data.task_number }}
                                 </span>
                                 <span class="text-blue-100 bg-blue-800 bg-opacity-30 px-3 py-1 rounded-full text-sm font-medium">
-                                    <i class="fas fa-calendar mr-1"></i> ২৪ ঘন্টা রিমেইনিং
+                                    <i class="fas fa-calendar mr-1"></i> {{ timeLeft }}
                                 </span>
                             </div>
                         </div>
