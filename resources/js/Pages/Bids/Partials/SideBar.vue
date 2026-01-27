@@ -143,7 +143,7 @@ const averageBid = computed(() => {
                 </div>
             </div>
              
-            <Link :href="route('bid.submit.form',{ id: currentTask.id, slug: currentTask.slug })"  
+            <Link :href="route('show.bid.submit.form',{ id: currentTask.id, slug: currentTask.slug })"  
              class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
               <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
             </Link>

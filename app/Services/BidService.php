@@ -63,6 +63,24 @@ class BidService
             ])
             ->findOrFail($id);
     }
+    public static function bidDetails($taskId, $slug)
+    {
+       return Task::select([
+            'id',
+            'slug',
+            'title',
+            'description',
+            'emergency',
+            'budget',
+            'category_id',
+            'bidding_ends_at',
+            'location_address',
+            'created_at'
+        ])->with(['category:id,name', 'bids:id,task_id,amount'])->findOrFail($taskId);
+    }
+
+
+
     public static function paymentCompletionRate($taskId)
     {
         $task = Task::with([

@@ -5,6 +5,16 @@ import DraftControls from '@/Components/DraftControls.vue';
 import BidForm from './Partials/BidForm.vue';
 import SideBar from './Partials/SideBar.vue';
 import { Head } from '@inertiajs/vue3';
+
+
+const props=defineProps({
+   bidDetails:{
+    type:Object,
+    required:true
+   }
+})
+
+
 </script>
 
 

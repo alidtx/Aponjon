@@ -21,7 +21,11 @@ class BidController extends Controller
             )
         ]);
     }
-    public function bidSubmitForm ()  {
-      return Inertia::render('BidSubmitForm/Index');
+    public function showBidSubmissionForm (Request $request, $id , $slug)  {
+      return Inertia::render('BidSubmitForm/Index',[
+         'bidDetails' => TaskResource::make(
+                BidService::bidDetails($id,$slug)
+            )
+      ]);
     }
 }
