@@ -1,11 +1,12 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue';
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useTimeLeft } from '@/composables/useTimeLeft'
 import { useTimeAgo } from '@/composables/useTimeAgo'
 
 const page = usePage()
+const bidAvices = page.props.bid_advices
 
 const props=defineProps({
    bidDetails:{
@@ -13,10 +14,28 @@ const props=defineProps({
     required:true
    }
 })
+
+const shortAddress = computed(() => {
+    const address = props.bidDetails.data?.location_address
+    if (!address) return ''
+
+    return address.split(' ').slice(0, 3).join(' ')
+})
+
+const average = computed(() => {
+    const bids = props.bidDetails.data?.bid
+     
+    if (!bids || bids.length === 0) return 0
+
+    const totalAmount = bids.reduce((sum, bid) => {
+        return sum + Number(bid.amount || 0)
+    }, 0)
+    return Math.round(totalAmount/bids.length);
+})
+
+
 const deadline = ref(props.bidDetails.data?.bidding_ends_at)
 const createdAt  = ref(props.bidDetails.data?.created_at)
-
-const bidAvices = page.props.bid_advices
 const timeLeft = useTimeLeft(deadline)
 const timeAgo = useTimeAgo(createdAt)
 
@@ -48,25 +67,25 @@ const timeAgo = useTimeAgo(createdAt)
                     
                     <!-- Task Description Card -->
                     <div class="mt-6 bg-blue-800 bg-opacity-30 rounded-lg p-4">
-                        <h3 class="text-white font-bold text-lg mb-3">বাসার ইলেকট্রিক ওয়্যারিং</h3>
-                        <p class="text-blue-100 mb-4">বাসার জন্য সম্পূর্ণ ইলেকট্রিক ওয়্যারিং সেটআপ করতে হবে। ৩ বেডরুম, ১ ড্রইং রুম, ১ কিচেন এবং ২ বাথরুম। পুরাতন ওয়্যারিং রিপ্লেসমেন্ট এবং নতুন পয়েন্ট ইন্সটলেশন প্রয়োজন।</p>
+                        <h3 class="text-white font-bold text-lg mb-3">{{ props.bidDetails.data?.title }}</h3>
+                        <p class="text-blue-100 mb-4">{{ props.bidDetails.data?.description }}</p>
                         
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
                                 <p class="text-blue-200 text-sm">গ্রাহকের বাজেট</p>
-                                <p class="text-white font-bold text-lg">৳২,০০০ - ৳৪,০০০</p>
+                                <p class="text-white font-bold text-lg">৳{{ Math.round(props.bidDetails.data?.budget) }}</p>
                             </div>
                             <div>
                                 <p class="text-blue-200 text-sm">গড় মূল্য</p>
-                                <p class="text-white font-bold text-lg">৳৩,০০০</p>
+                                <p class="text-white font-bold text-lg">৳{{ average }}</p>
                             </div>
                             <div>
                                 <p class="text-blue-200 text-sm">লোকেশন</p>
-                                <p class="text-white font-bold text-lg">ধানমন্ডি, ঢাকা</p>
+                                <p class="text-white font-bold text-lg">{{ shortAddress }}</p>
                             </div>
                             <div>
                                 <p class="text-blue-200 text-sm">বিডস</p>
-                                <p class="text-white font-bold text-lg">১২ টি</p>
+                                <p class="text-white font-bold text-lg">{{ props.bidDetails.data?.bid?.length }} টি</p>
                             </div>
                         </div>
                     </div>
