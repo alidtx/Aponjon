@@ -5,6 +5,8 @@ import { ref, provide } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { TailwindPagination } from 'laravel-vue-pagination'
 import { Link } from '@inertiajs/vue3';
+import { useLocation } from '@/composables/geoLocation';
+import { useTimeAgo } from '@/composables/useTimeAgo';
 
 const props = defineProps({
     cardData: {
@@ -39,39 +41,6 @@ const refreshSearch = () => {
 }
 
 provide('refreshSearch', refreshSearch)
-
-const getLocation = (task) => {
-    return [
-        task.district?.name,
-        task.zila?.name,
-        task.upozila?.name
-    ].filter(Boolean).join(', ')
-}
-
-const timeAgo = (dateTime) => {
-    if (!dateTime) return ''
-
-    const now = new Date()
-    const past = new Date(dateTime.replace(' ', 'T'))
-    const diffSeconds = Math.floor((now - past) / 1000)
-
-    if (diffSeconds < 60) {
-        return `${diffSeconds} সেকেন্ড আগে`
-    }
-
-    const diffMinutes = Math.floor(diffSeconds / 60)
-    if (diffMinutes < 60) {
-        return `${diffMinutes} মিনিট আগে`
-    }
-
-    const diffHours = Math.floor(diffMinutes / 60)
-    if (diffHours < 24) {
-        return `${diffHours} ঘন্ট আগে`
-    }
-
-    const diffDays = Math.floor(diffHours / 24)
-    return `${diffDays} দিন আগে`
-}
 
 const URGENCY_MAP = {
     normal: {
@@ -127,11 +96,11 @@ const urgency = (value = '') => URGENCY_MAP[value.toLowerCase()] || URGENCY_MAP.
                                 <div class="flex items-center text-sm text-gray-600 flex-wrap gap-2">
                                     <span class="flex items-center">
                                         <i class="fas fa-map-marker-alt mr-1"></i>
-                                        {{ getLocation(task) }}
+                                        {{ useLocation(task) }}
                                     </span>
                                     <span class="flex items-center">
                                         <i class="fas fa-clock mr-1"></i>
-                                        {{ timeAgo(task.created_at) }}
+                                        {{ useTimeAgo(task.created_at) }}
                                     </span>
                                     <span class="flex items-cente" :class="urgency(task.emergency).textColor">
                                         <i class="fas mr-1" :class="urgency(task.emergency).icon"></i>
