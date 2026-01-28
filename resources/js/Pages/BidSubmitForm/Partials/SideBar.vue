@@ -1,6 +1,7 @@
 <script setup>
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
 import { findPercentage } from '@/composables/findPercentage';
+import { useBidAmounts } from '@/composables/useBidAmounts';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -31,6 +32,8 @@ const userBasedBidAmount = computed(() => {
 const userBasedBidTotalPercentage = findPercentage(userBasedBidAmount.value, totalBidAmount.value)
 const average = useBidsAverageAmount(props.bidDetails.data?.bid)
 const bidPercentage = findPercentage(props.bidDetails.data?.bid, props.allBids.data)
+const BidAmounts=useBidAmounts(props.bidDetails.data?.bid)
+console.log(BidAmounts);
 
 </script>
 
@@ -112,7 +115,7 @@ const bidPercentage = findPercentage(props.bidDetails.data?.bid, props.allBids.d
                 <div>
                     <div class="flex justify-between mb-2">
                         <span class="text-gray-700">সর্বনিম্ন বিড</span>
-                        <span class="font-bold text-red-600">৳১,৮০০</span>
+                        <span class="font-bold text-red-600">৳{{ Math.round(BidAmounts.lowest) }}</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div class="h-full bg-red-500" style="width: 45%"></div>
@@ -122,7 +125,7 @@ const bidPercentage = findPercentage(props.bidDetails.data?.bid, props.allBids.d
                 <div>
                     <div class="flex justify-between mb-2">
                         <span class="text-gray-700">সর্বোচ্চ বিড</span>
-                        <span class="font-bold text-purple-600">৳৪,৫০০</span>
+                        <span class="font-bold text-purple-600">৳{{ Math.round(BidAmounts.highest) }}</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div class="h-full bg-purple-500" style="width: 90%"></div>
