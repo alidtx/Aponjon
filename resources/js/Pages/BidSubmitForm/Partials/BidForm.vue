@@ -5,6 +5,10 @@ import { ref, computed } from 'vue';
 import { useTimeLeft } from '@/composables/useTimeLeft'
 import { useTimeAgo } from '@/composables/useTimeAgo'
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
+import InputLabel from '@/Components/InputLabel.vue';
+import BaseParagraph from '@/Components/BaseParagraph.vue';
+import BaseIcon from '@/Components/BaseIcon.vue';
+import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 
 const page = usePage()
 const bidAvices = page.props.bid_advices
@@ -39,6 +43,8 @@ const average=useBidsAverageAmount(props.bidDetails.data?.bid);
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">বিড সাবমিট করুন</h2>
+                            
+                            
                             <div class="flex flex-wrap items-center gap-2 mb-4">
                                 <span class="text-blue-100 bg-blue-800 bg-opacity-30 px-3 py-1 rounded-full text-sm font-medium">
                                     <i class="fas fa-bolt mr-1"></i> কাজের নংঃ {{ props.bidDetails.data.task_number }}
@@ -86,37 +92,34 @@ const average=useBidsAverageAmount(props.bidDetails.data?.bid);
                     <div class="mb-10">
                         <div class="flex items-start mb-6">
                             <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                                <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+                                <BaseIcon class="fas fa-money-bill-wave text-blue-600 text-xl"/>
                             </div>
-                            <div class="flex-grow">
-                                <label class="block text-gray-800 font-semibold text-xl mb-2">
-                                    আপনার প্রস্তাবিত মূল্য <span class="text-red-500">*</span>
-                                </label>
-                                <p class="text-gray-600">গ্রাহকের বাজেটের সাথে মিলিয়ে প্রস্তাব দিন। কম মূল্যে ভালো সার্ভিস দিতে পারলে বিড জেতার সম্ভাবনা বাড়ে।</p>
+                             <div class="flex-grow">
+                                 <InputLabel class="block text-gray-800 font-semibold text-xl mb-2"  value="আপনার প্রস্তাবিত মূল্য" required />
+                                 <BaseParagraph class="text-gray-600">গ্রাহকের বাজেটের সাথে মিলিয়ে প্রস্তাব দিন। কম মূল্যে ভালো সার্ভিস দিতে পারলে বিড জেতার সম্ভাবনা বাড়ে।</BaseParagraph>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div>
-                                <label class="block text-gray-700 font-medium mb-3">আপনার বিড (৳)</label>
-                                <div class="relative">
-                                    <span class="absolute left-4 top-4 text-gray-600 text-2xl">৳</span>
-                                    <input type="number" 
-                                           class="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:border-blue-500 text-xl font-bold transition-colors" 
-                                           placeholder="1500" value="2500">
-                                </div>
-                                <p class="text-sm text-gray-500 mt-2">একবার বিড জমা দিলে তা পরিবর্তন করা যাবে না</p>
+                                <InputLabel class="block text-gray-700 font-medium mb-3"  value="আপনার প্রস্তাবিত টাকা (৳)" required />
+                                    <BaseNumberInput 
+                                     type="number"
+                                     placeholder="৳"
+                                     class="w-full p-3"
+                                     />  
+                               
+                                <BaseParagraph class="text-sm text-gray-500 mt-2">একবার বিড জমা দিলে তা পরিবর্তন করা যাবে না</BaseParagraph>
                             </div>
-                            
                             <div>
-                                <label class="block text-gray-700 font-medium mb-3">সার্ভিস চার্জ (১০%)</label>
-                                <div class="relative">
-                                    <span class="absolute left-4 top-4 text-gray-600 text-2xl">৳</span>
-                                    <input type="text" 
-                                           class="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl bg-gray-50 text-xl font-bold" 
-                                           value="250" readonly>
-                                </div>
-                                <p class="text-sm text-gray-500 mt-2">এই চার্জ প্ল্যাটফর্ম ফি হিসেবে নেয়া হয়</p>
+                                <InputLabel class="block text-gray-700 font-medium mb-3"  value="সার্ভিস চার্জ (১০%)" required />
+                                    <BaseNumberInput 
+                                     type="number"
+                                     class="w-full p-3"
+                                     placeholder="৳"
+                                     readonly
+                                     />  
+                                <BaseParagraph class="text-sm text-gray-500 mt-2">এই চার্জ প্ল্যাটফর্ম ফি হিসেবে নেয়া হয়</BaseParagraph>
                             </div>
                         </div>
                         
@@ -156,13 +159,11 @@ const average=useBidsAverageAmount(props.bidDetails.data?.bid);
                         <div>
                             <div class="flex items-center mb-6">
                                 <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                                    <i class="fas fa-clock text-blue-600 text-lg"></i>
+                                    <BaseIcon class="fas fa-clock text-blue-600 text-lg"/>
                                 </div>
                                 <div>
-                                    <label class="block text-gray-800 font-semibold text-lg">
-                                        আনুমানিক সময় <span class="text-red-500">*</span>
-                                    </label>
-                                    <p class="text-gray-600 text-sm">কাজ শেষ করতে কত সময় লাগবে?</p>
+                                    <InputLabel class="block text-gray-800 font-semibold text-lg" value="আনুমানিক সময়" required/>
+                                    <BaseParagraph class="text-gray-600 text-sm">কাজ শেষ করতে কত সময় লাগবে?</BaseParagraph>
                                 </div>
                             </div>
                             
