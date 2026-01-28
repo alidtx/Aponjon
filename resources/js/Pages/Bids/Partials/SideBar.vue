@@ -1,6 +1,7 @@
 <script setup>
-import {computed} from 'vue';
+import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import InfoCard from '@/Components/InfoCard.vue';
 import { useTimeAgo } from '@/composables/useTimeAgo'
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
 import { findPercentage } from '@/composables/findPercentage';
@@ -20,14 +21,14 @@ const props = defineProps({
         default: () => []
     },
     totalTaskCount: {
-         type: Array,
+        type: Array,
         default: () => []
     },
     paymentCompletionRate: {
         type: Number,
-        default:0
+        default: 0
     },
-   currentTask: {
+    currentTask: {
         type: Object,
         default: () => ({
             id: null,
@@ -44,9 +45,9 @@ const completedTaskCount = computed(() => {
     )
 })
 
-const successRate=findPercentage(completedTaskCount.value, props.customerTask)
-const TaskPercentage=findPercentage(props.customerTask, props.totalTaskCount)
-const average=useBidsAverageAmount(props.bids)
+const successRate = findPercentage(completedTaskCount.value, props.customerTask)
+const TaskPercentage = findPercentage(props.customerTask, props.totalTaskCount)
+const average = useBidsAverageAmount(props.bids)
 const bidAmounts = useBidAmounts(props.bids)
 </script>
 
@@ -82,10 +83,10 @@ const bidAmounts = useBidAmounts(props.bids)
                     <span class="font-bold text-primary">৳{{ average }}</span>
                 </div>
             </div>
-             
-            <Link :href="route('show.bid.submit.form',{ taskId: currentTask.id, slug: currentTask.slug })"  
-             class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-              <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
+
+            <Link :href="route('show.bid.submit.form', { taskId: currentTask.id, slug: currentTask.slug })"
+                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
             </Link>
 
             <div class="mt-4 text-center">
@@ -139,7 +140,7 @@ const bidAmounts = useBidAmounts(props.bids)
                         <p class="text-gray-700 text-sm mb-2">{{ bid.proposal }}</p>
                         <div class="flex items-center text-gray-600 text-sm">
                             <i class="far fa-clock mr-1"></i>
-                            <span>{{useTimeAgo(bid.created_at) }}</span>
+                            <span>{{ useTimeAgo(bid.created_at) }}</span>
                         </div>
                     </div>
                 </div>
@@ -152,7 +153,7 @@ const bidAmounts = useBidAmounts(props.bids)
             </div>
 
             <!-- Show button only if more than 2 bids -->
-            <button 
+            <button
                 class="w-full mt-4 py-2 border border-primary text-primary rounded-lg hover:bg-blue-50 font-medium transition-colors">
                 সব কাজ দেখুন
             </button>
@@ -170,7 +171,7 @@ const bidAmounts = useBidAmounts(props.bids)
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-gray-700 text-sm">টোটাল কাজ পোস্ট করেছেন</span>
-                        <span class="font-medium text-dark text-sm">{{props.customerTask?.length}}টি</span>
+                        <span class="font-medium text-dark text-sm">{{ props.customerTask?.length }}টি</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div class="h-full bg-primary rounded-full" :style="{ width: TaskPercentage + '%' }"></div>
@@ -180,20 +181,21 @@ const bidAmounts = useBidAmounts(props.bids)
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-gray-700 text-sm">সফলতার হার</span>
-                        <span class="font-medium text-dark text-sm">{{successRate}}%</span>
+                        <span class="font-medium text-dark text-sm">{{ successRate }}%</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-green-500 rounded-full" :style="{ width: successRate  + '%' }"></div>
+                        <div class="h-full bg-green-500 rounded-full" :style="{ width: successRate + '%' }"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-gray-700 text-sm">পেমেন্ট করার হার</span>
-                        <span class="font-medium text-dark text-sm">{{paymentCompletionRate}}%</span>
+                        <span class="font-medium text-dark text-sm">{{ paymentCompletionRate }}%</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-accent rounded-full" :style="{ width: paymentCompletionRate  + '%' }"></div>
+                        <div class="h-full bg-accent rounded-full" :style="{ width: paymentCompletionRate + '%' }">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,31 +213,14 @@ const bidAmounts = useBidAmounts(props.bids)
         </div>
 
         <!-- Safety Tips -->
-        <div class="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-5 animate-fade-in">
-            <h3 class="text-lg font-bold text-dark mb-3 flex items-center">
-                <i class="fas fa-shield-alt text-primary mr-3"></i>
-                সুরক্ষা টিপস
-            </h3>
+        <InfoCard title="সুরক্ষা টিপস" iconClass="fas fa-shield-alt text-primary mr-3"
+            wrapperClass="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-5"
+            titleClass="text-lg font-bold text-dark mb-3 flex items-center" :items="[
+                { text: 'কাজ শুরু করার আগে লিখিত চুক্তি করুন', icon: 'fas fa-check-circle text-primary' },
+                { text: 'গ্রাহকের পরিচয় যাচাই করুন', icon: 'fas fa-check-circle text-primary' },
+                { text: 'পেমেন্ট লেনদেনের রেকর্ড রাখুন', icon: 'fas fa-check-circle text-primary' }
+            ]" />
 
-            <div class="space-y-3">
-                <div class="flex items-start">
-                    <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
-                    <p class="text-sm text-gray-700">কাজ শুরু করার আগে লিখিত চুক্তি করুন</p>
-                </div>
-                <div class="flex items-start">
-                    <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
-                    <p class="text-sm text-gray-700">গ্রাহকের পরিচয় যাচাই করুন</p>
-                </div>
-                <div class="flex items-start">
-                    <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
-                    <p class="text-sm text-gray-700">পেমেন্ট লেনদেনের রেকর্ড রাখুন</p>
-                </div>
-                <div class="flex items-start">
-                    <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
-                    <p class="text-sm text-gray-700">সব কাজের ছবি তোলার পরামর্শ</p>
-                </div>
-            </div>
-        </div>
     </div>
 
 </template>
