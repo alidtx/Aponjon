@@ -16,7 +16,7 @@ class BidController extends Controller
     public function show(Request $request,$taskId, $slug)
     {
         return Inertia::render('Bids/Index', [
-            'totalTaskCount'=>Task::count(),
+            'totalTaskCount'=>Task::select('id')->get(),
             'paymentCompletionRate'=>BidService::paymentCompletionRate($taskId),
             'taskDetails' => TaskResource::make(BidService::findTaskDetails($taskId,$slug))
         ]);

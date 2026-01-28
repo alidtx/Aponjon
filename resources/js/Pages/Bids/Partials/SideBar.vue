@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3';
 import { useTimeAgo } from '@/composables/useTimeAgo'
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
 import { findPercentage } from '@/composables/findPercentage';
+import { useBidAmounts } from '@/composables/useBidAmounts';
 
 const props = defineProps({
     bids: {
@@ -19,8 +20,8 @@ const props = defineProps({
         default: () => []
     },
     totalTaskCount: {
-        type: Number,
-        default:0
+         type: Array,
+        default: () => []
     },
     paymentCompletionRate: {
         type: Number,
@@ -43,27 +44,10 @@ const completedTaskCount = computed(() => {
     )
 })
 
-const successRate=findPercentage(completedTaskCount.value, props.customerTask.length)
+const successRate=findPercentage(completedTaskCount.value, props.customerTask)
 const TaskPercentage=findPercentage(props.customerTask, props.totalTaskCount)
 const average=useBidsAverageAmount(props.bids)
-
-const lowestAmount = computed(() => {
-    if (!props.bids.length) return null
-
-    return Math.min(
-        ...props.bids.map(bid => Number(bid.amount))
-    )
-})
-
-const highestAmount = computed(() => {
-    if (!props.bids.length) return null
-
-    return Math.max(
-        ...props.bids.map(bid => Number(bid.amount))
-    )
-})
-
-
+const bidAmounts = useBidAmounts(props.bids)
 </script>
 
 <template>
@@ -87,11 +71,11 @@ const highestAmount = computed(() => {
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-700">সর্বনিম্ন বিড:</span>
-                    <span class="font-bold text-green-600">৳{{ Math.round(lowestAmount) }}</span>
+                    <span class="font-bold text-green-600">৳{{ Math.round(bidAmounts.lowest) }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-700">সর্বোচ্চ বিড:</span>
-                    <span class="font-bold text-red-600">৳{{ Math.round(highestAmount) }}</span>
+                    <span class="font-bold text-red-600">৳{{ Math.round(bidAmounts.highest) }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-700">গড় বিড:</span>
