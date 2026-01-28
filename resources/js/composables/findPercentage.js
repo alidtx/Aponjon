@@ -1,12 +1,20 @@
 import { computed, unref } from 'vue'
 
 export function findPercentage(t, tt) {
+    
     return computed(() => {
-        const list = unref(t) ?? []
-        const total = Number(unref(tt))
+        const value = unref(t)
+        const total = unref(tt)
+        if (value == null || total == null) return 0
+        if (Array.isArray(value) && Array.isArray(total)) {
+            if (!total.length) return 0
+            return Math.round((value.length / total.length) * 100)
+        }
+        const num = Number(value)
+        const totalNum = Number(total)
 
-        if (!list.length || !total || isNaN(total)) return 0
+        if (isNaN(num) || isNaN(totalNum) || totalNum === 0) return 0
 
-        return Math.round((list.length / total) * 100)
+        return Math.round((num / totalNum) * 100)
     })
 }

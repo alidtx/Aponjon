@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bid;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BidResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Bid;
 use App\Models\Task;
@@ -23,7 +24,7 @@ class BidController extends Controller
     public function showBidSubmissionForm (Request $request, $taskId , $slug)  {
       return Inertia::render('BidSubmitForm/Index',[
          'bidDetails' => TaskResource::make(BidService::bidDetails($taskId,$slug)),
-         'totalBid'=>Bid::select('id')->count()
+         'allBids'=>BidResource::collection(Bid::select('id','amount')->get()),
       ]);
     }
 }

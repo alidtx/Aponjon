@@ -7,15 +7,15 @@ import SideBar from './Partials/SideBar.vue';
 import { Head } from '@inertiajs/vue3';
 
 
-const props=defineProps({
-   bidDetails:{
-    type:Object,
-    required:true
-   },
-   totalBid:{
-    type:Number,
-    default:0
-   }
+const props = defineProps({
+    bidDetails: {
+        type: Object,
+        required: true
+    },
+    allBids: {
+        type: Object,
+        required: true
+    }
 })
 
 
@@ -34,13 +34,8 @@ const props=defineProps({
         </div>
         <main class="max-w-7xl mx-auto px-4 py-8">
             <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 grid-responsive">
-               <BidForm
-               :bidDetails="props.bidDetails"
-                />
-               <SideBar
-               :bidDetails="props.bidDetails"
-               :totalBid="totalBid"
-               />
+                <BidForm :bidDetails="props.bidDetails" />
+                <SideBar :bidDetails="props.bidDetails" :allBids="allBids" />
             </div>
         </main>
 
