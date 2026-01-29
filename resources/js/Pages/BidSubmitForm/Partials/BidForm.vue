@@ -10,6 +10,8 @@ import BaseParagraph from '@/Components/BaseParagraph.vue';
 import BaseIcon from '@/Components/BaseIcon.vue';
 import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import TextArea from '@/Components/TextArea.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const page = usePage()
 const bidAvices = page.props.bid_advices
@@ -191,7 +193,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                     <div>
                         <div class="flex items-center mb-6">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                                <i class="fas fa-calendar-alt text-blue-600 text-lg"></i>
+                               <BaseIcon class="fas fa-calendar-alt text-blue-600 text-lg"/>
                             </div>
                             <div>
                                 <label class="block text-gray-800 font-semibold text-lg">
@@ -204,8 +206,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         <div class="space-y-3">
                             <label
                                 class="flex items-center p-4 border-2 border-blue-600 rounded-xl cursor-pointer bg-blue-50 transition-all">
-                                <input type="radio" name="availability" value="today" class="w-5 h-5 text-blue-600"
-                                    checked>
+                                    <TextInput type="radio" name="availability" value="today" class="w-5 h-5 text-blue-600" checked/>
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আজ</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আজকে কাজ শুরু করতে পারবেন
@@ -213,9 +214,10 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                                 </div>
                                 <div
                                     class="ml-auto bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                                    <i class="fas fa-bolt mr-1"></i>দ্রুত
+                                    <BaseIcon class="fas fa-bolt mr-1"/>দ্রুত
                                 </div>
                             </label>
+                            
 
                             <label
                                 class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
@@ -275,12 +277,12 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
 
                         <button type="submit"
                             class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-lg">
-                            <i class="fas fa-paper-plane mr-3"></i>বিড জমা দিন
+                            <BaseIcon class="fas fa-paper-plane mr-3"/>বিড জমা দিন
                         </button>
                     </div>
 
                     <div class="mt-6 text-center text-gray-600 text-sm">
-                        <i class="fas fa-shield-alt text-gray-400 mr-2"></i>
+                        <BaseIcon class="fas fa-shield-alt text-gray-400 mr-2"/>
                         আপনার সকল তথ্য সুরক্ষিত রাখা হবে এবং গ্রাহক নির্বাচন না করা পর্যন্ত গোপন রাখা হবে
                     </div>
                 </div>
