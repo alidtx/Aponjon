@@ -1,7 +1,7 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue';
 import { usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useTimeLeft } from '@/composables/useTimeLeft'
 import { useTimeAgo } from '@/composables/useTimeAgo'
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
@@ -21,6 +21,12 @@ const props = defineProps({
         type: Object,
         required: true
     }
+})
+
+const selectedAvailability = ref('today')
+const showSpecificDate = ref(false)
+watch(selectedAvailability, (newValue) => {
+    showSpecificDate.value = newValue === 'specific'
 })
 
 const shortAddress = computed(() => {
@@ -177,7 +183,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                                 <Checkbox type="radio" name="estimated_hours" class="hidden peer" :value="hour"
                                     :checked="hour === 1" />
 
-                                <div class="h-full p-4 border-2 border-gray-300 rounded-xl text-center
+                                <div class="h-full p-3 border-2 border-gray-300 rounded-xl text-center
                                  transition-all hover:border-blue-400
                                peer-checked:border-blue-600 peer-checked:bg-blue-50">
                                     <div class="text-2xl font-bold text-gray-800">
@@ -191,7 +197,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
 
                     <!-- Availability -->
                     <div>
-                        <div class="flex items-center mb-6">
+                        <div class="flex items-center mb-8">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
                                <BaseIcon class="fas fa-calendar-alt text-blue-600 text-lg"/>
                             </div>
@@ -206,7 +212,9 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         <div class="space-y-3">
                             <label
                                 class="flex items-center p-4 border-2 border-blue-600 rounded-xl cursor-pointer bg-blue-50 transition-all">
-                                    <TextInput type="radio" name="availability" value="today" class="w-5 h-5 text-blue-600" checked/>
+                                    <input type="radio" name="availability" value="today" 
+                                           v-model="selectedAvailability"
+                                           class="w-5 h-5 text-blue-600" />
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আজ</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আজকে কাজ শুরু করতে পারবেন
@@ -218,10 +226,11 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                                 </div>
                             </label>
                             
-
                             <label
                                 class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                                <input type="radio" name="availability" value="tomorrow" class="w-5 h-5 text-blue-600">
+                                <input type="radio" name="availability" value="tomorrow" 
+                                       v-model="selectedAvailability"
+                                       class="w-5 h-5 text-blue-600"/>
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আগামীকাল</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আগামীকাল কাজ শুরু করতে পারবেন
@@ -231,7 +240,10 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
 
                             <label
                                 class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                                <input type="radio" name="availability" value="specific" class="w-5 h-5 text-blue-600">
+                                <input type="radio" name="availability" 
+                                       value="specific"
+                                       v-model="selectedAvailability"
+                                       class="w-5 h-5 text-blue-600"/>
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">নির্দিষ্ট তারিখ</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আপনার সুবিধাজনক তারিখ নির্ধারণ
@@ -240,8 +252,8 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                             </label>
                         </div>
 
-                        <div class="mt-4">
-                            <input type="date" class="w-full p-4 border-2 border-gray-300 rounded-xl text-lg">
+                        <div class="mt-4" v-if="showSpecificDate">
+                            <TextInput type="date" class="w-full p-3"/>
                         </div>
                     </div>
                 </div>
@@ -250,7 +262,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                 <div class="mb-10">
                     <div class="flex items-center mb-6">
                         <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                            <i class="fas fa-edit text-blue-600 text-lg"></i>
+                         <BaseIcon class="fas fa-edit text-blue-600 text-lg"/>
                         </div>
                         <div>
                             <label class="block text-gray-800 font-semibold text-lg">
@@ -261,9 +273,9 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         </div>
                     </div>
 
-                    <textarea rows="6"
+                    <TextArea rows="6"
                         class="w-full p-5 border-2 border-gray-300 rounded-xl focus:border-blue-500 text-gray-800 transition-colors"
-                        placeholder="আপনি কিভাবে এই কাজটি করবেন? আপনার অভিজ্ঞতা, টুলস, বা বিশেষ অফার সম্পর্কে লিখুন..."></textarea>
+                        placeholder="আপনি কিভাবে এই কাজটি করবেন? আপনার অভিজ্ঞতা, টুলস, বা বিশেষ অফার সম্পর্কে লিখুন..."></TextArea>
                     <Accordion :title="bidAvices.label" :items="bidAvices.items" />
                 </div>
 
