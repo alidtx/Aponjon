@@ -12,6 +12,7 @@ import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import TextArea from '@/Components/TextArea.vue';
 import TextInput from '@/Components/TextInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const page = usePage()
 const bidAvices = page.props.bid_advices
@@ -25,6 +26,7 @@ const props = defineProps({
 
 const selectedAvailability = ref('today')
 const showSpecificDate = ref(false)
+const bidAmount = ref(null)
 watch(selectedAvailability, (newValue) => {
     showSpecificDate.value = newValue === 'specific'
 })
@@ -34,6 +36,10 @@ const shortAddress = computed(() => {
     if (!address) return ''
 
     return address.split(' ').slice(0, 3).join(' ')
+})
+const serviceCharge = computed(() => {
+    if (!bidAmount.value) return ''
+    return Math.round(bidAmount.value * 0.05)
 })
 
 const deadline = ref(props.bidDetails.data?.bidding_ends_at)
@@ -113,22 +119,28 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Bid Amount -->
                         <div>
                             <InputLabel class="block text-gray-700 font-medium mb-3" value="আপনার প্রস্তাবিত টাকা (৳)"
                                 required />
-                            <BaseNumberInput type="number" placeholder="৳" class="w-full p-3" />
-
-                            <BaseParagraph class="text-sm text-gray-500 mt-2">একবার বিড জমা দিলে তা পরিবর্তন করা যাবে না
+                            <BaseNumberInput type="number" placeholder="৳" class="w-full p-3" v-model="bidAmount" />
+                            <BaseParagraph class="text-sm text-gray-500 mt-2">
+                                একবার বিড জমা দিলে তা পরিবর্তন করা যাবে না
                             </BaseParagraph>
                         </div>
+
+                        <!-- Service Charge -->
                         <div>
-                            <InputLabel class="block text-gray-700 font-medium mb-3" value="সার্ভিস চার্জ (১০%)"
-                                required />
-                            <BaseNumberInput type="number" class="w-full p-3" placeholder="৳" readonly />
-                            <BaseParagraph class="text-sm text-gray-500 mt-2">এই চার্জ প্ল্যাটফর্ম ফি হিসেবে নেয়া হয়
+                            <InputLabel class="block text-gray-700 font-medium mb-3" value="সার্ভিস চার্জ (৫%)" />
+                            <BaseNumberInput type="number"
+                                class="w-full p-3 bg-gray-100 text-gray-500 cursor-not-allowed border-gray-300"
+                                placeholder="৳" :value="serviceCharge" readonly />
+                            <BaseParagraph class="text-sm text-gray-500 mt-2">
+                                এই চার্জ প্ল্যাটফর্ম ফি হিসেবে নেয়া হয়
                             </BaseParagraph>
                         </div>
                     </div>
+
 
                     <!-- Budget Indicator -->
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
@@ -199,7 +211,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                     <div>
                         <div class="flex items-center mb-8">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                               <BaseIcon class="fas fa-calendar-alt text-blue-600 text-lg"/>
+                                <BaseIcon class="fas fa-calendar-alt text-blue-600 text-lg" />
                             </div>
                             <div>
                                 <label class="block text-gray-800 font-semibold text-lg">
@@ -212,9 +224,8 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         <div class="space-y-3">
                             <label
                                 class="flex items-center p-4 border-2 border-blue-600 rounded-xl cursor-pointer bg-blue-50 transition-all">
-                                    <input type="radio" name="availability" value="today" 
-                                           v-model="selectedAvailability"
-                                           class="w-5 h-5 text-blue-600" />
+                                <input type="radio" name="availability" value="today" v-model="selectedAvailability"
+                                    class="w-5 h-5 text-blue-600" />
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আজ</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আজকে কাজ শুরু করতে পারবেন
@@ -222,15 +233,14 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                                 </div>
                                 <div
                                     class="ml-auto bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                                    <BaseIcon class="fas fa-bolt mr-1"/>দ্রুত
+                                    <BaseIcon class="fas fa-bolt mr-1" />দ্রুত
                                 </div>
                             </label>
-                            
+
                             <label
                                 class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                                <input type="radio" name="availability" value="tomorrow" 
-                                       v-model="selectedAvailability"
-                                       class="w-5 h-5 text-blue-600"/>
+                                <input type="radio" name="availability" value="tomorrow" v-model="selectedAvailability"
+                                    class="w-5 h-5 text-blue-600" />
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আগামীকাল</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আগামীকাল কাজ শুরু করতে পারবেন
@@ -240,10 +250,8 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
 
                             <label
                                 class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                                <input type="radio" name="availability" 
-                                       value="specific"
-                                       v-model="selectedAvailability"
-                                       class="w-5 h-5 text-blue-600"/>
+                                <input type="radio" name="availability" value="specific" v-model="selectedAvailability"
+                                    class="w-5 h-5 text-blue-600" />
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">নির্দিষ্ট তারিখ</span>
                                     <BaseParagraph class="text-gray-600 text-sm mt-1">আপনার সুবিধাজনক তারিখ নির্ধারণ
@@ -253,7 +261,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         </div>
 
                         <div class="mt-4" v-if="showSpecificDate">
-                            <TextInput type="date" class="w-full p-3"/>
+                            <TextInput type="date" class="w-full p-3" />
                         </div>
                     </div>
                 </div>
@@ -262,7 +270,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                 <div class="mb-10">
                     <div class="flex items-center mb-6">
                         <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                         <BaseIcon class="fas fa-edit text-blue-600 text-lg"/>
+                            <BaseIcon class="fas fa-edit text-blue-600 text-lg" />
                         </div>
                         <div>
                             <label class="block text-gray-800 font-semibold text-lg">
@@ -281,20 +289,26 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
 
                 <!-- Submit Section -->
                 <div class="border-t border-gray-200 pt-8">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                        <div class="flex items-center">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                        <!-- Left (2/3) -->
+                        <div class="md:col-span-2 flex items-center">
                             <input type="checkbox" class="w-5 h-5 text-blue-600 rounded mr-3" checked>
-                            <span class="font-medium text-gray-800">আমি শর্তাবলী ও নীতিমালা মেনে নিচ্ছি</span>
+                            <span class="font-medium text-gray-800">
+                                আমি শর্তাবলী ও নীতিমালা মেনে নিচ্ছি
+                            </span>
                         </div>
 
-                        <button type="submit"
-                            class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-lg">
-                            <BaseIcon class="fas fa-paper-plane mr-3"/>বিড জমা দিন
-                        </button>
+                        <!-- Button (1/3) -->
+                        <PrimaryButton type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white
+           py-4 rounded-xl font-bold shadow-lg hover:shadow-xl
+           transition-all duration-200 flex items-center justify-center text-lg">
+                            <BaseIcon class="fas fa-paper-plane mr-3" />কাজ জমা দিন
+                        </PrimaryButton>
                     </div>
 
+
                     <div class="mt-6 text-center text-gray-600 text-sm">
-                        <BaseIcon class="fas fa-shield-alt text-gray-400 mr-2"/>
+                        <BaseIcon class="fas fa-shield-alt text-gray-400 mr-2" />
                         আপনার সকল তথ্য সুরক্ষিত রাখা হবে এবং গ্রাহক নির্বাচন না করা পর্যন্ত গোপন রাখা হবে
                     </div>
                 </div>
