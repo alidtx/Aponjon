@@ -47,13 +47,25 @@ const createdAt = ref(props.bidDetails.data?.created_at)
 const timeLeft = useTimeLeft(deadline)
 const timeAgo = useTimeAgo(createdAt)
 const average = useBidsAverageAmount(props.bidDetails.data?.bid);
+
+const submit = () => {
+    form.post(route('bid.store'), {
+        onSuccess: (res) => {
+            if (res.props.flash?.type==='success'){
+            showSuccessMessage.value = true
+            backendMessage.value = res.props.flash?.message  || 'আপনার গিগ সফলভাবে তৈরি হয়েছে!'
+            form.reset()
+            }
+        },
+    });
+}
+
+
 </script>
 
 <template>
     <div class="lg:col-span-2 animate-fade-in">
-        <!-- Bid Form Container -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <!-- Form Header -->
             <div class="bg-primary text-white p-6 md:p-8 rounded-lg shadow-md">
                 <div class="flex justify-between items-start">
                     <div>
@@ -74,8 +86,6 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         <div class="text-white font-bold">{{ timeAgo }}</div>
                     </div>
                 </div>
-
-                <!-- Task Description Card -->
                 <div class="mt-6 bg-blue-800 bg-opacity-30 rounded-lg p-4">
                     <h3 class="text-white font-bold text-lg mb-3">{{ props.bidDetails.data?.title }}</h3>
                     <p class="text-blue-100 mb-4">{{ props.bidDetails.data?.description }}</p>
@@ -100,10 +110,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                     </div>
                 </div>
             </div>
-
-            <!-- Bid Form -->
-            <form class="p-6 md:p-8">
-                <!-- Bid Amount Section -->
+            <form class="p-6 md:p-8" @submit.prevent="submit">
                 <div class="mb-10">
                     <div class="flex items-start mb-6">
                         <div
@@ -119,7 +126,6 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <!-- Bid Amount -->
                         <div>
                             <InputLabel class="block text-gray-700 font-medium mb-3" value="আপনার প্রস্তাবিত টাকা (৳)"
                                 required />
@@ -128,8 +134,6 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                                 একবার বিড জমা দিলে তা পরিবর্তন করা যাবে না
                             </BaseParagraph>
                         </div>
-
-                        <!-- Service Charge -->
                         <div>
                             <InputLabel class="block text-gray-700 font-medium mb-3" value="সার্ভিস চার্জ (৫%)" />
                             <BaseNumberInput type="number"
@@ -140,9 +144,6 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                             </BaseParagraph>
                         </div>
                     </div>
-
-
-                    <!-- Budget Indicator -->
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-800 font-semibold text-lg">বাজেট তুলনা</span>
@@ -173,10 +174,7 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         </div>
                     </div>
                 </div>
-
-                <!-- Time and Availability Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                    <!-- Estimated Time -->
                     <div>
                         <div class="flex items-center mb-6">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
@@ -206,8 +204,6 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                             </InputLabel>
                         </div>
                     </div>
-
-                    <!-- Availability -->
                     <div>
                         <div class="flex items-center mb-8">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
@@ -265,8 +261,6 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         </div>
                     </div>
                 </div>
-
-                <!-- Proposal Message -->
                 <div class="mb-10">
                     <div class="flex items-center mb-6">
                         <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
@@ -286,19 +280,14 @@ const average = useBidsAverageAmount(props.bidDetails.data?.bid);
                         placeholder="আপনি কিভাবে এই কাজটি করবেন? আপনার অভিজ্ঞতা, টুলস, বা বিশেষ অফার সম্পর্কে লিখুন..."></TextArea>
                     <Accordion :title="bidAvices.label" :items="bidAvices.items" />
                 </div>
-
-                <!-- Submit Section -->
                 <div class="border-t border-gray-200 pt-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                        <!-- Left (2/3) -->
                         <div class="md:col-span-2 flex items-center">
                             <input type="checkbox" class="w-5 h-5 text-blue-600 rounded mr-3" checked>
                             <span class="font-medium text-gray-800">
                                 আমি শর্তাবলী ও নীতিমালা মেনে নিচ্ছি
                             </span>
                         </div>
-
-                        <!-- Button (1/3) -->
                         <PrimaryButton type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white
            py-4 rounded-xl font-bold shadow-lg hover:shadow-xl
            transition-all duration-200 flex items-center justify-center text-lg">

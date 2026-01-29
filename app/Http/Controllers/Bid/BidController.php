@@ -27,4 +27,7 @@ class BidController extends Controller
          'allBids'=>BidResource::collection(Bid::select('id','amount')->get()),
       ]);
     }
+    public function bidStore(Request $request) {
+     dd($request->all());
+    }
 }
