@@ -25,7 +25,7 @@ Route::get('Zila-Wise-upozila', [HomeController::class, 'ZilaWiseUpozila'])->nam
 
 Route::get('/tasks/{taskId}/{slug}',[BidController::class, 'show'])->name('tasks.show');
 Route::get('/show-bid-submit-form/{taskId}/{slug}',[BidController::class, 'showBidSubmissionForm'])->name('show.bid.submit.form');
-Route::get('/bid-store/{taskId}/{slug}',[BidController::class, 'bidStore'])->name('bid.store');
+Route::post('/bid-store',[BidController::class, 'bidStore'])->name('bid.store');
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

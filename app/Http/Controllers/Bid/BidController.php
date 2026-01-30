@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bid;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BidRequest;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Bid;
@@ -27,7 +28,7 @@ class BidController extends Controller
          'allBids'=>BidResource::collection(Bid::select('id','amount')->get()),
       ]);
     }
-    public function bidStore(Request $request) {
-     dd($request->all());
+    public function bidStore(BidRequest $request) {
+         
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Bid;
 use App\Models\Order;
 use App\Models\Task;
 
@@ -65,7 +66,7 @@ class BidService
     }
     public static function bidDetails($taskId, $slug)
     {
-       return Task::select([
+        return Task::select([
             'id',
             'task_number',
             'slug',
@@ -79,8 +80,19 @@ class BidService
             'created_at'
         ])->with(['category:id,name', 'bids:id,task_id,amount'])->findOrFail($taskId);
     }
-
-
+    public static function store($request)
+    {
+        return Bid::create([
+            "task_id" => $request->task_id,
+            "bid_amount" => $request->bid_amount,
+            "tasker_id" => 2,
+            "availability" => $request->availability,
+            "specific_date" => $request->specific_date,
+            "estimated_hours" => $request->estimated_hours,
+            "proposal" => $request->proposal,
+            "terms_accepted" =>$request->terms_accepted,
+        ]);
+    }
 
     public static function paymentCompletionRate($taskId)
     {
