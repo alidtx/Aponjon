@@ -14,21 +14,28 @@ use Inertia\Inertia;
 
 class BidController extends Controller
 {
-    public function show(Request $request,$taskId, $slug)
+    public function show(Request $request, $taskId, $slug)
     {
         return Inertia::render('Bids/Index', [
-            'totalTaskCount'=>Task::select('id')->get(),
-            'paymentCompletionRate'=>BidService::paymentCompletionRate($taskId),
-            'taskDetails' => TaskResource::make(BidService::findTaskDetails($taskId,$slug))
+            'totalTaskCount' => Task::select('id')->get(),
+            'paymentCompletionRate' => BidService::paymentCompletionRate($taskId),
+            'taskDetails' => TaskResource::make(BidService::findTaskDetails($taskId, $slug))
         ]);
     }
-    public function showBidSubmissionForm (Request $request, $taskId , $slug)  {
-      return Inertia::render('BidSubmitForm/Index',[
-         'bidDetails' => TaskResource::make(BidService::bidDetails($taskId,$slug)),
-         'allBids'=>BidResource::collection(Bid::select('id','amount')->get()),
-      ]);
+    public function showBidSubmissionForm(Request $request, $taskId, $slug)
+    {
+        return Inertia::render('BidSubmitForm/Index', [
+            'bidDetails' => TaskResource::make(BidService::bidDetails($taskId, $slug)),
+            'allBids' => BidResource::collection(Bid::select('id', 'amount')->get()),
+        ]);
     }
-    public function bidStore(BidRequest $request) {
-         dd($request->all());
+    public function bidStore(BidRequest $request)
+    {
+
+        BidService::store($request);
+        return redirect()->back()->with([
+            'type' => 'success',
+            'message' => 'কাটি সপল ভাবে আবেদন করা হয়েছে',
+        ]);
     }
 }

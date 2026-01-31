@@ -84,13 +84,15 @@ class BidService
     {
         return Bid::create([
             "task_id" => $request->task_id,
-            "bid_amount" => $request->bid_amount,
-            "tasker_id" => 2,
-            "availability" => $request->availability,
-            "specific_date" => $request->specific_date,
-            "estimated_hours" => $request->estimated_hours,
+            "tasker_id" => 3,
+            "amount" => $request->bid_amount,
             "proposal" => $request->proposal,
-            "terms_accepted" =>$request->terms_accepted,
+            "estimated_hours" => $request->estimated_hours,
+            'availability'  => $request->availability,
+            'specific_date' => $request->availability === 'specific'
+                ? $request->specific_date
+                : null,
+            "terms_accepted" => $request->terms_accepted,
         ]);
     }
 

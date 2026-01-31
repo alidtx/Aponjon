@@ -11,19 +11,21 @@ use App\Models\Task;
  */
 class BidFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $availability = $this->faker->randomElement(['today', 'tomorrow', 'specific']);
+
         return [
-            'task_id' => Task::factory(), // Creates or links a Task
-            'tasker_id' => User::factory(), // Creates or links a User
-            'amount' => $this->faker->randomFloat(2, 50, 1000),
+            'task_id' => Task::factory(),
+            'tasker_id' => User::factory(),
+            'amount' => $this->faker->randomFloat(2, 100, 100000),
             'proposal' => $this->faker->paragraph(),
             'estimated_hours' => $this->faker->numberBetween(1, 40),
+            'availability' => $availability,
+            'specific_date' => $availability === 'specific'
+                ? $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d')
+                : null,
+            'terms_accepted' => true,
             'status' => $this->faker->randomElement(['pending', 'accepted', 'rejected']),
         ];
     }

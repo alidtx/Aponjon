@@ -14,9 +14,14 @@ class BidRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bid_amount'       => ['required', 'numeric', 'min:100', 'max:1000000'],
+            'bid_amount'       => ['required', 'numeric', 'min:100', 'max:100000'],
             'availability'     => ['required', 'in:today,tomorrow,specific'],
-            'specific_date'    => ['required_if:availability,specific', 'date', 'after_or_equal:today'],
+            'specific_date' => [
+                'exclude_unless:availability,specific',
+                'required',
+                'date',
+                'after_or_equal:today',
+            ],
             'proposal'         => ['nullable', 'string', 'max:3000'],
             'terms_accepted'   => ['required', 'accepted'],
         ];
@@ -36,7 +41,7 @@ class BidRequest extends FormRequest
             'availability.required' => 'কখন কাজ শুরু করতে পারবেন তা নির্বাচন করুন।',
             'availability.in'       => 'অনুগ্রহ করে সঠিক সময়সূচী নির্বাচন করুন।',
 
-            'specific_date.required_if' => 'নির্দিষ্ট তারিখ নির্বাচন করলে অবশ্যই একটি তারিখ দিতে হবে।',
+            'specific_date.required' => 'নির্দিষ্ট তারিখ নির্বাচন করলে অবশ্যই একটি তারিখ দিতে হবে।',
             'specific_date.date'        => 'অনুগ্রহ করে একটি সঠিক তারিখ নির্বাচন করুন।',
             'specific_date.after_or_equal' => 'নির্বাচিত তারিখ আজ বা তার পরের দিন হতে হবে।',
 
