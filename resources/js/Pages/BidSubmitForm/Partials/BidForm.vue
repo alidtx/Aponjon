@@ -1,7 +1,7 @@
 <script setup>
 import Accordion from '@/Components/Accordion.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, isProxy } from 'vue';
 import { useTimeLeft } from '@/composables/useTimeLeft'
 import { useTimeAgo } from '@/composables/useTimeAgo'
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
@@ -26,7 +26,6 @@ const props = defineProps({
     }
 })
 
-// Initialize form with proper data
 const form = useForm({
     task_id: props.bidDetails.data?.id,
     bid_amount: '',
@@ -40,7 +39,7 @@ const form = useForm({
 const showSpecificDate = ref(false)
 
 watch(() => form.availability, (newValue) => {
-    showSpecificDate.value = newValue === 'specific'
+     showSpecificDate.value = newValue === 'specific'
     if (newValue !== 'specific') {
         form.specific_date = ''
     }
@@ -142,47 +141,40 @@ const submit = () => {
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
-                            <InputLabel class="block text-gray-700 font-medium mb-3" value="আপনার প্রস্তাবিত টাকা (৳)" required />
-                            <BaseNumberInput 
-                                type="number" 
-                                placeholder="৳" 
-                                class="w-full p-3" 
-                                v-model="form.bid_amount"
-                                :error="form.errors.bid_amount"
-                                min="1"
-                            />
-                            <InputError class="mt-2" :message="form.errors.bid_amount"/>
+                            <InputLabel class="block text-gray-700 font-medium mb-3" value="আপনার প্রস্তাবিত টাকা (৳)"
+                                required />
+                            <BaseNumberInput type="number" placeholder="৳" class="w-full p-3" v-model="form.bid_amount"
+                                :error="form.errors.bid_amount" min="1" />
+                            <InputError class="mt-2" :message="form.errors.bid_amount" />
                             <BaseParagraph class="text-sm text-gray-500 mt-2">
                                 একবার বিড জমা দিলে তা পরিবর্তন করা যাবে না
                             </BaseParagraph>
                         </div>
                         <div>
                             <InputLabel class="block text-gray-700 font-medium mb-3" value="সার্ভিস চার্জ (৫%)" />
-                            <BaseNumberInput 
-                                type="number"
+                            <BaseNumberInput type="number"
                                 class="w-full p-3 bg-gray-100 text-gray-500 cursor-not-allowed border-gray-300"
-                                placeholder="৳" 
-                                :value="serviceCharge" 
-                                disabled="true" 
-                            />
+                                placeholder="৳" :value="serviceCharge" disabled="true" />
                             <BaseParagraph class="text-sm text-gray-500 mt-2">
                                 এই চার্জ প্ল্যাটফর্ম ফি হিসেবে নেয়া হয়
                             </BaseParagraph>
                         </div>
                     </div>
-                    
+
                     <!-- Budget comparison remains the same -->
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-800 font-semibold text-lg">বাজেট তুলনা</span>
                             <div class="text-right">
                                 <span class="font-bold text-green-600 text-lg">৳৫০০ কম</span>
-                                <BaseParagraph class="text-sm text-gray-600">গ্রাহকের সর্বনিম্ন বাজেট থেকে</BaseParagraph>
+                                <BaseParagraph class="text-sm text-gray-600">গ্রাহকের সর্বনিম্ন বাজেট থেকে
+                                </BaseParagraph>
                             </div>
                         </div>
                         <div class="h-4 bg-gray-200 rounded-full overflow-hidden relative mb-3">
                             <div class="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 w-full"></div>
-                            <div class="h-8 w-8 bg-blue-700 rounded-full border-4 border-white shadow-lg absolute -top-2" style="left: 45%;"></div>
+                            <div class="h-8 w-8 bg-blue-700 rounded-full border-4 border-white shadow-lg absolute -top-2"
+                                style="left: 45%;"></div>
                         </div>
                         <div class="flex justify-between text-gray-700 font-medium">
                             <div class="text-center">
@@ -210,23 +202,27 @@ const submit = () => {
                                 <BaseIcon class="fas fa-clock text-blue-600 text-lg" />
                             </div>
                             <div>
-                                <InputLabel class="block text-gray-800 font-semibold text-lg" value="আনুমানিক সময়" required />
+                                <InputLabel class="block text-gray-800 font-semibold text-lg" value="আনুমানিক সময়"
+                                    required />
                                 <BaseParagraph class="text-gray-600 text-sm">কাজ শেষ করতে কত সময় লাগবে?</BaseParagraph>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-3 gap-3">
-                            <InputLabel v-for="hour in hours" :key="hour" class="relative cursor-pointer" :class="hour === 8 ? 'col-span-2' : ''">
-                                <Checkbox 
-                                    type="radio" 
-                                    name="estimated_hours" 
-                                    class="hidden peer" 
-                                    :value="hour"
-                                    v-model="form.estimated_hours"
-                                />
-                                <div class="h-full p-3 border-2 border-gray-300 rounded-xl text-center transition-all hover:border-blue-400 peer-checked:border-blue-600 peer-checked:bg-blue-50">
-                                    <div class="text-2xl font-bold text-gray-800">{{ hour === 8 ? '8+' : hour }}</div>
-                                    <div class="text-gray-600">ঘন্টা</div>
+                            <InputLabel v-for="hour in hours" :key="hour" class="relative cursor-pointer"
+                                :class="hour === 8 ? 'col-span-2' : ''">
+                                <input type="radio" v-model="form.estimated_hours" class="hidden peer" :value="hour"
+                                    :checked="hour === 1" />
+
+                                <div class="h-full p-4 border-2 border-gray-300 rounded-xl text-center
+             transition-all hover:border-blue-400
+             peer-checked:border-blue-600 peer-checked:bg-blue-50">
+                                    <div class="text-2xl font-bold text-gray-800">
+                                        {{ hour === 8 ? '8+' : hour }}
+                                    </div>
+                                    <div class="text-gray-600">
+                                        {{ hour === 8 ? 'দীর্ঘমেয়াদী' : 'ঘন্টা' }}
+                                    </div>
                                 </div>
                             </InputLabel>
                         </div>
@@ -245,60 +241,48 @@ const submit = () => {
                         </div>
 
                         <div class="space-y-3">
-                            <label class="flex items-center p-4 border-2 border-blue-600 rounded-xl cursor-pointer bg-blue-50 transition-all">
-                                <Checkbox 
-                                    type="radio" 
-                                    name="availability" 
-                                    value="today" 
-                                    v-model="form.availability"
-                                    class="w-5 h-5 text-blue-600" 
-                                />
+                            <label
+                                class="flex items-center p-4 border-2 border-blue-600 rounded-xl cursor-pointer bg-blue-50 transition-all">
+                                <input type="radio"  name="availability" value="today" :v-model="form.availability"
+                                    class="w-5 h-5 text-blue-600" :checked="form.availability==='today'" />
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আজ</span>
-                                    <BaseParagraph class="text-gray-600 text-sm mt-1">আজকে কাজ শুরু করতে পারবেন</BaseParagraph>
+                                    <BaseParagraph class="text-gray-600 text-sm mt-1">আজকে কাজ শুরু করতে পারবেন
+                                    </BaseParagraph>
                                 </div>
-                                <div class="ml-auto bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                <div
+                                    class="ml-auto bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                                     <BaseIcon class="fas fa-bolt mr-1" />দ্রুত
                                 </div>
                             </label>
 
-                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                                <Checkbox 
-                                    type="radio" 
-                                    name="availability" 
-                                    value="tomorrow" 
-                                    v-model="form.availability"
-                                    class="w-5 h-5 text-blue-600" 
-                                />
+                            <label
+                                class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
+                                <input type="radio" name="availability" value="tomorrow" v-model="form.availability"
+                                    class="w-5 h-5 text-blue-600" />
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">আগামীকাল</span>
-                                    <BaseParagraph class="text-gray-600 text-sm mt-1">আগামীকাল কাজ শুরু করতে পারবেন</BaseParagraph>
+                                    <BaseParagraph class="text-gray-600 text-sm mt-1">আগামীকাল কাজ শুরু করতে পারবেন
+                                    </BaseParagraph>
                                 </div>
                             </label>
 
-                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                                <Checkbox 
-                                    type="radio" 
-                                    name="availability" 
-                                    value="specific" 
-                                    v-model="form.availability"
-                                    class="w-5 h-5 text-blue-600" 
-                                />
+                            <label
+                                class="flex items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
+                                <input type="radio" name="availability" value="specific" v-model="form.availability"
+                                    class="w-5 h-5 text-blue-600"/>
                                 <div class="ml-4">
                                     <span class="font-medium text-gray-800">নির্দিষ্ট তারিখ</span>
-                                    <BaseParagraph class="text-gray-600 text-sm mt-1">আপনার সুবিধাজনক তারিখ নির্ধারণ করুন</BaseParagraph>
+                                    <BaseParagraph class="text-gray-600 text-sm mt-1">আপনার সুবিধাজনক তারিখ নির্ধারণ
+                                        করুন</BaseParagraph>
                                 </div>
                             </label>
                         </div>
 
                         <div class="mt-4" v-if="showSpecificDate">
-                            <TextInput 
-                                type="date" 
-                                class="w-full p-3" 
-                                v-model="form.specific_date"
-                                :min="new Date().toISOString().split('T')[0]"
-                            />
-                         <InputError class="mt-2" :message="form.errors.specific_date"/>
+                            <TextInput type="date" class="w-full p-3" v-model="form.specific_date"
+                                :min="new Date().toISOString().split('T')[0]" />
+                            <InputError class="mt-2" :message="form.errors.specific_date" />
                         </div>
                     </div>
                 </div>
@@ -311,41 +295,33 @@ const submit = () => {
                         </div>
                         <div>
                             <label class="block text-gray-800 font-semibold text-lg">আপনার প্রস্তাবনা</label>
-                            <BaseParagraph class="text-gray-600 text-sm">ভালো প্রস্তাবনা বিড জেতার সম্ভাবনা বাড়ায়</BaseParagraph>
+                            <BaseParagraph class="text-gray-600 text-sm">ভালো প্রস্তাবনা বিড জেতার সম্ভাবনা বাড়ায়
+                            </BaseParagraph>
                         </div>
                     </div>
-                     <div>   
-                    <TextArea 
-                        rows="6" 
-                        v-model="form.proposal"
-                        class="w-full p-5 border-2 border-gray-300 rounded-xl focus:border-blue-500 text-gray-800 transition-colors"
-                        placeholder="আপনি কিভাবে এই কাজটি করবেন? আপনার অভিজ্ঞতা, টুলস, বা বিশেষ অফার সম্পর্কে লিখুন..."
-                        :error="form.errors.proposal"
-                    ></TextArea>
-                     <InputError class="mt-2" :message="form.errors.proposal"/>
+                    <div>
+                        <textarea rows="6" v-model="form.proposal"
+                            class="w-full p-5 border-2 border-gray-300 rounded-xl focus:border-blue-500 text-gray-800 transition-colors"
+                            placeholder="আপনি কিভাবে এই কাজটি করবেন? আপনার অভিজ্ঞতা, টুলস, বা বিশেষ অফার সম্পর্কে লিখুন..."
+                            :error="form.errors.proposal"></TextArea>
+                        <InputError class="mt-2" :message="form.errors.proposal" />
                     </div>
                     <Accordion :title="bidAvices.label" :items="bidAvices.items" />
-                   </div>
+                </div>
                 <div class="border-t border-gray-200 pt-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                        
+
                         <div class="md:col-span-2 flex items-center">
-                            <Checkbox 
-                                type="checkbox" 
-                                class="w-5 h-5 text-blue-600 rounded mr-3" 
-                                v-model="form.terms_accepted"
-                                checked
-                            />
+                            <input type="radio" class="w-5 h-5 text-blue-600 rounded mr-3"
+                                v-model="form.terms_accepted" checked />
                             <span class="font-medium text-gray-800">
                                 আমি শর্তাবলী ও নীতিমালা মেনে নিচ্ছি
                             </span>
-                        <InputError class="mt-2" :message="form.errors.terms_accepted"/>
+                            <InputError class="mt-2" :message="form.errors.terms_accepted" />
                         </div>
-                        <PrimaryButton 
-                            type="submit" 
+                        <PrimaryButton type="submit"
                             class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-lg"
-                            :disabled="form.processing"
-                        >
+                            :disabled="form.processing">
                             <BaseIcon class="fas fa-paper-plane mr-3" />
                             <span v-if="form.processing">সাবমিট করা হচ্ছে...</span>
                             <span v-else>কাজ জমা দিন</span>

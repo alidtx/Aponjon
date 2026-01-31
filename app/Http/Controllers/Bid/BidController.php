@@ -29,6 +29,6 @@ class BidController extends Controller
       ]);
     }
     public function bidStore(BidRequest $request) {
-         
+         dd($request->all());
     }
 }
