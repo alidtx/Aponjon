@@ -4,6 +4,7 @@ use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,9 +46,9 @@ Route::middleware(['auth', 'role:customer','verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:tasker','verified'])->group(function () {
-    Route::get('tasker', function(){
-        return 'tasker';
-    });
+     Route::prefix('tasker-kyc')->name('tasker-kyc.')->group(function(){
+          Route::get('/', [TaskController::class,'index'])->name('tasker-kyc.index');
+     });
 });
 
 
