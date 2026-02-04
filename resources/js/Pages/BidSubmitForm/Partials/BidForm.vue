@@ -312,7 +312,7 @@ const submit = () => {
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
 
                         <div class="md:col-span-2 flex items-center">
-                            <input type="radio" class="w-5 h-5 text-blue-600 rounded mr-3"
+                            <input type="checkbox" class="w-5 h-5 text-blue-600 rounded mr-3"
                                 v-model="form.terms_accepted" checked />
                             <span class="font-medium text-gray-800">
                                 আমি শর্তাবলী ও নীতিমালা মেনে নিচ্ছি

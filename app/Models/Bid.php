@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Bid extends Model
 {    
     Use HasFactory;
-    protected $fillable = ['task_id', 'tasker_id', 'amount', 'proposal', 'estimated_hours', 'status'];
+    protected $fillable = [
+    'task_id', 'tasker_id', 'amount', 'proposal', 'estimated_hours','availability',
+    'specific_date','terms_accepted', 'status'
+    ];
 
 
     public function task()
