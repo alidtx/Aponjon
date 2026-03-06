@@ -11,18 +11,13 @@ import Benefits from './Partials/Benefits.vue';
 
 <template>
     <DefaultLayout>
-
         <Head title="টাস্কার" />
         <div class="max-w-4xl mx-auto px-4">
             <PageHeadline title="টাস্কার হিসেবে" highlight="রেজিস্টার করুন"
                 description="আপনার দক্ষতা ব্যবহার করে আয় করুন এবং মানুষকে সাহায্য করুন।" />
-            <!-- Progress Steps -->
             <ProgressBar />
-
-            <!-- Registration Form -->
             <div class="bg-white rounded-lg shadow-md p-8">
-                <form id="taskerRegistrationForm">
-                    <!-- Personal Information -->
+                <form id="taskerRegistrationForm">  
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">ব্যক্তিগত তথ্য</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -55,8 +50,6 @@ import Benefits from './Partials/Benefits.vue';
                             </div>
                         </div>
                     </div>
-
-                    <!-- Address Information -->
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">ঠিকানা তথ্য</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,8 +93,6 @@ import Benefits from './Partials/Benefits.vue';
                             </div>
                         </div>
                     </div>
-
-                    <!-- Skills and Services -->
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">আপনার দক্ষতা ও সেবা</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -138,8 +129,6 @@ import Benefits from './Partials/Benefits.vue';
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Hourly Rate -->
                         <div class="mb-6">
                             <label class="block text-dark font-medium mb-2">আপনার ঘণ্টাপ্রতি রেট (৳)</label>
                             <div class="flex items-center">
@@ -148,8 +137,6 @@ import Benefits from './Partials/Benefits.vue';
                                         id="rateValue">300</span></span>
                             </div>
                         </div>
-
-                        <!-- Experience -->
                         <div>
                             <label class="block text-dark font-medium mb-2">অভিজ্ঞতা (বছর)</label>
                             <select
@@ -162,8 +149,6 @@ import Benefits from './Partials/Benefits.vue';
                             </select>
                         </div>
                     </div>
-
-                    <!-- Documents Upload -->
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">ডকুমেন্ট আপলোড</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -189,8 +174,6 @@ import Benefits from './Partials/Benefits.vue';
                             </div>
                         </div>
                     </div>
-
-                    <!-- Terms and Submit -->
                     <div class="mb-6">
                         <div class="flex items-start">
                             <input type="checkbox" class="w-5 h-5 text-primary rounded mt-1" required>
@@ -208,7 +191,6 @@ import Benefits from './Partials/Benefits.vue';
                     </button>
                 </form>
             </div>
-            <!-- Benefits Section -->
             <Benefits />
         </div>
     </DefaultLayout>

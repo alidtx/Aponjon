@@ -46,8 +46,8 @@ Route::middleware(['auth', 'role:customer','verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:tasker','verified'])->group(function () {
-     Route::prefix('tasker-kyc')->name('tasker-kyc.')->group(function(){
-          Route::get('/', [TaskController::class,'index'])->name('tasker-kyc.index');
+     Route::prefix('tasker')->name('tasker.')->group(function(){
+          Route::get('create-profile', [TaskController::class,'createProfile'])->name('tasker.create-profile');
      });
 });
 

@@ -7,7 +7,7 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-    public function index()  {
+    public function createProfile()  {
           return Inertia::render('Task/Index');
     }
 }
