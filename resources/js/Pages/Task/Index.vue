@@ -1,9 +1,34 @@
 <script setup>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import PageHeadline from '@/Components/PageHeadline.vue';
 import ProgressBar from './Partials/ProgressBar.vue';
 import Benefits from './Partials/Benefits.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/Components/InputError.vue';
+import BaseNumberInput from '@/Components/BaseNumberInput.vue';
+import LocationSelector from '@/Components/LocationSelector.vue';
+
+const props = defineProps({
+
+    districts: {
+        type: Object,
+        default: () => ({})
+    },
+    zilas: {
+        type: Object,
+        default: () => ({})
+    },
+
+})
+
+const form = useForm({
+    district_id: '',
+    zila_id: '',
+    upozila_id: '',
+});
+
 
 </script>
 
@@ -11,87 +36,45 @@ import Benefits from './Partials/Benefits.vue';
 
 <template>
     <DefaultLayout>
+
         <Head title="টাস্কার" />
         <div class="max-w-4xl mx-auto px-4">
-            <PageHeadline title="টাস্কার হিসেবে" highlight="রেজিস্টার করুন"
+            <PageHeadline title="টাস্কার হিসেবে আপনার প্রফাইল" highlight="কমপ্লিট করুন"
                 description="আপনার দক্ষতা ব্যবহার করে আয় করুন এবং মানুষকে সাহায্য করুন।" />
             <ProgressBar />
             <div class="bg-white rounded-lg shadow-md p-8">
-                <form id="taskerRegistrationForm">  
+                <form id="taskerRegistrationForm">
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">ব্যক্তিগত তথ্য</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-dark font-medium mb-2">পূর্ণ নাম <span
-                                        class="text-red-500">*</span></label>
-                                <input type="text"
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="আপনার পূর্ণ নাম লিখুন" required>
+                                <InputLabel for="name" value="পূর্ণ নাম" required />
+                                <TextInput id="name" type="text" class="w-full p-3"
+                                    placeholder="আপনার পূর্ণ নাম লিখুন" />
+                                <InputError class="mt-2" />
                             </div>
                             <div>
-                                <label class="block text-dark font-medium mb-2">মোবাইল নম্বর <span
-                                        class="text-red-500">*</span></label>
-                                <input type="tel"
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="01XXXXXXXXX" required>
+                                <InputLabel for="number" value="মোবাইল নম্বর" required />
+                                <TextInput id="number" type="number" class="w-full p-3" placeholder="01XXXXXXXXX" />
+                                <InputError class="mt-2" />
                             </div>
                             <div>
-                                <label class="block text-dark font-medium mb-2">ইমেইল</label>
-                                <input type="email"
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="your@email.com">
+                                <InputLabel for="email" value="ইমেইল" required />
+                                <TextInput id="email" type="email" class="w-full p-3" placeholder="your@email.com" />
+                                <InputError class="mt-2" />
                             </div>
                             <div>
-                                <label class="block text-dark font-medium mb-2">এনআইডি নম্বর <span
-                                        class="text-red-500">*</span></label>
-                                <input type="text"
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="জাতীয় পরিচয়পত্র নম্বর" required>
+                                <InputLabel for="email" value="এনআইডি নম্বর" required />
+                                <BaseNumberInput id="nid" type="number" class="w-full p-3"
+                                    placeholder="জাতীয় পরিচয়পত্র নম্বর" />
+                                <InputError class="mt-2" />
                             </div>
                         </div>
                     </div>
                     <div class="mb-8">
-                        <h3 class="text-xl font-bold text-dark mb-6">ঠিকানা তথ্য</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="md:col-span-2">
-                                <label class="block text-dark font-medium mb-2">বিভাগ <span
-                                        class="text-red-500">*</span></label>
-                                <select
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    required>
-                                    <option value="">বিভাগ নির্বাচন করুন</option>
-                                    <option value="dhaka">ঢাকা</option>
-                                    <option value="chattogram">চট্টগ্রাম</option>
-                                    <option value="khulna">খুলনা</option>
-                                    <option value="rajshahi">রাজশাহী</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-dark font-medium mb-2">জেলা <span
-                                        class="text-red-500">*</span></label>
-                                <select
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    required>
-                                    <option value="">জেলা নির্বাচন করুন</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-dark font-medium mb-2">উপজেলা/থানা <span
-                                        class="text-red-500">*</span></label>
-                                <select
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    required>
-                                    <option value="">উপজেলা নির্বাচন করুন</option>
-                                </select>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-dark font-medium mb-2">পূর্ণ ঠিকানা <span
-                                        class="text-red-500">*</span></label>
-                                <textarea
-                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    rows="3" placeholder="বাড়ি নম্বর, রাস্তা, এলাকা" required></textarea>
-                            </div>
-                        </div>
+                        <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
+                        <LocationSelector :districts="districts" :zilas="zilas" v-model:districtId="form.district_id"
+                            v-model:zilaId="form.zila_id" v-model:upozilaId="form.upozila_id" :errors="form.errors" />
                     </div>
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">আপনার দক্ষতা ও সেবা</h3>

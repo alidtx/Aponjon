@@ -4,7 +4,7 @@ use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\Tasker\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;

@@ -64,7 +64,7 @@ watch(() => props.zilaId, (val) => {
 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
     <div >
         <InputLabel value="বিভাগ" required />
-        <SelectInput class="w-full"
+        <SelectInput class="w-full p-3"
             :options="districtsData"
             labelKey="name"
             valueKey="id"
@@ -76,7 +76,7 @@ watch(() => props.zilaId, (val) => {
     </div>
     <div>
         <InputLabel value="জেলা" required />
-        <SelectInput class="w-full"
+        <SelectInput class="w-full p-3"
             :options="filteredZilaList"
             labelKey="name"
             valueKey="id"
@@ -93,7 +93,7 @@ watch(() => props.zilaId, (val) => {
     <div>
         <InputLabel value="উপজেলা" required />
 
-        <SelectInput class="w-full"
+        <SelectInput class="w-full p-3"
             :options="filteredUpozilaList"
             labelKey="name"
             valueKey="id"
