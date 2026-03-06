@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Category;
+use App\Services\LocationService;
 use App\Services\TaskService;
 
 class CustomerController extends Controller
@@ -56,8 +57,8 @@ class CustomerController extends Controller
       ->get(['id', 'name', 'icon']);
 
     return Inertia::render('Customer/CreateGig', [
-      'districts' => DistrictResource::collection(TaskService::districtWiseZila()),
-      'zilas' => ZilaResource::collection(TaskService::zilaWiseUpozila()),
+      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
+      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
       'categories' => CategoryResource::collection($categories),
     ]);
   }
