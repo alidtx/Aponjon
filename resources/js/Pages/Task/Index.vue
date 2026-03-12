@@ -9,6 +9,8 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 import LocationSelector from '@/Components/LocationSelector.vue';
+import SelectInput from '@/Components/SelectInput.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
 
@@ -23,6 +25,7 @@ const props = defineProps({
 
 })
 
+const sliderValue=ref(250)
 const form = useForm({
     district_id: '',
     zila_id: '',
@@ -30,6 +33,17 @@ const form = useForm({
 });
 
 
+const Options=[
+    {value:'1', label: '১ বছর'},
+    {value:'2', label: '২ বছর'},
+    {value:'3', label: '৩ বছর'},
+    {value:'4', label: '৪ বছর'},
+    {value:'5', label: '৫+ বছর'},
+]
+
+function rangeValue (event) {
+       sliderValue.value=event.target.value
+}
 </script>
 
 
@@ -71,7 +85,7 @@ const form = useForm({
                             </div>
                         </div>
                     </div>
-                    <div class="mb-8">
+                    <div class="mb-4">
                         <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
                         <LocationSelector :districts="districts" :zilas="zilas" v-model:districtId="form.district_id"
                             v-model:zilaId="form.zila_id" v-model:upozilaId="form.upozila_id" :errors="form.errors" />
@@ -79,60 +93,32 @@ const form = useForm({
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">আপনার দক্ষতা ও সেবা</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <div
-                                class="flex items-center p-4 border border-gray-300 rounded-lg hover:border-primary cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 text-primary rounded">
-                                <div class="ml-3">
-                                    <span class="font-medium text-dark">ইলেকট্রিক কাজ</span>
-                                    <p class="text-sm text-gray-600">ওয়্যারিং, সুইচ, ফ্যান ইন্সটলেশন</p>
-                                </div>
+                            <div>
+                                <InputLabel for="skils" value="দক্ষাতা" required />
+                                <TextInput id="skils" type="text" class="w-full p-3" placeholder="আপনি কি কাজে দক্ষ ?" />
+                                <InputError class="mt-2" />
                             </div>
-                            <div
-                                class="flex items-center p-4 border border-gray-300 rounded-lg hover:border-primary cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 text-primary rounded">
-                                <div class="ml-3">
-                                    <span class="font-medium text-dark">প্লাম্বিং কাজ</span>
-                                    <p class="text-sm text-gray-600">পাইপ লাইন, ট্যাপ, স্যানিটারি</p>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center p-4 border border-gray-300 rounded-lg hover:border-primary cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 text-primary rounded">
-                                <div class="ml-3">
-                                    <span class="font-medium text-dark">ক্লিনিং সার্ভিস</span>
-                                    <p class="text-sm text-gray-600">বাড়ি, অফিস, কার্পেট ক্লিনিং</p>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center p-4 border border-gray-300 rounded-lg hover:border-primary cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 text-primary rounded">
-                                <div class="ml-3">
-                                    <span class="font-medium text-dark">ফার্নিচার অ্যাসেম্বলি</span>
-                                    <p class="text-sm text-gray-600">আইকিয়া, লোকাল ফার্নিচার</p>
-                                </div>
+                            <div>
+                               <InputLabel for="experience" value="অবিজ্ঞতা" required />
+                                <SelectInput 
+                                  :options="Options"  
+                                  class="w-full p-3"
+                                  defaultVal="এই কাজে কত বছরের অবিজ্ঞ্য" 
+                                  labelKey="label" valueKey="value"
+                                  />
+                                <InputError class="mt-2" />
                             </div>
                         </div>
                         <div class="mb-6">
                             <label class="block text-dark font-medium mb-2">আপনার ঘণ্টাপ্রতি রেট (৳)</label>
                             <div class="flex items-center">
-                                <input type="range" min="100" max="1000" step="50" class="flex-1" value="300">
+                                <input type="range" min="100" max="2000" step="50" class="flex-1" v-model="sliderValue"   @input="rangeValue">
                                 <span class="ml-4 text-lg font-bold text-primary">৳<span
-                                        id="rateValue">300</span></span>
+                                        id="rateValue">{{ sliderValue }}</span></span>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-dark font-medium mb-2">অভিজ্ঞতা (বছর)</label>
-                            <select
-                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                                <option value="0">কোন অভিজ্ঞতা নেই</option>
-                                <option value="1">১ বছর</option>
-                                <option value="2">২ বছর</option>
-                                <option value="3">৩ বছর</option>
-                                <option value="5">৫ বছর+</option>
-                            </select>
-                        </div>
                     </div>
-                    <div class="mb-8">
+                    <div class="mb-4">
                         <h3 class="text-xl font-bold text-dark mb-6">ডকুমেন্ট আপলোড</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
