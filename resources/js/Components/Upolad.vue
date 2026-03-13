@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import PdfIcon from './Icons/PdfIcon.vue'
 
 const props = defineProps({
     acceptedType: {
@@ -43,8 +44,8 @@ function handleFileChange(event) {
             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" @change="handleFileChange"
             accept=".jpg,.jpeg,.png" />
 
-        <div v-if="imagePreviewUrl && isPdfPreview" class="mx-auto mb-2">
-            <i class="fas fa-file-pdf text-4xl text-red-500"></i>
+        <div v-if="imagePreviewUrl && isPdfPreview" class="flex justify-center mb-2">
+            <PdfIcon width="50" height="50" />
         </div>
 
         <img v-else-if="imagePreviewUrl" :src="imagePreviewUrl" class="mx-auto mb-2 h-12 object-contain rounded" />
