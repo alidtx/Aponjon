@@ -1,6 +1,7 @@
 <script setup>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import PageHeadline from '@/Components/PageHeadline.vue';
 import ProgressBar from './Partials/ProgressBar.vue';
 import Benefits from './Partials/Benefits.vue';
@@ -10,7 +11,7 @@ import InputError from '@/Components/InputError.vue';
 import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 import LocationSelector from '@/Components/LocationSelector.vue';
 import SelectInput from '@/Components/SelectInput.vue';
-import { ref } from 'vue';
+import Upolad from '@/Components/Upolad.vue';
 
 const props = defineProps({
 
@@ -26,7 +27,6 @@ const props = defineProps({
 })
 
 const sliderValue = ref(250)
-const fileName = ref('')
 
 const form = useForm({
     district_id: '',
@@ -45,15 +45,6 @@ const Options = [
 
 function rangeValue(event) {
     sliderValue.value = event.target.value
-}
-
-function handleFileChange(event) {
-  const file = event.target.files[0]
-  if (file) {
-    fileName.value = file.name
-  } else {
-    fileName.value = ''
-  }
 }
 
 </script>
@@ -124,7 +115,7 @@ function handleFileChange(event) {
                                 <input type="range" min="100" max="2000" step="50" class="flex-1" v-model="sliderValue"
                                     @input="rangeValue">
                                 <span class="ml-4 text-lg font-bold text-primary">৳<span id="rateValue">{{ sliderValue
-                                        }}</span></span>
+                                }}</span></span>
                             </div>
                         </div>
                     </div>
@@ -133,27 +124,15 @@ function handleFileChange(event) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <InputLabel for="document" value="এনআইডি ফ্রন্ট সাইড" required />
-                                <div 
-                                    class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-primary transition-colors duration-200 relative">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                                    <input type="file" ref="fileInput"
-                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                        @change="handleFileChange" accept=".jpg,.jpeg,.png" />
-                                    <p class="text-gray-600 mb-1">
-                                        {{ fileName ? fileName : "ফাইল নির্বাচন করুন বা ড্র্যাগ করুন" }}
-                                    </p>
-                                    <p class="text-sm text-gray-500">JPG, PNG (সর্বোচ্চ ৫MB)</p>
-                                </div>
-
+                                <Upolad
+                                 acceptedType=".jpg,.jpeg,.png,.gif,.svg,.pdf"
+                                />
                             </div>
                             <div>
                                 <InputLabel for="document" value="এনআইডি ব্যাক সাইড" required />
-                                <div
-                                    class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary cursor-pointer">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                                    <p class="text-gray-600">ফাইল নির্বাচন করুন বা ড্র্যাগ করুন</p>
-                                    <p class="text-sm text-gray-500">JPG, PNG (সর্বোচ্চ ৫MB)</p>
-                                </div>
+                                <Upolad
+                                 acceptedType=".jpg,.jpeg,.png,.gif,.svg,.pdf"
+                                />
                             </div>
                         </div>
                     </div>
