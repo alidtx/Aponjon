@@ -25,7 +25,9 @@ const props = defineProps({
 
 })
 
-const sliderValue=ref(250)
+const sliderValue = ref(250)
+const fileName = ref('')
+
 const form = useForm({
     district_id: '',
     zila_id: '',
@@ -33,17 +35,27 @@ const form = useForm({
 });
 
 
-const Options=[
-    {value:'1', label: '১ বছর'},
-    {value:'2', label: '২ বছর'},
-    {value:'3', label: '৩ বছর'},
-    {value:'4', label: '৪ বছর'},
-    {value:'5', label: '৫+ বছর'},
+const Options = [
+    { value: '1', label: '১ বছর' },
+    { value: '2', label: '২ বছর' },
+    { value: '3', label: '৩ বছর' },
+    { value: '4', label: '৪ বছর' },
+    { value: '5', label: '৫+ বছর' },
 ]
 
-function rangeValue (event) {
-       sliderValue.value=event.target.value
+function rangeValue(event) {
+    sliderValue.value = event.target.value
 }
+
+function handleFileChange(event) {
+  const file = event.target.files[0]
+  if (file) {
+    fileName.value = file.name
+  } else {
+    fileName.value = ''
+  }
+}
+
 </script>
 
 
@@ -95,26 +107,24 @@ function rangeValue (event) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
                                 <InputLabel for="skils" value="দক্ষাতা" required />
-                                <TextInput id="skils" type="text" class="w-full p-3" placeholder="আপনি কি কাজে দক্ষ ?" />
+                                <TextInput id="skils" type="text" class="w-full p-3"
+                                    placeholder="আপনি কি কাজে দক্ষ ?" />
                                 <InputError class="mt-2" />
                             </div>
                             <div>
-                               <InputLabel for="experience" value="অবিজ্ঞতা" required />
-                                <SelectInput 
-                                  :options="Options"  
-                                  class="w-full p-3"
-                                  defaultVal="এই কাজে কত বছরের অবিজ্ঞ্য" 
-                                  labelKey="label" valueKey="value"
-                                  />
+                                <InputLabel for="experience" value="অবিজ্ঞতা" required />
+                                <SelectInput :options="Options" class="w-full p-3"
+                                    defaultVal="এই কাজে কত বছরের অবিজ্ঞ্য" labelKey="label" valueKey="value" />
                                 <InputError class="mt-2" />
                             </div>
                         </div>
                         <div class="mb-6">
                             <label class="block text-dark font-medium mb-2">আপনার ঘণ্টাপ্রতি রেট (৳)</label>
                             <div class="flex items-center">
-                                <input type="range" min="100" max="2000" step="50" class="flex-1" v-model="sliderValue"   @input="rangeValue">
-                                <span class="ml-4 text-lg font-bold text-primary">৳<span
-                                        id="rateValue">{{ sliderValue }}</span></span>
+                                <input type="range" min="100" max="2000" step="50" class="flex-1" v-model="sliderValue"
+                                    @input="rangeValue">
+                                <span class="ml-4 text-lg font-bold text-primary">৳<span id="rateValue">{{ sliderValue
+                                        }}</span></span>
                             </div>
                         </div>
                     </div>
@@ -122,18 +132,22 @@ function rangeValue (event) {
                         <h3 class="text-xl font-bold text-dark mb-6">ডকুমেন্ট আপলোড</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-dark font-medium mb-2">এনআইডি ফ্রন্ট সাইড <span
-                                        class="text-red-500">*</span></label>
-                                <div
-                                    class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary cursor-pointer">
+                                <InputLabel for="document" value="এনআইডি ফ্রন্ট সাইড" required />
+                                <div 
+                                    class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-primary transition-colors duration-200 relative">
                                     <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                                    <p class="text-gray-600">ফাইল নির্বাচন করুন বা ড্র্যাগ করুন</p>
+                                    <input type="file" ref="fileInput"
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        @change="handleFileChange" accept=".jpg,.jpeg,.png" />
+                                    <p class="text-gray-600 mb-1">
+                                        {{ fileName ? fileName : "ফাইল নির্বাচন করুন বা ড্র্যাগ করুন" }}
+                                    </p>
                                     <p class="text-sm text-gray-500">JPG, PNG (সর্বোচ্চ ৫MB)</p>
                                 </div>
+
                             </div>
                             <div>
-                                <label class="block text-dark font-medium mb-2">এনআইডি ব্যাক সাইড <span
-                                        class="text-red-500">*</span></label>
+                                <InputLabel for="document" value="এনআইডি ব্যাক সাইড" required />
                                 <div
                                     class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary cursor-pointer">
                                     <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
