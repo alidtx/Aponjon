@@ -12,6 +12,9 @@ import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 import LocationSelector from '@/Components/LocationSelector.vue';
 import SelectInput from '@/Components/SelectInput.vue';
 import Upolad from '@/Components/Upolad.vue';
+import Modal from '@/Components/Modal.vue';
+import TermsAndConditions from './Partials/TermsAndConditions.vue';
+
 
 const props = defineProps({
 
@@ -27,6 +30,7 @@ const props = defineProps({
 })
 
 const sliderValue = ref(250)
+const isOpenTermsModal=ref(false)
 
 const form = useForm({
     district_id: '',
@@ -139,15 +143,14 @@ function rangeValue(event) {
                     <div class="mb-6">
                         <div class="flex items-start">
                             <input type="checkbox" class="w-5 h-5 text-primary rounded mt-1" required>
-                            <label class="ml-3 text-gray-700">
-                                আমি <a href="#" class="text-primary hover:underline">টার্মস অ্যান্ড কন্ডিশন</a> এবং <a
-                                    href="#" class="text-primary hover:underline">প্রাইভেসি পলিসি</a> পড়েছি এবং সম্মতি
+                            <label class="ml-3 text-gray-700" >
+                                আমি <a href="#" @click.prevent="isOpenTermsModal = true" class="text-primary hover:underline">টার্মস অ্যান্ড কন্ডিশন</a> পড়েছি এবং সম্মতি
                                 দিচ্ছি
                             </label>
                         </div>
                     </div>
 
-                    <button type="submit"
+                    <button type="submit" 
                         class="w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
                         রেজিস্টার সম্পন্ন করুন
                     </button>
@@ -155,5 +158,14 @@ function rangeValue(event) {
             </div>
             <Benefits />
         </div>
+     <Modal
+            maxWidth="md"
+            :show="isOpenTermsModal"
+            @close="isOpenTermsModal = false"
+            closeable
+     >
+    <TermsAndConditions/>
+    </Modal>
+     
     </DefaultLayout>
 </template>

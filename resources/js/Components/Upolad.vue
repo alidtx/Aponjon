@@ -45,7 +45,7 @@ function handleFileChange(event) {
             accept=".jpg,.jpeg,.png" />
 
         <div v-if="imagePreviewUrl && isPdfPreview" class="flex justify-center mb-2">
-            <PdfIcon width="50" height="50" />
+            <PdfIcon width="50" height="46" />
         </div>
 
         <img v-else-if="imagePreviewUrl" :src="imagePreviewUrl" class="mx-auto mb-2 h-12 object-contain rounded" />
