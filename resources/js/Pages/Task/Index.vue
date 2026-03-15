@@ -32,13 +32,13 @@ const props = defineProps({
 })
 
 const sliderValue = ref(250)
-const isOpenTermsModal=ref(false)
+const isOpenTermsModal = ref(false)
 
 const form = useForm({
     district_id: '',
     zila_id: '',
     upozila_id: '',
-    is_terms_and_condition_accept:false
+    is_terms_and_condition_accept: false
 });
 
 
@@ -54,6 +54,12 @@ function rangeValue(event) {
     sliderValue.value = event.target.value
 }
 
+const acceptTerms = () => {
+    form.is_terms_and_condition_accept = true
+    isOpenTermsModal.value = false
+
+}
+
 </script>
 
 
@@ -67,10 +73,10 @@ function rangeValue(event) {
                 description="আপনার দক্ষতা ব্যবহার করে আয় করুন এবং মানুষকে সাহায্য করুন।" />
             <ProgressBar />
             <div class="bg-white rounded-lg shadow-md p-8">
-                <form id="taskerRegistrationForm">
+                <form id="taskerRegistrationForm" @submit.prevent="submit">
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">ব্যক্তিগত তথ্য</h3>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <InputLabel for="name" value="পূর্ণ নাম" required />
@@ -123,7 +129,7 @@ function rangeValue(event) {
                                 <input type="range" min="100" max="2000" step="50" class="flex-1" v-model="sliderValue"
                                     @input="rangeValue">
                                 <span class="ml-4 text-lg font-bold text-primary">৳<span id="rateValue">{{ sliderValue
-                                }}</span></span>
+                                        }}</span></span>
                             </div>
                         </div>
                     </div>
@@ -132,26 +138,23 @@ function rangeValue(event) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <InputLabel for="document" value="এনআইডি ফ্রন্ট সাইড" required />
-                                <Upolad
-                                 acceptedType=".jpg,.jpeg,.png,.gif,.svg,.pdf"
-                                />
+                                <Upolad acceptedType=".jpg,.jpeg,.png,.gif,.svg,.pdf" />
                             </div>
                             <div>
                                 <InputLabel for="document" value="এনআইডি ব্যাক সাইড" required />
-                                <Upolad
-                                 acceptedType=".jpg,.jpeg,.png,.gif,.svg,.pdf"
-                                />
+                                <Upolad acceptedType=".jpg,.jpeg,.png,.gif,.svg,.pdf" />
                             </div>
                         </div>
                     </div>
                     <div class="mb-6">
                         <div class="flex items-start">
-                            <Checkbox class="w-4 h-4 mt-1"
-                            v-model="form.is_terms_and_condition_accept"
-                            @click.prevent="isOpenTermsModal = true"
-                            />
-                            <label class="ml-2 text-gray-700" >
-                                আমি <a href="#" @click.prevent="isOpenTermsModal = true" class="text-primary hover:underline">টার্মস অ্যান্ড কন্ডিশন</a> পড়েছি এবং সম্মতি
+                            <Checkbox class="w-4 h-4 mt-1"   
+                            :checked="form.is_terms_and_condition_accept"
+                            :disabled="form.is_terms_and_condition_accept"
+                             @click.prevent="isOpenTermsModal = true" />
+                            <label class="ml-2 text-gray-700">
+                                আমি <a href="#" @click.prevent="isOpenTermsModal = true"
+                                    class="text-primary hover:underline">টার্মস অ্যান্ড কন্ডিশন</a> পড়েছি এবং সম্মতি
                                 দিচ্ছি
                             </label>
                         </div>
@@ -165,14 +168,9 @@ function rangeValue(event) {
             </div>
             <Benefits />
         </div>
-     <Modal
-            maxWidth="md"
-            :show="isOpenTermsModal"
-            @close="isOpenTermsModal = false"
-            closeable
-     >
-    <TermsAndConditions/>
-    </Modal>
-     
+        <Modal maxWidth="md" :show="isOpenTermsModal" @close="isOpenTermsModal = false" closeable>
+            <TermsAndConditions @accepted="acceptTerms" />
+        </Modal>
+
     </DefaultLayout>
 </template>
