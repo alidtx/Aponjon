@@ -14,6 +14,8 @@ import SelectInput from '@/Components/SelectInput.vue';
 import Upolad from '@/Components/Upolad.vue';
 import Modal from '@/Components/Modal.vue';
 import TermsAndConditions from './Partials/TermsAndConditions.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Checkbox from '@/Components/Checkbox.vue';
 
 
 const props = defineProps({
@@ -36,6 +38,7 @@ const form = useForm({
     district_id: '',
     zila_id: '',
     upozila_id: '',
+    is_terms_and_condition_accept:false
 });
 
 
@@ -67,6 +70,7 @@ function rangeValue(event) {
                 <form id="taskerRegistrationForm">
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-dark mb-6">ব্যক্তিগত তথ্য</h3>
+                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <InputLabel for="name" value="পূর্ণ নাম" required />
@@ -142,18 +146,21 @@ function rangeValue(event) {
                     </div>
                     <div class="mb-6">
                         <div class="flex items-start">
-                            <input type="checkbox" class="w-5 h-5 text-primary rounded mt-1" required>
-                            <label class="ml-3 text-gray-700" >
+                            <Checkbox class="w-4 h-4 mt-1"
+                            v-model="form.is_terms_and_condition_accept"
+                            @click.prevent="isOpenTermsModal = true"
+                            />
+                            <label class="ml-2 text-gray-700" >
                                 আমি <a href="#" @click.prevent="isOpenTermsModal = true" class="text-primary hover:underline">টার্মস অ্যান্ড কন্ডিশন</a> পড়েছি এবং সম্মতি
                                 দিচ্ছি
                             </label>
                         </div>
                     </div>
 
-                    <button type="submit" 
-                        class="w-full bg-primary text-white py-4 rounded-lg hover:bg-blue-700 font-medium text-lg">
+                    <PrimaryButton type="submit"
+                        class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg">
                         রেজিস্টার সম্পন্ন করুন
-                    </button>
+                    </PrimaryButton>
                 </form>
             </div>
             <Benefits />

@@ -33,7 +33,7 @@ const accpetTermsCondition = () => {
 </h3>
 
 <p class="mb-4">
-এই শর্তাবলী গ্রহণ করার মাধ্যমে মার্চেন্ট Paysuite Fintech Limited এর পেমেন্ট গেটওয়ে ব্যবহার করে একটি মার্চেন্ট অ্যাকাউন্ট খুলতে পারবেন এবং এখানে বর্ণিত শর্তসমূহ পূরণ সাপেক্ষে পেমেন্ট গেটওয়ে সেবা গ্রহণ করতে পারবেন।
+এই শর্তাবলী গ্রহণ করার মাধ্যমে মার্চেন্ট Aponjon এর পেমেন্ট গেটওয়ে ব্যবহার করে একটি মার্চেন্ট অ্যাকাউন্ট খুলতে পারবেন এবং এখানে বর্ণিত শর্তসমূহ পূরণ সাপেক্ষে পেমেন্ট গেটওয়ে সেবা গ্রহণ করতে পারবেন।
 </p>
 
 <!-- Terms -->
@@ -93,7 +93,7 @@ PFL সীমিত কিছু লেনদেন পরীক্ষা কর
     <!-- Footer -->
     <div class="flex items-center justify-center  text-xs font-normal text-gray-600">
                 <PrimaryButton @click.prevent="accpetTermsCondition">
-                    I agree and accept the terms and conditions
+                    আমি শর্তাবলী মেনে নিচ্ছি এবং তা গ্রহণ করছি।
                 </PrimaryButton>
             </div>
 
