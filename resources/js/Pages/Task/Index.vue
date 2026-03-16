@@ -17,6 +17,7 @@ import TermsAndConditions from './Partials/TermsAndConditions.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import TextArea from '@/Components/TextArea.vue';
+import TagsInput from '@/Components/TagsInput.vue';
 
 
 const props = defineProps({
@@ -141,8 +142,7 @@ const submit = () =>{
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
                                 <InputLabel for="skils" value="দক্ষাতা" required />
-                                <TextInput v-model="form.skills" :errors="form.errors" type="text" class="w-full p-3"
-                                    placeholder="আপনি কি কাজে দক্ষ ?" />
+                                <TagsInput v-model="skills" :errors="form.errors" placeholder="আপনি কি কাজে দক্ষ ?" />
                                 <InputError class="mt-2" :message="form.errors.skills"/>
                             </div>
                             <div>
