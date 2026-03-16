@@ -40,8 +40,7 @@ class UserService
             'zila_id' => $request->zila_id,
             'upozila_id' => $request->upozila_id,
             'hourly_rate' => $request->hourly_rate,
-            'nid_front' => $request->nid_front,
-            'nid_back' => $request->nid_back,
+            'document' => $request->nid_front,
             'is_terms_and_condition_accept' => $request->is_terms_and_condition_accept,
         ]);
     }

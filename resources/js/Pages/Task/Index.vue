@@ -48,8 +48,7 @@ const form = useForm({
     upozila_id: '',
     bio: '',
     hourly_rate: sliderValue.value,
-    nid_front: '',
-    nid_back: '',
+    document: '',
     is_terms_and_condition_accept: false
 });
 
@@ -74,7 +73,7 @@ const acceptTerms = () => {
 }
 
 const submit = () =>{
-    console.log('dd')
+     console.log('dd')
     form.post(route('tasker.store.profile'),{
 
     })
@@ -142,7 +141,7 @@ const submit = () =>{
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
                                 <InputLabel for="skils" value="দক্ষাতা" required />
-                                <TagsInput v-model="skills" :errors="form.errors" placeholder="আপনি কি কাজে দক্ষ ?" />
+                                <TagsInput v-model="form.skills" :errors="form.errors" placeholder="আপনি কি কাজে দক্ষ ?" />
                                 <InputError class="mt-2" :message="form.errors.skills"/>
                             </div>
                             <div>

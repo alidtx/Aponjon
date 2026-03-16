@@ -49,7 +49,6 @@ Route::middleware(['auth', 'role:tasker','verified'])->group(function () {
      Route::prefix('tasker')->name('tasker.')->group(function(){
           Route::get('create-profile', [TaskController::class,'createProfile'])->name('create-profile');
           Route::post('store-profile', [TaskController::class,'storeProfile'])->name('store.profile');
-          Route::get('dashboard', [TaskController::class,'dashboard'])->name('dashboard');
      });
 });
 

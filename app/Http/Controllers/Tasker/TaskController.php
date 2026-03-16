@@ -21,7 +21,8 @@ class TaskController extends Controller
     ]);
   }
   public function storeProfile(TaskerProfileRequest $request)
-  {
+  {    
+    dd($request->all());
     UserService::storeTaskerProfile($request);
   }
 }
