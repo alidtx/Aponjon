@@ -156,25 +156,22 @@ class TaskService
 
         return $categories;
     }
-    public static function storeTaskerProfile($request)
-    {
-        $tasker = TaskerProfile::create([
-            'nid_number' => $request->nid_number,
-            'skills' => $request->skills,
-            'experience' => $request->experience,
-            'district_id' => $request->district_id,
-            'zila_id' => $request->zila_id,
-            'upozila_id' => $request->upozila_id,
-            'hourly_rate' => $request->hourly_rate,
-            'is_terms_and_condition_accept' => $request->is_terms_and_condition_accept,
-        ]);
+public static function storeTaskerProfile($request)
+{
+    $tasker = TaskerProfile::create([
+        'user_id' => auth()->id(),
+        'nid_number' => $request->nid_number,
+        'bio' => $request->bio,
+        'skill' => $request->skills, // ✅ FIXED
+        'experience' => $request->experience,
+        'district_id' => $request->district_id,
+        'zila_id' => $request->zila_id,
+        'upozila_id' => $request->upozila_id,
+        'hourly_rate' => $request->hourly_rate,
+        'document' => $request->document,
+        'is_terms_and_condition_accept' => $request->is_terms_and_condition_accept,
+    ]);
 
-        if ($request->hasFile('nid_front')) {
-            MediaService::upload(file: $request->file('nid_front'), path: 'tasker/documents', name: 'NID Front', documentTypeId: null, fileable: $tasker);
-        }
-        if ($request->hasFile('nid_back')) {
-            MediaService::upload(file: $request->file('nid_back'), path: 'tasker/documents', name: 'NID Back', documentTypeId: null, fileable: $tasker);
-        }
-        return $tasker;
-    }
+    return $tasker;
+}
 }

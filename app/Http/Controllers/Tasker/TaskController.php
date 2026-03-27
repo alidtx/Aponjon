@@ -26,9 +26,14 @@ class TaskController extends Controller
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
   }
-  public function storeProfile(Request $request)
+  public function storeProfile(TaskerProfileRequest $request)
   {
-    dd($request->all());
-    TaskService::storeTaskerProfile($request);
+    $response=TaskService::storeTaskerProfile($request);
+    return response()->json([
+    'success' => true,
+    'message' => 'Tasker profile created successfully',
+    'data' => $response,
+], 201); 
+
   }
 }

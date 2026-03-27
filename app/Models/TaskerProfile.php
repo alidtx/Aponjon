@@ -16,7 +16,7 @@ class TaskerProfile extends Model
         'upozila_id',
         'bio',
         'skill',
-        'daily_rate',
+        'hourly_rate',
         'document',
         'nid_number',
         'experience',
@@ -52,6 +52,6 @@ class TaskerProfile extends Model
         'experience' => 'array',
         'is_online' => 'boolean',
         'rating' => 'float',
-        'daily_rate' => 'float',
+        'hourly_rate' => 'float',
     ];
 }

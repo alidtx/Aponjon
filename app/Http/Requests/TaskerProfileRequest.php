@@ -22,9 +22,6 @@ class TaskerProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:60',
-            'phone_number' => 'required|numeric|digits:11',
-            'email' => 'required|email',
             'nid_number' => 'required|numeric|digits_between:10,17',
             'skills' => 'required|array|min:1',
             'skills.*' => 'string',
@@ -47,18 +44,7 @@ class TaskerProfileRequest extends FormRequest
      */
     public function messages(): array
     {
-        return [
-            'name.required' => 'নামের ঘরটি পূরণ করা আবশ্যক',
-            'name.string' => 'নামটি সঠিক ফরম্যাটে প্রদান করুন',
-            'name.max' => 'নাম ৬০ অক্ষরের বেশি হতে পারবে না',
-            
-            'phone_number.required' => 'মোবাইল নম্বর প্রদান করা আবশ্যক',
-            'phone_number.numeric' => 'মোবাইল নম্বরটি সঠিক ফরম্যাটে প্রদান করুন',
-            'phone_number.digits' => 'মোবাইল নম্বরটি ১১ অংকের হতে হবে',
-            
-            'email.required' => 'ইমেইল ঠিকানা প্রদান করা আবশ্যক',
-            'email.email' => 'সঠিক ইমেইল ঠিকানা প্রদান করুন',
-            
+        return [    
             'nid_number.required' => 'এনআইডি নম্বর প্রদান করা আবশ্যক',
             'nid_number.numeric' => 'এনআইডি নম্বরটি সঠিক ফরম্যাটে প্রদান করুন',
             'nid_number.digits_between' => 'এনআইডি নম্বরটি ১০ থেকে ১৭ অংকের মধ্যে হতে হবে',
