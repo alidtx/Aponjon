@@ -49,7 +49,7 @@ class TaskerProfile extends Model
     protected $casts = [
         'skill' => 'array',
         'document' => 'array',
-        'experience' => 'array',
+        'experience' => 'integer',
         'is_online' => 'boolean',
         'rating' => 'float',
         'hourly_rate' => 'float',

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enum;
 
-use App\Enums\Attributes\Description;
-use App\Enums\Attributes\EnumAttributes;
+use App\Enum\Attributes\Description;
+use App\Enum\Attributes\EnumAttributes;
 
 enum MediaType: string
 {

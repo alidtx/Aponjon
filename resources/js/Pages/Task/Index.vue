@@ -57,11 +57,14 @@ const form = useForm({
 const placeholder = `৮ বছরের অভিজ্ঞতা নিয়ে আমি একজন প্রফেশনাল ইলেকট্রিশিয়ান। বাসা-বাড়ি, অফিস, দোকান - সকল ধরনের ইলেকট্রিক্যাল কাজে আমি পারদর্শী। আমি শুধু মেরামতই নয়, নতুন ওয়্যারিং,ইলেকট্রিক্যাল ডিজাইন এবং এনার্জি এফিসিয়েন্ট সলিউশনও প্রদান করি।`
 
 const Options = [
-    { value: '1', label: '১ বছর' },
-    { value: '2', label: '২ বছর' },
-    { value: '3', label: '৩ বছর' },
-    { value: '4', label: '৪ বছর' },
-    { value: '5', label: '৫+ বছর' },
+    { value: 1, label: '১ বছর' },
+    { value: 2, label: '২ বছর' },
+    { value: 3, label: '৩ বছর' },
+    { value: 4, label: '৪ বছর' },
+    { value: 5, label: '৫ বছর' },
+    { value: 6, label: '6+ বছর' },
+    { value: 7, label: '7+ বছর' },
+    { value: 8, label: '8+ বছর' },
 ]
 
 function rangeValue(event) {

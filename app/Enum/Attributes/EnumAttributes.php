@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Attributes;
+namespace App\Enum\Attributes;
 
 use ReflectionClassConstant;
 

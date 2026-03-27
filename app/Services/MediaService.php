@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Models;
+namespace App\Services;
 
-use App\Enums\MediaType;
+use App\Enum\MediaType;
 use App\Models\Media;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -31,7 +31,6 @@ class MediaService
             'name' => $name,
             'fileable_id' => $fileable?->id,
             'fileable_type' => $fileable ? get_class($fileable) : null,
-            'document_type_id' => $documentTypeId,
         ]);
     }
 
