@@ -78,10 +78,17 @@ const acceptTerms = () => {
 }
 
 const submit = () => {
-    console.log('dd')
     form.post(route('tasker.store.profile'), {
-
-    })
+        onSuccess: (page) => {
+            console.log('Success:', page);
+        },
+        onError: (errors) => {
+            console.log('Errors:', errors);
+        },
+        onFinish: () => {
+            console.log('Request finished');
+        }
+    });
 }
 
 

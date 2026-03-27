@@ -10,6 +10,7 @@ use App\Http\Resources\ZilaResource;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -26,14 +27,14 @@ class TaskController extends Controller
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
   }
-  public function storeProfile(TaskerProfileRequest $request)
-  {
-    $response=TaskService::storeTaskerProfile($request);
-    return response()->json([
-    'success' => true,
-    'message' => 'Tasker profile created successfully',
-    'data' => $response,
-], 201); 
-
-  }
+  public function storeProfile(TaskerProfileRequest $request) : JsonResponse
+{
+    $result = TaskService::storeTaskerProfile($request);
+    
+    if (!$result['success']) {
+        return response()->json($result, 422);
+    }
+    
+    return response()->json($result, 200);
+}
 }

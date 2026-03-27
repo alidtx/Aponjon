@@ -169,7 +169,6 @@ class TaskService
             'upozila_id' => $request->upozila_id,
             'hourly_rate' => $request->hourly_rate,
             'document' => $request->document,
-            'is_terms_and_condition_accept' => $request->is_terms_and_condition_accept,
         ]);
 
         if ($request->hasFile('nid_front')) {
