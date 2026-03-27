@@ -1,14 +1,9 @@
 <?php
 
 namespace App\Services;
-
-use App\Models\Otp;
-use App\Models\TaskerProfile;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Random\RandomException;
 use Illuminate\Support\Facades\Hash;
+
 
 class UserService
 {
@@ -25,23 +20,5 @@ class UserService
         ]);
 
         return $user;
-    }
-
-    public static function storeTaskerProfile($request)
-    {
-        return TaskerProfile::create([
-            'name' => $request->name,
-            'phone_number' => $request->phone_number,
-            'email' => $request->email,
-            'nid_number' => $request->nid_number,
-            'skills' => $request->skills,
-            'experience' => $request->experience,
-            'district_id' => $request->district_id,
-            'zila_id' => $request->zila_id,
-            'upozila_id' => $request->upozila_id,
-            'hourly_rate' => $request->hourly_rate,
-            'document' => $request->nid_front,
-            'is_terms_and_condition_accept' => $request->is_terms_and_condition_accept,
-        ]);
     }
 }

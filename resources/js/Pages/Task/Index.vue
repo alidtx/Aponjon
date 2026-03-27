@@ -37,9 +37,6 @@ const sliderValue = ref(250)
 const isOpenTermsModal = ref(false)
 
 const form = useForm({
-    name:'',
-    phone_number:'',
-    email:'',
     nid_number:'',
     skills:'',
     experience:'',
@@ -48,7 +45,8 @@ const form = useForm({
     upozila_id: '',
     bio: '',
     hourly_rate: sliderValue.value,
-    document: '',
+    nid_front: '',
+    nid_back: '',
     is_terms_and_condition_accept: false
 });
 
@@ -99,22 +97,21 @@ const submit = () =>{
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <InputLabel for="name" value="পূর্ণ নাম" required />
-                                <TextInput v-model="form.name" type="text" class="w-full p-3"
+                                <InputLabel for="name" value="পূর্ণ নাম" />
+                                <TextInput  type="text" class="w-full p-3"
                                     placeholder="আপনার পূর্ণ নাম লিখুন" 
-                                    :error="form.errors.name"
+                                     readonly="true"  
                                     />
-                                <InputError class="mt-2" :message="form.errors.name"/>
                             </div>
                             <div>
                                 <InputLabel for="number" value="মোবাইল নম্বর" required />
-                                <TextInput v-model="form.phone_number" :error="form.errors.phone_number" type="number" class="w-full p-3" placeholder="আপনার ফোন নম্বর লিখুন" />
-                                <InputError class="mt-2" :message="form.errors.name"/>
+                                <TextInput v-model="form.phone_number"  type="number" class="w-full p-3" placeholder="আপনার ফোন নম্বর লিখুন" 
+                                 readonly="true"
+                                />
                             </div>
                             <div>
                                 <InputLabel for="email" value="ইমেইল" required />
-                                <TextInput v-model="form.email" :error="form.errors.email" type="email" class="w-full p-3" placeholder="আপনার ইমেইল লিখুন" />
-                                <InputError class="mt-2" :message="form.errors.email"/>
+                                <TextInput v-model="form.email" type="email" class="w-full p-3" placeholder="আপনার ইমেইল লিখুন"  readonly="true"/>
                             </div>
                             <div>
                                 <InputLabel for="nid_number" value="এনআইডি নম্বর" required />

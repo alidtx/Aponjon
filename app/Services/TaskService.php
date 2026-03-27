@@ -6,8 +6,8 @@ use App\Models\Task;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enum\PaginationLimits;
 use App\Models\Category;
-use App\Models\District;
-use App\Models\Zila;
+use App\Services\Models\MediaService;
+use App\Models\TaskerProfile;
 use Illuminate\Http\Request;
 
 class TaskService
@@ -93,38 +93,38 @@ class TaskService
         }
     }
 
-   private static function applyKeywordFilter($query, $value): void
-{
-    if (empty($value)) {
-        return;
-    }
-
-    $value = trim($value);
-
-    if ($value === '') {
-        return;
-    }
-
-    $query->where(function ($q) use ($value) {
-        if (is_numeric($value)) {
-            $q->where('id', (int) $value);
-        } else {
-            $q->where('title', 'LIKE', "%{$value}%")
-              ->orWhere('description', 'LIKE', "%{$value}%");
+    private static function applyKeywordFilter($query, $value): void
+    {
+        if (empty($value)) {
+            return;
         }
-    });
-}
-private static function applySorting($query, string $sort=null): void
-{
-    match ($sort) {
-        'newest'     => $query->orderBy('created_at', 'desc'),
-        'oldest'     => $query->orderBy('created_at', 'asc'),
-        'budget_high' => $query->orderBy('budget', 'desc'),
-        'budget_low'  => $query->orderBy('budget', 'asc'),
-        'urgent'  => $query->where('emergency', 'emergency'),
-         default => $query->orderByDesc('id'),
-    };
-}
+
+        $value = trim($value);
+
+        if ($value === '') {
+            return;
+        }
+
+        $query->where(function ($q) use ($value) {
+            if (is_numeric($value)) {
+                $q->where('id', (int) $value);
+            } else {
+                $q->where('title', 'LIKE', "%{$value}%")
+                    ->orWhere('description', 'LIKE', "%{$value}%");
+            }
+        });
+    }
+    private static function applySorting($query, string $sort = null): void
+    {
+        match ($sort) {
+            'newest'     => $query->orderBy('created_at', 'desc'),
+            'oldest'     => $query->orderBy('created_at', 'asc'),
+            'budget_high' => $query->orderBy('budget', 'desc'),
+            'budget_low'  => $query->orderBy('budget', 'asc'),
+            'urgent'  => $query->where('emergency', 'emergency'),
+            default => $query->orderByDesc('id'),
+        };
+    }
 
     private static function applyLocationFilter($query, string $field, $value, string $relation): void
     {
@@ -156,5 +156,25 @@ private static function applySorting($query, string $sort=null): void
 
         return $categories;
     }
-   
+    public static function storeTaskerProfile($request)
+    {
+        $tasker = TaskerProfile::create([
+            'nid_number' => $request->nid_number,
+            'skills' => $request->skills,
+            'experience' => $request->experience,
+            'district_id' => $request->district_id,
+            'zila_id' => $request->zila_id,
+            'upozila_id' => $request->upozila_id,
+            'hourly_rate' => $request->hourly_rate,
+            'is_terms_and_condition_accept' => $request->is_terms_and_condition_accept,
+        ]);
+
+        if ($request->hasFile('nid_front')) {
+            MediaService::upload(file: $request->file('nid_front'), path: 'tasker/documents', name: 'NID Front', documentTypeId: null, fileable: $tasker);
+        }
+        if ($request->hasFile('nid_back')) {
+            MediaService::upload(file: $request->file('nid_back'), path: 'tasker/documents', name: 'NID Back', documentTypeId: null, fileable: $tasker);
+        }
+        return $tasker;
+    }
 }

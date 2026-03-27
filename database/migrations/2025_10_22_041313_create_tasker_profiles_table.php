@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->text('bio')->nullable();
             $table->json('skill')->nullable();
-            $table->decimal('daily_rate',8,2)->nullable();
+            $table->decimal('hourly_rate',8,2)->nullable();
             $table->json('document')->nullable();
             $table->enum('verification_status', ['pending', 'verified', 'rejected'])->default('pending');
             $table->decimal('rating', 3, 2)->default(0);

@@ -7,9 +7,11 @@ use App\Http\Requests\TaskerProfileRequest;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\ZilaResource;
 use App\Services\LocationService;
-use App\Services\UserService;
-use Illuminate\Http\Request;
+use App\Services\TaskService;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+
+
 
 class TaskController extends Controller
 {
@@ -20,9 +22,9 @@ class TaskController extends Controller
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
   }
-  public function storeProfile(TaskerProfileRequest $request)
-  {    
+  public function storeProfile(Request $request)
+  {      
     dd($request->all());
-    UserService::storeTaskerProfile($request);
+    TaskService::storeTaskerProfile($request);
   }
 }
