@@ -18,6 +18,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import TextArea from '@/Components/TextArea.vue';
 import TagsInput from '@/Components/TagsInput.vue';
+import { toast } from 'vue3-toastify'
 
 
 const props = defineProps({
@@ -79,16 +80,15 @@ const acceptTerms = () => {
 
 const submit = () => {
     form.post(route('tasker.store.profile'), {
-        onSuccess: (page) => {
-            console.log('Success:', page);
-        },
-        onError: (errors) => {
-            console.log('Errors:', errors);
-        },
-        onFinish: () => {
-            console.log('Request finished');
-        }
-    });
+    onSuccess: (response) => {
+        
+    },
+    onError: (errors) => {
+        toast.error('অনুগ্রহ করে ফর্মের ভুলগুলো ঠিক করুন',{
+            position:'bottom-right'
+        });
+    },
+});
 }
 
 
