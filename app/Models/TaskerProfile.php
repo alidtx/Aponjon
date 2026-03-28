@@ -17,7 +17,6 @@ class TaskerProfile extends Model
         'bio',
         'skill',
         'hourly_rate',
-        'document',
         'nid_number',
         'experience',
         'verification_status',
@@ -48,7 +47,6 @@ class TaskerProfile extends Model
 
     protected $casts = [
         'skill' => 'array',
-        'document' => 'array',
         'experience' => 'integer',
         'is_online' => 'boolean',
         'rating' => 'float',

@@ -19,8 +19,8 @@ return new class extends Migration
                 ->constrained('upozilas')
             ->nullOnDelete();
 
-            $table->string('nid_number')->nullable()->after('document');
-            $table->json('experience')->nullable()->after('document');
+            $table->string('nid_number')->nullable()->after('skill');
+            $table->json('experience')->nullable()->after('skill');
         });
     }
 
