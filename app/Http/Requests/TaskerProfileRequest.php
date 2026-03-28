@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NidNumberRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TaskerProfileRequest extends FormRequest
@@ -22,14 +23,14 @@ class TaskerProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nid_number' => 'required|numeric|digits_between:10,17',
+            'nid_number' => ['required', new NidNumberRule()],
             'skills' => 'required|array|min:1',
             'skills.*' => 'string',
             'experience' => 'required|string|max:500',
             'district_id' => 'required|integer|exists:districts,id',
             'zila_id' => 'required|integer',
             'upozila_id' => 'required|integer',
-            'bio' => 'required|string|max:1000',
+            'bio' => 'required|string|max:150',
             'hourly_rate' => 'required|numeric|min:0',
             'nid_front' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'nid_back' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
