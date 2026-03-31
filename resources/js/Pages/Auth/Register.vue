@@ -19,6 +19,16 @@ const form = useForm({
 
 const showRegistrationForm = ref(false); 
 const selectedRole = ref(''); 
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
+const showPasswordToggle = () => {
+    showPassword.value = !showPassword.value;
+};
+
+const showConfirmPasswordToggle = () => {
+    showConfirmPassword.value = !showConfirmPassword.value;
+};
 
 const FormRoleToggle = (role) => {
     showRegistrationForm.value = true;
@@ -152,18 +162,42 @@ const submit = () => {
                        <TextInput id="phone" type="text" class="mt-1 block w-full" v-model="form.phone" placeholder="মোবাইল নম্বর"/>
                        <InputError class="mt-2" :message="form.errors.phone" />
                  </div>
-                <div class="mb-4">
+                <div class="mb-4 relative">
                     <InputLabel for="password" value="পাসওয়ার্ড" required/>
-                    <TextInput id="password" type="password" class="mt-1 block w-full" placeholder="আপনার পাসওয়ার্ড"
+                    <div class="relative">
+
+                    
+                    <TextInput id="password"  class="mt-1 block w-full" placeholder="আপনার পাসওয়ার্ড"
                         v-model="form.password" 
-                        autocomplete="new-password" />
-                    <InputError class="mt-2" :message="form.errors.password" />
+                        autocomplete="new-password" 
+                        :type="showPassword ? 'text' : 'password'"
+                        />
+                        <button 
+                            type="button" 
+                            @click="showPasswordToggle"
+                            class="absolute text-sm inset-y-0 right-0 pr-3 flex items-center mt-1"
+                        >
+                            <i :class="showPassword ? 'far fa-eye-slash text-gray-600' : 'far fa-eye text-gray-400'"
+                                class="transition-colors duration-200"></i>
+                       </button>
+                        </div>
+                    <InputError class="mt-2" :message="form.errors.password" />   
                 </div>
 
                 <div class="mb-6">
                     <InputLabel for="password_confirmation" value="পাসওয়ার্ড নিশ্চিত করুন" required/>
-                    <TextInput id="password_confirmation" placeholder="পাসওয়ার্ড নিশ্চিত করুন" type="password" class="mt-1 block w-full"
+                    <div class="relative">
+                    <TextInput id="password_confirmation" placeholder="পাসওয়ার্ড নিশ্চিত করুন" :type="showConfirmPassword ? 'text' : 'password'" class="mt-1 block w-full"
                         v-model="form.password_confirmation"  autocomplete="new-password" />
+                        <button 
+                            type="button" 
+                            @click="showConfirmPasswordToggle"
+                            class="absolute text-sm inset-y-0 right-0 pr-3 flex items-center mt-1"
+                        >
+                            <i :class="showConfirmPassword ? 'far fa-eye-slash text-gray-600' : 'far fa-eye text-gray-400'"
+                                class="transition-colors duration-200"></i>
+                       </button>
+                    </div>
                     <InputError class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
 
