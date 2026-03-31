@@ -22,14 +22,13 @@ class RegisteredUserController extends Controller
    
     public function store(RegisterUserRequest $request): RedirectResponse
     {
-        
+        dd($request->all()); 
         $user=UserService::register($request);
 
         Session::put('otp_verified_user_id', $user->id);
 
-        // Session::put('otp_identifier', $user->phone ?? $user->email);
-        
         UserRegistered::dispatch($user);
+
         event(new Registered($user));
         
         return redirect()->route('otp.verify');

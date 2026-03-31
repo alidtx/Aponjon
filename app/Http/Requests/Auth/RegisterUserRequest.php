@@ -8,53 +8,36 @@ use App\Rules\BdPhoneNumberRule;
 
 class RegisterUserRequest extends FormRequest
 {
-    
+
     public function authorize(): bool
     {
-        return true; 
+        return true;
     }
 
-   
-   public function rules(): array
-{
-    $identifier = $this->input('identifier');
 
-    if (preg_match('/^\d+$/', $identifier)) {
+    public function rules(): array
+    {
         return [
             'name' => 'required|string|max:255',
-            'identifier' => ['required', new BdPhoneNumberRule, 'unique:users,phone'],
+            'email' => 'required|email:rfc,dns|unique:users,email',
+            'phone' => ['required', new BdPhoneNumberRule, 'unique:users,phone'],
             'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
-    return [
-        'name' => 'required|string|max:255',
-        'identifier' => 'required|email:rfc,dns|unique:users,email',
-        'password' => ['required', 'confirmed', Password::defaults()],
-    ];
-}
 
-public function messages(): array
-{
-    $identifier = $this->input('identifier');
-
-    $commonMessages = [
+    public function messages(): array
+    {
+        return [
         'name.required' => 'আপনার পূর্ণ নাম লিখুন।',
+        'name.string' => 'নাম অবশ্যই সঠিক ফরম্যাটে লিখতে হবে।',
+        'name.max' => 'নাম ২৫৫ অক্ষরের বেশি হতে পারবে না।',
+        'email.required' => 'অনুগ্রহ করে একটি ইমেইল ঠিকানা লিখুন।',
+        'email.email' => 'সঠিক ইমেইল ঠিকানা প্রদান করুন।',
+        'email.unique' => 'এই ইমেইলটি ইতিমধ্যে ব্যবহার করা হয়েছে।',
+        'phone.required' => 'অনুগ্রহ করে একটি ফোন নম্বর লিখুন।',
+        'phone.unique' => 'এই ফোন নম্বরটি ইতিমধ্যে ব্যবহার করা হয়েছে।',
         'password.required' => 'অনুগ্রহ করে একটি পাসওয়ার্ড লিখুন।',
         'password.confirmed' => 'পাসওয়ার্ড নিশ্চিতকরণ মিলছে না।',
     ];
-
-    if (preg_match('/^\d+$/', $identifier)) {
-        return $commonMessages + [
-            'identifier.required' => 'অনুগ্রহ করে বাংলাদেশী ফোন নাম্বার অথবা ইমেলটি লিখুন।',
-            'identifier.unique' => 'এই ফোন নম্বর ইতিমধ্যেই নিবন্ধিত।',
-        ];
-    } else {
-        return $commonMessages + [
-            'identifier.required' => 'অনুগ্রহ করে বাংলাদেশী ফোন নাম্বার অথবা ইমেলটি লিখুন।',
-            'identifier.email' => 'দয়া করে বৈধ ইমেইল ঠিকানা লিখুন।',
-            'identifier.unique' => 'এই ইমেইল ইতিমধ্যেই নিবন্ধিত।',
-        ];
     }
-}
-
 }
