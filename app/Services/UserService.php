@@ -9,12 +9,11 @@ class UserService
 {
     public static function register($request)
     {
-        $identifier = $request->input('identifier');
-
+        
         $user = User::create([
             'name' => $request->name,
-            'email' => filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : null,
-            'phone' => !filter_var($identifier, FILTER_VALIDATE_EMAIL) ? $identifier : null,
+            'email' => $request->email,
+            'phone' => $request->phone,
             'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
