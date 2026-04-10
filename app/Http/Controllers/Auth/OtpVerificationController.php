@@ -16,24 +16,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OtpVerificationController extends Controller
 {
- public function showVerificationForm()
+ public function showVerificationForm(Request $request)
 {
-
-    $userId = Session::get('otp_verified_user_id');
-    
-    // if (!$userId) {
-    //     return redirect()->route('register');
-    // }
-
-    $user = User::find($userId);
-
-    // if (!$user) {
-    //     Session::forget('otp_verified_user_id');
-    //     return redirect()->route('register');
-    // }
-
     return Inertia::render('Auth/VerifyOtp', [
-        'contact' => $user->phone ?? $user->email??'',
+         'guest' => [
+                'email' => request()->input('email'),
+                'mobile' => request()->input('mobile'),
+            ],
     ]);
 
 }
@@ -53,8 +42,7 @@ public function resend(Request $request)
   public function verify(Request $request)
   {
 
-    $userId = Session::get('otp_verified_user_id'); //user id
-    $user = User::findOrFail($userId);
+    $user = User::where('email', $request->email)->firstOrFail();
     $cacheKey = $user?->login_attempts_cache_key;
     $maxLoginAttempts = config('aponjon.static_data.max_login_attempts');
     $loginAttemptTimeout = config('aponjon.static_data.login_attempt_timeout_in_minutes');

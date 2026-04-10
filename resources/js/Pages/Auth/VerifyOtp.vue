@@ -11,8 +11,12 @@ const showResendButton = ref(false);
 const timer = ref(null);
 const timeLeft = ref(2 * 60);
 const page = usePage();
-const contact = page.props.contact;
+const email=computed(() => page.props.guest.email);
+const mobile=computed(() => page.props.guest.mobile);
+
 const form = useForm({
+    email: email.value,
+    mobile: mobile.value,
     otp: '',
 });
 
@@ -134,7 +138,7 @@ onUnmounted(() => {
                     <i class="fas fa-mobile-alt text-4xl text-primary"></i>
                 </div>
                 <p class="text-gray-700">
-                    আমরা <span class="font-semibold">{{ contact }}</span> নম্বরে একটি ওটিপি পাঠিয়েছি
+                    আমরা <span class="font-semibold">{{ email }}</span> নম্বরে একটি ওটিপি পাঠিয়েছি
                 </p>
             </div>
 

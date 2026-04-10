@@ -25,12 +25,10 @@ class RegisteredUserController extends Controller
 
         $user=UserService::register($request);
 
-        Session::put('otp_verified_user_id', $user->id);
-
         UserRegistered::dispatch($user);
 
         event(new Registered($user));
-        
-        return redirect()->route('otp.verify');
+
+        return redirect()->route('otp.verify', ['email' => $user->email,'mobile' => $user->phone ?? '']);
     }
 }
