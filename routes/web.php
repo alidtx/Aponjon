@@ -32,7 +32,7 @@ Route::post('/bid-store', [BidController::class, 'bidStore'])->name('bid.store')
 Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:admin'])->group(function () {
-        
+
         Route::get('admin', function () {
             return 'admin';
         });
@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:tasker'])->group(function () {
         
     Route::prefix('tasker')->name('tasker.')->group(function () {
-        Route::get('create-profile', [TaskController::class, 'createProfile'])->name('create-profile');
+        Route::get('create-profile', [TaskController::class, 'createProfile'])->name('create.profile');
         Route::post('store-profile', [TaskController::class, 'storeProfile'])->name('store.profile');
     });
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Events\EmailNotVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,7 +35,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse|JsonResponse
+    public function store(LoginRequest $request)
     {
 
         $user = UserService::findbyEmail($request->email);
@@ -63,12 +64,12 @@ class AuthenticatedSessionController extends Controller
 
         if (!$user->is_verified) {
             EmailNotVerified::dispatch($user);
-            return redirect()->route('otp.verify', ['email' => $user->email,'mobile' => $user->phone ?? '']);
+            return redirect()->route('otp.verify', ['email' => $user->email, 'mobile' => $user->phone ?? '']);
         }
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return UserService::roleBaseRedirect($user);
     }
 
     /**
