@@ -60,12 +60,10 @@ class AuthenticatedSessionController extends Controller
         }
         Cache::forget($cacheKey);
 
-        if (is_null($user->is_Verified) || $user->is_Verified === false) {
-            return redirect()->route('otp.verify', [
-                'email' => $user->email,
-            ]);
+        if (!$user->is_verified) {
+            return redirect()->route('otp.verify');
         }
-
+        Auth::login($user); 
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

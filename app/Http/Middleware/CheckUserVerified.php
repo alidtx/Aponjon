@@ -15,11 +15,6 @@ class CheckUserVerified
         if (!$user) {
             abort(401, 'Unauthenticated.');
         }
-    
-        if (!$user->is_verified) {
-            abort(403, 'Please complete verification process.');
-        }
-        
         return $next($request);
     }
 

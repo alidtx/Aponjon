@@ -21,19 +21,19 @@ class OtpVerificationController extends Controller
 
     $userId = Session::get('otp_verified_user_id');
     
-    if (!$userId) {
-        return redirect()->route('register');
-    }
+    // if (!$userId) {
+    //     return redirect()->route('register');
+    // }
 
     $user = User::find($userId);
 
-    if (!$user) {
-        Session::forget('otp_verified_user_id');
-        return redirect()->route('register');
-    }
+    // if (!$user) {
+    //     Session::forget('otp_verified_user_id');
+    //     return redirect()->route('register');
+    // }
 
     return Inertia::render('Auth/VerifyOtp', [
-        'contact' => $user->phone ?? $user->email,
+        'contact' => $user->phone ?? $user->email??'',
     ]);
 
 }
