@@ -144,25 +144,25 @@ const submit = () => {
                 
                 <input type="hidden" v-model="form.role">
 
-                <div class="mb-4">
+                <div class="mb-2">
                     <InputLabel for="name" value="পূর্ণ নাম" required/>
                     <TextInput id="name" type="text" placeholder="আপনার পূর্ণ নাম" class="mt-1 block w-full" v-model="form.name"  autofocus
                         autocomplete="name" />
                     <InputError class="mt-2" :message="form.errors.name" />
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-2">
                     <InputLabel for="email or phone" value="ইমেইল" required/>
                     <TextInput id="email" type="text" class="mt-1 block w-full" v-model="form.email"
                         autocomplete="username" placeholder="ইমেইল"/>
                     <InputError class="mt-2" :message="form.errors.email" />
                 </div>
-                <div class="mb-4">
+                <div class="mb-2">
                        <InputLabel for="phone" value="মোবাইল নম্বর" required/>
                        <TextInput id="phone" type="text" class="mt-1 block w-full" v-model="form.phone" placeholder="মোবাইল নম্বর"/>
                        <InputError class="mt-2" :message="form.errors.phone" />
                  </div>
-                <div class="mb-4 relative">
+                <div class="mb-2 relative">
                     <InputLabel for="password" value="পাসওয়ার্ড" required/>
                     <div class="relative">
 

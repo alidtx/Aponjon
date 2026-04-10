@@ -19,10 +19,9 @@ defineProps({
 });
 
 const form = useForm({
-    login_field: '', 
+    email: '', 
     password: '',
     remember: false,
-    login_type: 'email', 
 });
 
 const submit = () => {
@@ -32,34 +31,11 @@ const submit = () => {
 };
 
 const showPassword = ref(false);
-const loginType = ref('email'); 
 
 const togglePasswordVisibility = () => {
     showPassword.value = !showPassword.value;
 };
 
-const inputType = computed(() => {
-    return loginType.value === 'email' ? 'email' : 'tel'; 
-});
-
-const placeholder = computed(() => {
-    return loginType.value === 'email'
-        ? 'আপনার ইমেইল লিখুন'
-        : 'আপনার ফোন নম্বর লিখুন';
-});
-
-const inputLabel = computed(() => {
-    return loginType.value === 'email' ? 'ইমেইল' : 'ফোন নম্বর';
-});
-
-const inputName = computed(() => {
-    return loginType.value === 'email' ? 'email' : 'phone';
-});
-
-
-const updateLoginField = () => {
-    form.login_field = '';
-};
 </script>
 
 <template>
@@ -78,50 +54,23 @@ const updateLoginField = () => {
         </div>
 
         <div class="bg-white rounded-xl shadow-md p-6">
-            <div class="py-4 text-center">
-                <p class="py-1">অ্যাকাউন্টে লগইন করুন দিয়ে</p>
-                <div class="flex justify-center gap-3">
-                    <InputLabel>
-                        <input 
-                            type="radio" 
-                            v-model="loginType" 
-                            value="email"
-                            @change="updateLoginField"
-                            class="rounded-full border-4 border-gray-400 focus:ring-0 focus:ring-offset-0" 
-                            name="login_type"
-                        >
-                        <span class="ms-2 text-sm text-gray-600">ইমেইল</span>
-                    </InputLabel>
-                    <InputLabel>
-                        <input 
-                            type="radio" 
-                            v-model="loginType" 
-                            value="phone"
-                            @change="updateLoginField"
-                            class="rounded-full border-4 border-gray-400 focus:ring-0 focus:ring-offset-0" 
-                            name="login_type"
-                        >
-                        <span class="ms-2 text-sm text-gray-600">ফোন</span>
-                    </InputLabel>
-                </div>
-            </div>
+            
             
             <form @submit.prevent="submit">
-                <div class="mb-4">
-                    <InputLabel :for="inputName" :value="inputLabel" required />
+                <div class="mb-2">
+                    <InputLabel for="ইমেইল" value="ইমেইল" required />
                     <TextInput  
-                        :id="inputName"
-                        :type="inputType" 
+                        type="email" 
                         class="mt-1 block w-full" 
-                        v-model="form.login_field"
-                        :placeholder="placeholder" 
+                        v-model="form.email"
+                        placeholder="আপনার ইমেইল লিখুন" 
                         autofocus 
-                        :autocomplete="loginType === 'email' ? 'username' : 'tel'"
+                        autocomplete="ইমেইল"
                     />
-                    <InputError class="mt-2" :message="form.errors.login_field" />
+                    <InputError class="mt-2" :message="form.errors.email" />
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-2">
                     <InputLabel for="password" value="পাসওয়ার্ড" required />
                     <div class="relative">
                         <TextInput 
