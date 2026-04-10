@@ -63,7 +63,7 @@ class AuthenticatedSessionController extends Controller
 
         if (!$user->is_verified) {
             EmailNotVerified::dispatch($user);
-            return redirect()->route('otp.verify');
+            return redirect()->route('otp.verify', ['email' => $user->email,'mobile' => $user->phone ?? '']);
         }
         Auth::login($user);
         $request->session()->regenerate();
