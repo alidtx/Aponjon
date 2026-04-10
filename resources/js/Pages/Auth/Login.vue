@@ -7,7 +7,8 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { ref, computed } from 'vue';
+import { ref,} from 'vue';
+import { toast } from 'vue3-toastify';
 
 defineProps({
     canResetPassword: {
@@ -26,6 +27,11 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('login'), {
+        onError: (response) => {
+            toast(response.message || 'An error occurred while trying to log in.', {
+                type: 'error',
+            });
+        },  
         onFinish: () => form.reset('password'),
     });
 };

@@ -115,6 +115,16 @@ class User extends Authenticatable
         return $this->hasOne(Otp::class)->latestOfMany();
     }
 
+     public function getLoginAttemptsCacheKeyAttribute(): string
+    {
+        return 'login_attempts_'.$this->email;
+    }
+
+    public function getLoginAttemptsTimeoutCacheKeyAttribute(): string
+    {
+        return 'login_attempts_'.$this->email.'_timeout';
+    }
+
     public function getFullAddressAttribute(): string
     {
         $parts = [];

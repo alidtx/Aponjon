@@ -20,4 +20,9 @@ class UserService
 
         return $user;
     }
+
+    public static function findbyEmail(string $email) : ?User
+    {
+        return User::where('email', $email)->first();
+    }
 }
