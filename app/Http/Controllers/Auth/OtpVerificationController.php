@@ -13,7 +13,7 @@ use App\Services\UserService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class OtpVerificationController extends Controller
 {
@@ -80,6 +80,7 @@ public function resend(Request $request)
 
     $user->latestOtp->delete();
     Auth::login($user);
+    $request->session()->regenerate();
     return UserService::roleBaseRedirect($user);
   }
 }

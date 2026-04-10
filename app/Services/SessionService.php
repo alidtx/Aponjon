@@ -46,7 +46,7 @@ class SessionService
 
     public static function getAuthenticateUser(Request $request)
     {
-        return $request->session()->get('auth.user');
+        return $request->user();
     }
 
     public static function clean(Request $request): void
