@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
@@ -79,6 +80,6 @@ public function resend(Request $request)
 
     $user->latestOtp->delete();
     Auth::login($user);
-    return redirect()->route('dashboard');
+    return UserService::roleBaseRedirect($user);
   }
 }
