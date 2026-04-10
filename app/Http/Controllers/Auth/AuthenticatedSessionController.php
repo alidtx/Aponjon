@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\EmailNotVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\UserService;
@@ -12,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Cache;;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -45,25 +48,24 @@ class AuthenticatedSessionController extends Controller
 
         if ($attempts >= (int) $maxLoginAttempts) {
             Cache::put($lockExpiryKey, now()->addMinutes((int) $loginAttemptTimeout)->timestamp, $loginAttemptTimeout * 60);
-
-            return back()->withErrors([
-                'message' => 'Too many login attempts. Please try again in ' . $loginAttemptTimeout . ' minutes.',
+            throw ValidationException::withMessages([
+                'message' => 'অত্যধিক লগইন চেষ্টা করা হয়েছে। অনুগ্রহ করে ' . $loginAttemptTimeout . ' মিনিট পরে আবার চেষ্টা করুন.',
             ]);
         }
 
         if (! $user || ! Hash::check($request->password, $user->password) || Cache::has($lockExpiryKey)) {
             Cache::put($cacheKey, $attempts + 1, now()->addMinutes((int) $loginAttemptTimeout));
-
-            return back()->withErrors([
-                'message' => 'The provided credentials are incorrect',
+            throw ValidationException::withMessages([
+                'message' => 'প্রদত্ত ক্রেডেনশিয়াল সঠিক নয়। অনুগ্রহ করে সঠিক তথ্য দিন',
             ]);
         }
         Cache::forget($cacheKey);
 
         if (!$user->is_verified) {
+            EmailNotVerified::dispatch($user);
             return redirect()->route('otp.verify');
         }
-        Auth::login($user); 
+        Auth::login($user);
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

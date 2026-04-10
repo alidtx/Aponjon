@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\EmailNotVerified;
 use App\Events\UserRegistered;
 use App\Services\OtpService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,11 +14,11 @@ class SendOtpNotification implements ShouldQueue
 {    
     use InteractsWithQueue;
 
-    public function handle(UserRegistered $event): void
+    public function handle(UserRegistered | EmailNotVerified $event): void
     {
-
-        $user = $event->user;
        
+        $user = $event->user;
+         
         $phoneOrEmail = $user->phone ?? $user->email;
 
         if (!$phoneOrEmail) {
