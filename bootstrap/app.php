@@ -20,7 +20,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'role'=>CheckUserRole::class,
-            'verified'=>CheckUserVerified::class,
         ]);
 
         //
