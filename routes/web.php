@@ -29,7 +29,7 @@ Route::get('/show-bid-submit-form/{taskId}/{slug}', [BidController::class, 'show
 Route::post('/bid-store', [BidController::class, 'bidStore'])->name('bid.store');
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','profile_completed'])->group(function () {
 
     Route::middleware(['role:admin'])->group(function () {
 
@@ -51,9 +51,12 @@ Route::middleware(['auth'])->group(function () {
         
     Route::prefix('tasker')->name('tasker.')->group(function () {
         Route::get('create-profile', [TaskController::class, 'createProfile'])->name('create.profile');
+        Route::get('dashboard', [TaskController::class, 'dashboard'])->name('dashboard');
         Route::post('store-profile', [TaskController::class, 'storeProfile'])->name('store.profile');
     });
 });
+
+Route::get('awaiting-approval', [TaskController::class, 'awaitingApproval'])->name('awaiting.approval');
 
 });
 

@@ -81,6 +81,6 @@ public function resend(Request $request)
     $user->latestOtp->delete();
     Auth::login($user);
     $request->session()->regenerate();
-    return UserService::roleBaseRedirect($user);
+    return redirect()->route('tasker.dashboard');
   }
 }

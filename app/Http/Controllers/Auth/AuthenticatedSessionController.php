@@ -66,7 +66,7 @@ class AuthenticatedSessionController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return UserService::roleBaseRedirect($user);
+        return redirect()->route('tasker.dashboard');
     }
 
     /**
