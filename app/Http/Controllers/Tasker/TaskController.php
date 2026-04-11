@@ -19,9 +19,16 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+
+  public function index()
+{
+     return Inertia::render('Task/Index');
+
+}
+
   public function createProfile(Request $request)
   {
-    return Inertia::render('Task/Index', [
+    return Inertia::render('Task/CreateProfile', [
       'loggedInUser' => new UserResource(Auth::user()),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
@@ -41,9 +48,5 @@ public function storeProfile(TaskerProfileRequest $request)
         }
     }
 
-public function dashboard()
-{
-     echo "Tasker Dashboard";
 
-}
 }

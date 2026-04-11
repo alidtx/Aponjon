@@ -51,8 +51,8 @@ Route::middleware(['auth','profile_completed'])->group(function () {
     Route::middleware(['role:tasker'])->group(function () {
         
     Route::prefix('tasker')->name('tasker.')->group(function () {
+        Route::get('dashboard', [TaskController::class, 'index'])->name('dashboard');
         Route::get('create-profile', [TaskController::class, 'createProfile'])->name('create.profile');
-        Route::get('dashboard', [TaskController::class, 'dashboard'])->name('dashboard');
         Route::post('store-profile', [TaskController::class, 'storeProfile'])->name('store.profile');
     });
 });
