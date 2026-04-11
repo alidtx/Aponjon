@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\CheckUserVerified;
+use App\Http\Middleware\EnsureAwaitingKycApproval;
 use App\Http\Middleware\IsProfileCompleted;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role'=>CheckUserRole::class,
             'profile_completed'=>IsProfileCompleted::class,
+            'awaiting_kyc_approval'=>EnsureAwaitingKycApproval::class,
         ]);
 
         //

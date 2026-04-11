@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\KycApprovalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Tasker\TaskController;
@@ -55,8 +56,7 @@ Route::middleware(['auth','profile_completed'])->group(function () {
         Route::post('store-profile', [TaskController::class, 'storeProfile'])->name('store.profile');
     });
 });
-
-Route::get('awaiting-approval', [TaskController::class, 'awaitingApproval'])->name('awaiting.approval');
+Route::middleware('awaiting_kyc_approval')->get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])->name('kyc.awaiting-approval.index');
 
 });
 
