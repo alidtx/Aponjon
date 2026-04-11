@@ -44,6 +44,10 @@ class TaskerProfile extends Model
     {
         return $this->belongsTo(Upozila::class);
     }
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'fileable');
+    }
 
     protected $casts = [
         'skill' => 'array',

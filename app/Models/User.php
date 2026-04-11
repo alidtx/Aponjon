@@ -24,6 +24,7 @@ class User extends Authenticatable
         'location',
         'district_id',
         'zila_id',
+        'is_profile_completed',
         'upozila_id',
     ];
 

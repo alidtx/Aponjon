@@ -6,6 +6,7 @@ use App\Enum\MediaType;
 use App\Models\Media;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class MediaService
 {
@@ -34,6 +35,31 @@ class MediaService
         ]);
     }
 
+    public static function delete(Media $media): bool
+    {
+        
+        if (Storage::exists($media->src)) {
+            Storage::delete($media->src);
+        }
+     
+        return $media->delete();
+    }
+
+    
+    public static function deleteByName(Model $fileable, string $name): bool
+    {
+        $media = Media::query()
+            ->where('fileable_id', $fileable->id)
+            ->where('fileable_type', get_class($fileable))
+            ->where('name', $name)
+            ->first();
+        
+        if ($media) {
+            return self::delete($media);
+        }
+        
+        return false;
+    }
 
  
 }
