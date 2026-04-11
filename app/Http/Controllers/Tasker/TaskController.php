@@ -37,10 +37,6 @@ class TaskController extends Controller
     
     return response()->json($result, 200);
 }
-public function awaitingApproval()
-{
-    return Inertia::render('Approved/AwaitingApproval');
-}
 
 public function dashboard()
 {

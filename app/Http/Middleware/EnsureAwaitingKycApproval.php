@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\UserStatus;
+use App\Enum\UserStatus;
 use App\Services\SessionService;
 use Closure;
 use Illuminate\Http\Request;
