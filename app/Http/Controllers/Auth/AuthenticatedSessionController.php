@@ -6,6 +6,7 @@ use App\Events\EmailNotVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\UserService;
+use App\Services\RedirectionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,8 +66,7 @@ class AuthenticatedSessionController extends Controller
         }
         Auth::login($user);
         $request->session()->regenerate();
-
-        return redirect()->route('tasker.dashboard');
+        return RedirectionService::roleBasedRedirect($user);
     }
 
     /**

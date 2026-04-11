@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enum\Role;
 use App\Services\SessionService;
 use Closure;
 use Illuminate\Http\Request;
@@ -26,20 +27,17 @@ class IsProfileCompleted
 
             if ($request->routeIs([
                 'admin.create.profile',
-                'admin.store.profile',
                 'tasker.create.profile',
-                'tasker.store.profile',
                 'customer.create.profile',
-                'customer.store.profile',
+              
             ])) {
                 return $next($request);
             }
 
             return match ($user->role) {
-                'admin' => to_route('admin.create.profile'),
-                'customer' => to_route('customer.create.profile'),
-                'tasker' =>   to_route('tasker.create.profile'),
-                default => redirect('/'),
+                Role::Admin->value => to_route('admin.create.profile'),
+                Role::Customer->value => to_route('customer.create.profile'),
+                Role::Tasker->value =>   to_route('tasker.create.profile'),
             };
         }
 
