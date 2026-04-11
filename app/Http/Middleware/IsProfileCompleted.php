@@ -19,7 +19,7 @@ class IsProfileCompleted
         $user =SessionService::getAuthenticateUser($request);
 
         if (!$user) {
-            return $next($request);
+            return to_route('login');
         }
 
         if (!$user->is_profile_completed) {
@@ -36,9 +36,9 @@ class IsProfileCompleted
             }
 
             return match ($user->role) {
-                'admin' => redirect()->route('admin.create.profile'),
-                'customer' => redirect()->route('customer.create.profile'),
-                'tasker' => redirect()->route('tasker.create.profile'),
+                'admin' => to_route('admin.create.profile'),
+                'customer' => to_route('customer.create.profile'),
+                'tasker' =>   to_route('tasker.create.profile'),
                 default => redirect('/'),
             };
         }
