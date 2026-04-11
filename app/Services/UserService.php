@@ -27,20 +27,4 @@ class UserService
         return User::where('email', $email)->first();
     }
 
-    public static function roleBaseRedirect(User $user)
-    {
-        switch ($user->role) {
-            case 'admin':
-                return redirect()->route('admin.dashboard');
-
-            case 'customer':
-                return redirect()->route('customer.dashboard');
-
-            case 'tasker':
-                return redirect()->route('tasker.create.profile');
-
-            default:
-                return redirect()->route('dashboard');
-        }
-    }
 }
