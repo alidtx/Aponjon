@@ -27,16 +27,19 @@ class TaskController extends Controller
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
   }
-  public function storeProfile(TaskerProfileRequest $request) : JsonResponse
-{
-    $result = TaskService::storeTaskerProfile($request);
-    
-    if (!$result['success']) {
-        return response()->json($result, 422);
+public function storeProfile(TaskerProfileRequest $request)
+    {
+        try {
+            TaskService::storeTaskerProfile($request);
+
+            return redirect()->route('kyc.awaiting-approval.index');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to save profile: ' . $e->getMessage())
+                ->withInput();
+        }
     }
-    
-    return response()->json($result, 200);
-}
 
 public function dashboard()
 {
