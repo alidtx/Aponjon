@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Services\RedirectionService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Carbon;
@@ -79,8 +80,9 @@ public function resend(Request $request)
     ]);
 
     $user->latestOtp->delete();
+    $request->session()->put('auth.client', $user);
     Auth::login($user);
     $request->session()->regenerate();
-    return redirect()->route('tasker.dashboard');
+    return RedirectionService::roleBasedRedirect($user);
   }
 }
