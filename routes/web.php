@@ -30,7 +30,7 @@ Route::get('/show-bid-submit-form/{taskId}/{slug}', [BidController::class, 'show
 Route::post('/bid-store', [BidController::class, 'bidStore'])->name('bid.store');
 
 
-Route::middleware(['auth','profile_completed'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['role:admin'])->group(function () {
 
@@ -39,7 +39,7 @@ Route::middleware(['auth','profile_completed'])->group(function () {
         });
     });
 
-    Route::middleware(['role:customer'])->group(function () {
+    Route::middleware(['role:customer','profile_completed'])->group(function () {
 
         Route::prefix('customer')->name('customer.')->group(function () {
             Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
@@ -48,7 +48,7 @@ Route::middleware(['auth','profile_completed'])->group(function () {
         });
     });
 
-    Route::middleware(['role:tasker'])->group(function () {
+    Route::middleware(['role:tasker','profile_completed'])->group(function () {
         
     Route::prefix('tasker')->name('tasker.')->group(function () {
         Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');

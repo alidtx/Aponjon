@@ -26,7 +26,6 @@ class IsProfileCompleted
         if (!$user->is_profile_completed) {
 
             if ($request->routeIs([
-                'admin.create.profile',
                 'tasker.create.profile',
                 'customer.create.profile',
               
@@ -35,7 +34,6 @@ class IsProfileCompleted
             }
 
             return match ($user->role) {
-                Role::Admin->value => to_route('admin.create.profile'),
                 Role::Customer->value => to_route('customer.create.profile'),
                 Role::Tasker->value =>   to_route('tasker.create.profile'),
             };
