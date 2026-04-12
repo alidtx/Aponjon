@@ -36,7 +36,7 @@ class SessionService
 
     public static function getAuthenticateMerchant(Request $request)
     {
-        return $request->session()->get('auth.merchant');
+        return $request->session()->get('auth.admin');
     }
 
     public static function getAccessToken(Request $request)
@@ -46,7 +46,7 @@ class SessionService
 
     public static function getAuthenticateUser(Request $request)
     {
-        return $request->session()->get('auth.user');
+        return $request->session()->get('auth.client');
     }
 
     public static function clean(Request $request): void

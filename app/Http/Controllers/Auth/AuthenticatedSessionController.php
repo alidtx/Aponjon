@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\UserService;
 use App\Services\RedirectionService;
+use App\Services\SessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,9 +65,9 @@ class AuthenticatedSessionController extends Controller
             EmailNotVerified::dispatch($user);
             return redirect()->route('otp.verify', ['email' => $user->email, 'mobile' => $user->phone ?? '']);
         }
+        $request->session()->put('auth.client', $user);
         Auth::login($user);
         $request->session()->regenerate();
-        $request->session()->put('auth', $user);
         return RedirectionService::roleBasedRedirect($user);
     }
 
@@ -80,7 +81,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-
+        SessionService::clean($request);
         return redirect('/');
     }
 }
