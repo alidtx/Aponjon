@@ -38,8 +38,8 @@ Route::middleware(['auth'])->group(function () {
             return 'admin';
         });
     });
-
-    Route::middleware(['role:customer','profile_completed'])->group(function () {
+   Route::middleware(['profile_completed'])->group(function () {
+    Route::middleware(['role:customer'])->group(function () {
 
         Route::prefix('customer')->name('customer.')->group(function () {
             Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
@@ -48,13 +48,14 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-    Route::middleware(['role:tasker','profile_completed'])->group(function () {
+    Route::middleware(['role:tasker'])->group(function () {
         
     Route::prefix('tasker')->name('tasker.')->group(function () {
         Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
         Route::get('/create-profile', [TaskController::class, 'createProfile'])->name('create.profile');
         Route::post('//store-profile', [TaskController::class, 'storeProfile'])->name('store.profile');
     });
+});
 });
 Route::middleware('awaiting_kyc_approval')->get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])->name('kyc.awaiting-approval.index');
 

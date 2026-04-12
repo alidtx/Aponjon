@@ -12,7 +12,7 @@ class CheckUserRole
 
     public function handle(Request $request, Closure $next, string $roles): Response
     {
-        $user = SessionService::getAuthenticateUser($request);
+        $user = SessionService::getAuthenticateClient($request);
 
         if (!$user) {
             return to_route('login');

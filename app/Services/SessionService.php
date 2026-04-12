@@ -44,7 +44,7 @@ class SessionService
         return $request->session()->get('auth.access_token');
     }
 
-    public static function getAuthenticateUser(Request $request)
+    public static function getAuthenticateClient(Request $request)
     {
         return $request->session()->get('auth.client');
     }

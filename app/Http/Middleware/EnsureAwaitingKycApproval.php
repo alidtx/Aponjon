@@ -17,7 +17,8 @@ class EnsureAwaitingKycApproval
      */
     public function handle(Request $request, Closure $next): Response
     {     
-        $user =SessionService::getAuthenticateUser($request);
+        $user =SessionService::getAuthenticateClient($request);
+        dd($user);
          
          if ($user['status'] != UserStatus::APPROVED->value && $user['is_profile_completed']) {
             return $next($request);

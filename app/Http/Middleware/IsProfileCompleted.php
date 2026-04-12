@@ -17,8 +17,8 @@ class IsProfileCompleted
      */
     public function handle($request, Closure $next)
     {
-        $user =SessionService::getAuthenticateUser($request);
-
+        $user =SessionService::getAuthenticateClient($request);
+        
         if (!$user) {
             return to_route('login');
         }
