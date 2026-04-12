@@ -50,6 +50,10 @@ class CustomerController extends Controller
     ]);
   }
 
+  public function createProfile () {
+    return Inertia::render('Customer/CreateProfile');  
+  } 
+
   public function createGig()
   {
 
