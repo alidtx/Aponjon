@@ -1,12 +1,13 @@
 <script setup>
- import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
+ import DefaultLayout from '@/Layouts/DefaultLayout.vue';
+ import { Head } from '@inertiajs/vue3';
 </script>
 
 
 
 <template>
- <CustomerDefaultLayout>
-        <Head title="গিগ তৈরি" />
+ <DefaultLayout>
+        <Head title="কাস্টমার প্রোফাইল" />
         <h1>Create customer profile form</h1>
- </CustomerDefaultLayout>
+ </DefaultLayout>
 </template>

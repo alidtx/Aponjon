@@ -99,7 +99,7 @@ const submit = () => {
 <template>
     <DefaultLayout>
 
-        <Head title="টাস্কার" />
+        <Head title="টাস্কার প্রোফাইল" />
         <div class="max-w-4xl mx-auto px-4">
             <PageHeadline title="টাস্কার হিসেবে আপনার প্রফাইল" highlight="কমপ্লিট করুন"
                 description="আপনার দক্ষতা ব্যবহার করে আয় করুন এবং মানুষকে সাহায্য করুন।" />
