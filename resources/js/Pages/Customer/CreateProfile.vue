@@ -7,7 +7,7 @@
 
 <template>
  <DefaultLayout>
-        <Head title="কাস্টমার প্রোফাইল" />
+        <Head title="প্রোফাইল তৈরী" />
         <h1>Create customer profile form</h1>
  </DefaultLayout>
 </template>
