@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
    
      Route::middleware(['role:customer'])->prefix('customer')->name('customer.')->group(function () {
         Route::get('/create-profile', [CustomerController::class, 'createProfile'])->name('create.profile');
+        Route::post('/store-profile', [CustomerController::class, 'storeProfile'])->name('store.profile');
         
     });
     

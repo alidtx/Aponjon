@@ -5,53 +5,63 @@ namespace App\Services;
 use App\Models\CustomerProfile;
 use Illuminate\Support\Facades\DB;
 use App\Services\MediaService;
-use App\Models\TaskerProfile;
-use Illuminate\Http\Request;
 
-class TaskService
+
+class CustomerService
 {   
- public static function storeTaskerProfile($request)
+ public static function storeCustomerProfile($request)
     {
         DB::beginTransaction();
         try {
-            $tasker = TaskerProfile::updateOrCreate(
+            $customer = CustomerProfile::updateOrCreate(
                 ['user_id' => auth()->id()],
                 [
                     'nid_number' => $request->nid_number,
                     'district_id' => $request->district_id,
                     'zila_id' => $request->zila_id,
                     'upozila_id' => $request->upozila_id,
-                    'document' => $request->document,
                 ]
             );
 
+            if ($request->hasFile('person_image')) {
+
+                MediaService::deleteByName($customer, 'Person Image');
+            
+                MediaService::upload(
+                    file: $request->file('person_image'),
+                    path: 'customer/documents',
+                    name: 'Peron Image',
+                    fileable: $customer
+                );
+            }
+
             if ($request->hasFile('nid_front')) {
 
-                MediaService::deleteByName($tasker, 'NID Front');
+                MediaService::deleteByName($customer, 'NID Front');
             
                 MediaService::upload(
                     file: $request->file('nid_front'),
-                    path: 'tasker/documents',
+                    path: 'customer/documents',
                     name: 'NID Front',
-                    fileable: $tasker
+                    fileable: $customer
                 );
             }
 
             if ($request->hasFile('nid_back')) {
-                MediaService::deleteByName($tasker, 'NID Back');
+                MediaService::deleteByName($customer, 'NID Back');
 
                 MediaService::upload(
                     file: $request->file('nid_back'),
-                    path: 'tasker/documents',
+                    path: 'customer/documents',
                     name: 'NID Back',
-                    fileable: $tasker
+                    fileable: $customer
                 );
             }
             auth()->user()->update(['is_profile_completed' => true]);
             
             DB::commit();
             
-            return $tasker;
+            return $customer;
             
         } catch (\Exception $e) {
             DB::rollBack();

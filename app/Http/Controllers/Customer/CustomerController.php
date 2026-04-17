@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerProfileRequest;
 use App\Http\Requests\GigRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DistrictResource;
@@ -14,6 +15,7 @@ use App\Models\Category;
 use App\Services\LocationService;
 use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CustomerService;
 
 class CustomerController extends Controller
 {
@@ -72,9 +74,17 @@ class CustomerController extends Controller
     ]);
   }
 
-  public function StoreProfile()  {
+  public function StoreProfile(CustomerProfileRequest $request)  {
 
-
+    try {
+            CustomerService::storeCustomerProfile($request);
+            return redirect()->route('kyc.awaiting-approval.index');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to save profile: ' . $e->getMessage())
+                ->withInput();
+        }
   }
   public function gigsStore(GigRequest $request)
   {

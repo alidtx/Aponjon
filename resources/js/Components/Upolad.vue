@@ -15,6 +15,10 @@ const props = defineProps({
         type: String,
         default: 'ফাইল নির্বাচন করুন বা ড্র্যাগ করুন'
     },
+    helperText: {   
+        type: String,
+        default: 'JPG, JPEG, PNG, PDF (সর্বোচ্চ ২MB)'
+    }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -65,7 +69,7 @@ function handleFileChange(event) {
             {{ placeholder }}
         </p>
 
-        <p class="text-sm text-gray-500">JPG, PNG, PDF (সর্বোচ্চ ৫MB)</p>
+        <p class="text-sm text-gray-500">{{ helperText }}</p>
 
     </div>
 </template>
