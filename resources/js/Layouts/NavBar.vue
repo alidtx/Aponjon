@@ -7,7 +7,6 @@ import { MenuItem } from '@headlessui/vue'
 import UserDropdown from '@/Components/UserDropdown.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import LogOutIcon from '@/Components/Icons/LogOutIcon.vue';
-import { EyeDropperIcon } from '@heroicons/vue/20/solid';
 import MessageIcon from '@/Components/Icons/MessageIcon.vue';
 </script>
 
@@ -33,7 +32,7 @@ import MessageIcon from '@/Components/Icons/MessageIcon.vue';
                         <template #items>
                             <MenuItem v-slot="{ active }">
                             <button :class="[
-                                active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                                active ? 'bg-primary text-white' : 'text-gray-900',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
                             ]">
                                 <EditIcon class="mr-2 h-5 w-5 text-violet-400" />
@@ -43,7 +42,7 @@ import MessageIcon from '@/Components/Icons/MessageIcon.vue';
 
                             <MenuItem v-slot="{ active }">
                             <button :class="[
-                                active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                                active ? 'bg-primary text-white' : 'text-gray-900',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
                             ]">
                                 <LogOutIcon class="mr-2 h-5 w-5 text-violet-400" />

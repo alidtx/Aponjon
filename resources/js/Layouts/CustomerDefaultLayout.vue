@@ -1,5 +1,5 @@
 <script setup>
-import CustomerNav from '@/Layouts/Customer/NavBar/CustomerNav.vue';
+import NavBar from './NavBar.vue';
 
 const props = defineProps({
   user: {
@@ -12,7 +12,7 @@ const props = defineProps({
 
 
 <template>
-  <CustomerNav 
+  <NavBar 
      :user="props.user"
   />
   <slot />
