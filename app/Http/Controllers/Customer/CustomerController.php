@@ -13,6 +13,7 @@ use App\Http\Resources\ZilaResource;
 use App\Models\Category;
 use App\Services\LocationService;
 use App\Services\TaskService;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -51,7 +52,11 @@ class CustomerController extends Controller
   }
 
   public function createProfile () {
-    return Inertia::render('Customer/CreateProfile');  
+    return Inertia::render('Customer/CreateProfile',[
+      'loggedInUser' => new UserResource(Auth::user()),
+      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
+      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
+    ]);  
   } 
 
   public function createGig()

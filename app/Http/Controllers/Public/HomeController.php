@@ -50,13 +50,4 @@ class HomeController extends Controller
     {
         return CategoryResource::collection(TaskService::category());
     }
-    public function districtWiseZila()
-    {
-        return  DistrictResource::collection(TaskService::districtWiseZila());
-    }
-
-    public function ZilaWiseUpozila()
-    {
-        return  ZilaResource::collection(TaskService::zilaWiseUpozila());
-    }
 }
