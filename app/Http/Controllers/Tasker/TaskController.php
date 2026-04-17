@@ -8,6 +8,7 @@ use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Services\LocationService;
+use App\Services\TaskerService;
 use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -35,7 +36,7 @@ class TaskController extends Controller
 public function storeProfile(TaskerProfileRequest $request)
     {
         try {
-            TaskService::storeTaskerProfile($request);
+            TaskerService::storeTaskerProfile($request);
 
             return redirect()->route('kyc.awaiting-approval.index');
             
