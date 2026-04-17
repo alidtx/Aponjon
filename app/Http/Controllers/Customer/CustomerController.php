@@ -71,6 +71,11 @@ class CustomerController extends Controller
       'categories' => CategoryResource::collection($categories),
     ]);
   }
+
+  public function StoreProfile()  {
+
+
+  }
   public function gigsStore(GigRequest $request)
   {
     TaskService::store($request);

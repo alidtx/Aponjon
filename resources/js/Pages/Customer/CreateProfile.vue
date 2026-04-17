@@ -33,12 +33,9 @@ const props = defineProps({
 
 const form = useForm({
     nid_number: '',
-    skills: '',
-    experience: '',
     district_id: '',
     zila_id: '',
     upozila_id: '',
-    bio: '',
     nid_front: '',
     nid_back: '',
 });
