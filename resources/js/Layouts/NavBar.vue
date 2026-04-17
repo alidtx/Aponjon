@@ -8,6 +8,12 @@ import UserDropdown from '@/Components/UserDropdown.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import LogOutIcon from '@/Components/Icons/LogOutIcon.vue';
 import MessageIcon from '@/Components/Icons/MessageIcon.vue';
+import { router } from '@inertiajs/vue3'
+
+
+const logout = () => {
+    router.post(route('logout'))
+}
 </script>
 
 
@@ -44,7 +50,10 @@ import MessageIcon from '@/Components/Icons/MessageIcon.vue';
                             <button :class="[
                                 active ? 'bg-primary text-white' : 'text-gray-900',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
-                            ]">
+                            ]"
+                            @click="logout"
+                            >
+                            
                                 <LogOutIcon class="mr-2 h-5 w-5 text-violet-400" />
                                 লগ আউট করুন
                             </button>
