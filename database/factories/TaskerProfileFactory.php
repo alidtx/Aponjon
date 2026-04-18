@@ -21,6 +21,7 @@ class TaskerProfileFactory extends Factory
             'zila_id' => Zila::factory(), 
             'upozila_id' => Upozila::factory(), 
             'bio' => $this->faker->paragraph,
+            'designation' => $this->faker->name,
             'skill' => $this->faker->randomElements(['PHP', 'Laravel', 'JavaScript', 'Vue.js', 'MySQL'], rand(1, 3)),
             'hourly_rate' => $this->faker->randomFloat(2, 10, 500), 
             'verification_status' => $this->faker->randomElement(['pending', 'verified', 'rejected']),
