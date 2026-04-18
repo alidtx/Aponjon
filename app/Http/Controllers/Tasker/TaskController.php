@@ -23,18 +23,18 @@ class TaskController extends Controller
   public function index()
   {
 
-    $user = User::with([
+    $userOverview = User::with([
       'taskerProfiles',
       'taskerProfiles.media',
       'bids',
-      'taskerTasks' 
+      'taskerTasks'
     ])
       ->select('id', 'name')
       ->findOrFail(auth()->id());
     return Inertia::render('Task/Index', [
-      'overview' => BidResource::collection(TaskerService::TaskerDashboardOverView()),
-      'profile' => new UserResource($user),
+      'overview' => new UserResource($userOverview),
     ]);
+    
   }
 
   public function createProfile(Request $request)

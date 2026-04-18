@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'customer_tasks' => TaskResource::collection($this->whenLoaded('customerTasks')),
             'districts' => new DistrictResource($this->whenLoaded('districts')), 
             'bids' => BidResource::collection($this->whenLoaded('bids')),
+            'tasker_tasks' => TaskResource::collection($this->whenLoaded('taskerTasks')),
             'tasker_profile' => new TaskerProfileResource($this->whenLoaded('taskerProfiles')),
             'zilas' => new ZilaResource($this->whenLoaded('zillas')),
             'upozilas' => new UpozilaResource($this->whenLoaded('upozilas')),

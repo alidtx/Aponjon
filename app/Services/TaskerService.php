@@ -71,15 +71,4 @@ class TaskerService
             throw $e;
         }
     }
-  public static function TaskerDashboardOverView()  {
-
-  $taskerDashboardoverView = Bid::with('tasker:id,name','task:id,title,location_address,status,budget')
-    ->where('tasker_id', auth()->user()->id)
-    ->select('id','task_id','tasker_id','estimated_hours','availability','amount')
-    ->get();
-   return $taskerDashboardoverView;
-
- }
-
-
 }
