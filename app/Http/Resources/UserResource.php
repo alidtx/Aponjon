@@ -15,20 +15,22 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'email'=>$this->email,
-            'name'=>$this->name,
-            'phone'=>$this->phone,
-            'role'=>$this->role,
+            'id' => $this->id,
+            'email' => $this->email,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'role' => $this->role,
             'avatar' => $this->avatar ?: '/img/avatars/avatar.png',
-            'is_verified'=>true,
-            'location'=>$this->location,
+            'is_verified' => true,
+            'location' => $this->location,
             'customer_tasks' => TaskResource::collection($this->whenLoaded('customerTasks')),
-            'districts'=>new DistrictResource($this->whenLoaded('districts')),
-            'zilas'=> new ZilaResource($this->whenLoaded('zillas')),
-            'upozilas'=>new UpozilaResource($this->whenLoaded('upozilas')),
-            'crated_at'=>$this->crated_at?->toDateTimeString(),
-            'updated_at'=>$this->updated_at?->toDateTimeString(),
+            'districts' => new DistrictResource($this->whenLoaded('districts')), 
+            'bids' => BidResource::collection($this->whenLoaded('bids')),
+            'tasker_profile' => new TaskerProfileResource($this->whenLoaded('taskerProfiles')),
+            'zilas' => new ZilaResource($this->whenLoaded('zillas')),
+            'upozilas' => new UpozilaResource($this->whenLoaded('upozilas')),
+            'crated_at' => $this->crated_at?->toDateTimeString(),
+            'updated_at' => $this->updated_at?->toDateTimeString(),
         ];
     }
 }

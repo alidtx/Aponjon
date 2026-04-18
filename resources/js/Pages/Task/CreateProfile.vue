@@ -52,6 +52,7 @@ const form = useForm({
     hourly_rate: sliderValue.value,
     nid_front: '',
     nid_back: '',
+    person_image: '',
     is_terms_and_condition_accept: false
 });
 
@@ -80,15 +81,15 @@ const acceptTerms = () => {
 
 const submit = () => {
     form.post(route('tasker.store.profile'), {
-    onSuccess: (response) => {
-        
-    },
-    onError: (errors) => {
-        toast.error('অনুগ্রহ করে ফর্মের ভুলগুলো ঠিক করুন',{
-            position:'bottom-right'
-        });
-    },
-});
+        onSuccess: (response) => {
+
+        },
+        onError: (errors) => {
+            toast.error('অনুগ্রহ করে ফর্মের ভুলগুলো ঠিক করুন', {
+                position: 'bottom-right'
+            });
+        },
+    });
 }
 
 
@@ -111,13 +112,13 @@ const submit = () => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <InputLabel for="name"   value="পূর্ণ নাম" />
-                                <TextInput type="text" v-model="props.loggedInUser.data.name"  class="w-full p-3" placeholder="আপনার পূর্ণ নাম লিখুন"
-                                    readonly="true" />
+                                <InputLabel for="name" value="পূর্ণ নাম" />
+                                <TextInput type="text" v-model="props.loggedInUser.data.name" class="w-full p-3"
+                                    placeholder="আপনার পূর্ণ নাম লিখুন" readonly="true" />
                             </div>
                             <div>
-                                <InputLabel for="number"  value="মোবাইল নম্বর"/>
-                                <TextInput v-model="props.loggedInUser.data.phone"  class="w-full p-3"
+                                <InputLabel for="number" value="মোবাইল নম্বর" />
+                                <TextInput v-model="props.loggedInUser.data.phone" class="w-full p-3"
                                     placeholder="আপনার ফোন নম্বর লিখুন" readonly="true" />
                             </div>
                             <div>
@@ -167,13 +168,19 @@ const submit = () => {
                                 <input type="range" :errors="form.errors" min="100" max="2000" step="50" class="flex-1"
                                     v-model="sliderValue" @input="rangeValue">
                                 <span class="ml-4 text-lg font-bold text-primary">৳<span id="rateValue">{{ sliderValue
-                                }}</span></span>
+                                        }}</span></span>
                             </div>
                             <InputError class="mt-2" :message="form.errors.sliderValue" />
                         </div>
                     </div>
                     <div class="mb-4">
-                        <h3 class="text-xl font-bold text-dark mb-6">ডকুমেন্ট আপলোড</h3>
+                        <h3 class="text-xl font-bold text-dark mb-3">ডকুমেন্ট আপলোড</h3>
+                        <div class="mb-4">
+                            <InputLabel for="document" value="আপনার নিজ ছবি" required />
+                            <Upolad v-model="form.person_image" :errors="form.errors"
+                                helperText="JPG, JPEG, PNG,(সর্বোচ্চ ২MB)" acceptedType=".jpg,.jpeg,.png" />
+                            <InputError class="mt-2" :message="form.errors.person_image" />
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <InputLabel for="document" value="এনআইডি ফ্রন্ট সাইড" required />

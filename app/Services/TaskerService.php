@@ -27,7 +27,17 @@ class TaskerService
                     'document' => $request->document,
                 ]
             );
+             if ($request->hasFile('person_image')) {
 
+                MediaService::deleteByName($tasker, 'Person Image');
+            
+                MediaService::upload(
+                    file: $request->file('person_image'),
+                    path: 'customer/documents',
+                    name: 'Peron Image',
+                    fileable: $tasker
+                );
+            }
             if ($request->hasFile('nid_front')) {
 
                 MediaService::deleteByName($tasker, 'NID Front');

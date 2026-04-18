@@ -1,13 +1,32 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+
+
+const props = defineProps({
+
+    profile: {
+        type: Object,
+        default: () => ({})
+    }
+
+})
+
+const userName = computed(() => props.profile.data?.name || '')
+// const designation = computed(() => props.profile.data?.tasker_profile.designation || '')
+console.log(props.profile)
+
+
 </script>
 
 <template>
     <div class="lg:col-span-1">
         <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
             <div class="text-center mb-6">
-                <img src="https://www.twtf.org.uk/wp-content/uploads/2024/01/dummy-image.jpg" alt="Profile" class="w-20 h-20 rounded-full mx-auto mb-4">
-                <h2 class="text-xl font-bold text-dark">করিমুল ইসলাম</h2>
+                <img src="https://www.twtf.org.uk/wp-content/uploads/2024/01/dummy-image.jpg" alt="Profile"
+                    class="w-20 h-20 rounded-full mx-auto mb-4">
+                <h2 class="text-xl font-bold text-dark">{{ userName }}</h2>
                 <p class="text-gray-600 text-sm">ইলেকট্রিশিয়ান</p>
                 <div class="flex justify-center space-x-1 text-yellow-400 mt-2">
                     <i class="fas fa-star"></i>
@@ -29,7 +48,8 @@ import { Link } from '@inertiajs/vue3';
                 </div>
             </div>
             <nav class="space-y-2">
-                <Link class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i class="fas fa-chart-pie mr-3"></i>ওভারভিউ</Link>                       
+                <Link class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
+                        class="fas fa-chart-pie mr-3"></i>ওভারভিউ</Link>
             </nav>
         </div>
     </div>

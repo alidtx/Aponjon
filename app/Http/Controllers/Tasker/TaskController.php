@@ -8,6 +8,7 @@ use App\Http\Resources\BidResource;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
+use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskerService;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +21,21 @@ class TaskController extends Controller
 {
 
   public function index()
-{    
-     return Inertia::render('Task/Index',[
-         'overview'=>BidResource::collection(TaskerService::TaskerDashboardOverView())
-     ]);
+  {
 
-}
+    $user = User::with([
+      'taskerProfiles',
+      'taskerProfiles.media',
+      'bids',
+      'taskerTasks' 
+    ])
+      ->select('id', 'name')
+      ->findOrFail(auth()->id());
+    return Inertia::render('Task/Index', [
+      'overview' => BidResource::collection(TaskerService::TaskerDashboardOverView()),
+      'profile' => new UserResource($user),
+    ]);
+  }
 
   public function createProfile(Request $request)
   {
@@ -35,19 +45,16 @@ class TaskController extends Controller
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
   }
-public function storeProfile(TaskerProfileRequest $request)
-    {
-        try {
-            TaskerService::storeTaskerProfile($request);
+  public function storeProfile(TaskerProfileRequest $request)
+  {
+    try {
+      TaskerService::storeTaskerProfile($request);
 
-            return redirect()->route('kyc.awaiting-approval.index');
-            
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Failed to save profile: ' . $e->getMessage())
-                ->withInput();
-        }
+      return redirect()->route('kyc.awaiting-approval.index');
+    } catch (\Exception $e) {
+      return redirect()->back()
+        ->with('error', 'Failed to save profile: ' . $e->getMessage())
+        ->withInput();
     }
-
-
+  }
 }
