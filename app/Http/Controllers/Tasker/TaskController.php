@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Tasker;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskerProfileRequest;
+use App\Http\Resources\BidResource;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Services\LocationService;
 use App\Services\TaskerService;
-use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -20,8 +20,10 @@ class TaskController extends Controller
 {
 
   public function index()
-{
-     return Inertia::render('Task/Index');
+{    
+     return Inertia::render('Task/Index',[
+         'overview'=>BidResource::collection(TaskerService::TaskerDashboardOverView())
+     ]);
 
 }
 

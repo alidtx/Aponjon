@@ -46,12 +46,12 @@ class User extends Authenticatable
 
     public function taskerProfiles()
     {
-        return $this->hasMany(TaskerProfile::class);
+        return $this->hasOne(TaskerProfile::class);
     }
 
     public function customerTasks()
     {
-        return $this->hasMany(Task::class, 'customer_id');
+        return $this->hasOne(Task::class, 'customer_id');
     }
 
     public function taskerTasks()
