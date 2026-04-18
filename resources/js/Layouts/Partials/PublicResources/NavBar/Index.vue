@@ -31,7 +31,8 @@ const props=defineProps({
 
         <div class="hidden md:flex items-center space-x-4">
 
-          <Link v-if="$page.props.auth.user" :href="route('dashboard')"
+          <Link v-if="$page.props.auth.user"  :href="$page.props.auth.user.role === 'customer'? route('customer.dashboard') 
+           : route('tasker.dashboard')"
             class="flex items-center space-x-2 px-4 py-2 text-dark font-medium hover:text-primary rounded-md ring-1 ring-transparent transition">
 
           <img :src="props.user.data.avatar" alt="User Avatar"
