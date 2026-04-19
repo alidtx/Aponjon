@@ -11,10 +11,6 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
-    profile: {
-        type: Object,
-        default: () => ({})
-    }
 })
 
 </script>
@@ -26,7 +22,10 @@ const props = defineProps({
         <Head title="টাস্কার ড্যাশবোর্ড" />
         <div class="max-w-7xl mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <SideBar :profile="props.profile"/>
+                <SideBar 
+                :tasker="props.overview?.data?.name"
+                :tasker_profile="props.overview?.data?.tasker_profile"
+                />
                 <div class="lg:col-span-3">
                     <Overview />
                     <AssignedTask />

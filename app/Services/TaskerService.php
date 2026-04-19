@@ -33,7 +33,7 @@ class TaskerService
             
                 MediaService::upload(
                     file: $request->file('person_image'),
-                    path: 'customer/documents',
+                    path: 'tasker/documents',
                     name: 'Peron Image',
                     fileable: $tasker
                 );
