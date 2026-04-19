@@ -40,7 +40,7 @@ const emptyStars = computed(() => 5 - fullStars.value - (hasHalfStar.value ? 1 :
                     <i v-for="n in emptyStars" :key="'e' + n" class="far fa-star"></i>
 
                 </div>
-                ( {{ rating.toFixed(1) }}/5.0 )
+                 {{ rating.toFixed(1) }}/5.0 (৪৫ রিভিউ)
             </div>
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
                 <div class="flex justify-between items-center mb-3">

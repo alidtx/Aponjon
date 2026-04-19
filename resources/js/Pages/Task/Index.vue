@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3'
 import SideBar from './Partials/SideBar.vue';
 import Overview from './Partials/Overview.vue';
 import AssignedTask from './Partials/AssignedTask.vue';
+import { computed } from 'vue';
 
 
 const props = defineProps({
@@ -27,7 +28,9 @@ const props = defineProps({
                 :tasker_profile="props.overview?.data?.tasker_profile"
                 />
                 <div class="lg:col-span-3">
-                    <Overview />
+                    <Overview 
+                    :activeBids="props.overview?.data?.bids"
+                    />
                     <AssignedTask />
                 </div>
             </div>
