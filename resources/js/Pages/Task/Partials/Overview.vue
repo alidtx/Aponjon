@@ -8,6 +8,10 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
+    monthly: {
+        type: Number,
+        default: 0
+    }
 })
 const inProgressBids = computed(() => {return props.activeBids?.filter(bid => bid.status === 'accepted') || []})
 const acitveBids = computed(() => {return props.activeBids?.filter(bid => bid.status === 'pending') || []})
@@ -25,17 +29,17 @@ const acitveBids = computed(() => {return props.activeBids?.filter(bid => bid.st
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div class="bg-blue-50 rounded-lg p-4 text-center">
                 <i class="fas fa-gavel text-2xl text-primary mb-2"></i>
-                <div class="text-lg font-bold text-dark">{{ acitveBids.length }}</div>
+                <div class="text-lg font-bold text-dark">৳ {{ acitveBids.length }}</div>
                 <div class="text-sm text-gray-600">সক্রিয় বিড</div>
             </div>
             <div class="bg-green-50 rounded-lg p-4 text-center">
                 <i class="fas fa-check-circle text-2xl text-green-600 mb-2"></i>
-                <div class="text-lg font-bold text-dark">{{ inProgressBids.length }}</div>
+                <div class="text-lg font-bold text-dark">৳ {{ inProgressBids.length }}</div>
                 <div class="text-sm text-gray-600">চলমান কাজ</div>
             </div>
             <div class="bg-purple-50 rounded-lg p-4 text-center">
                 <i class="fas fa-money-bill-wave text-2xl text-purple-600 mb-2"></i>
-                <div class="text-lg font-bold text-dark">৳২৫,৪০০</div>
+                <div class="text-lg font-bold text-dark">৳ {{  Math.round(monthly)  }}</div>
                 <div class="text-sm text-gray-600">এই মাসের আয়</div>
             </div>
             <div class="bg-orange-50 rounded-lg p-4 text-center">

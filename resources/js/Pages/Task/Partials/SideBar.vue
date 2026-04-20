@@ -11,7 +11,12 @@ const props = defineProps({
     tasker_profile: {
         type: String,
         required: true
+    },
+     total: {
+        type: Number,
+        default:0
     }
+
 })
 
 const designation = computed(() => props.tasker_profile?.designation || '')
@@ -49,7 +54,7 @@ const emptyStars = computed(() => 5 - fullStars.value - (hasHalfStar.value ? 1 :
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">মোট আয়</span>
-                    <span class="text-sm font-bold text-primary">৳১,২৫,৪০০</span>
+                    <span class="text-sm font-bold text-primary">৳ {{ Math.round(total) }}</span>
                 </div>
             </div>
             <nav class="space-y-2">

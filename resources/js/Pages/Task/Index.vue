@@ -12,6 +12,14 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
+    totalEarning: {
+        type: Number,
+        default: 0
+    },
+    monthlyErning: {
+        type: Number,
+        default: 0
+    }
 })
 
 </script>
@@ -24,12 +32,14 @@ const props = defineProps({
         <div class="max-w-7xl mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <SideBar 
-                :tasker="props.overview?.data?.name"
-                :tasker_profile="props.overview?.data?.tasker_profile"
+                :tasker="props.overview?.data?.name" 
+                :tasker_profile="props.overview?.data?.tasker_profile" 
+                :total="totalEarning" 
                 />
                 <div class="lg:col-span-3">
                     <Overview 
-                    :activeBids="props.overview?.data?.bids"
+                    :activeBids="props.overview?.data?.bids" 
+                    :monthly="monthlyErning" 
                     />
                     <AssignedTask />
                 </div>

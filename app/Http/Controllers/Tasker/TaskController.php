@@ -8,6 +8,8 @@ use App\Http\Resources\BidResource;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
+use App\Models\Bid;
+use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskerService;
@@ -22,19 +24,21 @@ class TaskController extends Controller
 
   public function index()
   {
+    
+    $user = auth()->user();
 
     $userOverview = User::with([
       'taskerProfiles',
       'taskerProfiles.media',
       'bids',
-      'taskerTasks'
     ])
       ->select('id', 'name')
-      ->findOrFail(auth()->id());
+      ->findOrFail($user->id);
     return Inertia::render('Task/Index', [
       'overview' => new UserResource($userOverview),
+      'totalEarning' => TaskerService::TaskerTotalEarning($user),
+      'monthlyErning' => TaskerService::TaskerCurrentMonthEarning($user)
     ]);
-    
   }
 
   public function createProfile(Request $request)

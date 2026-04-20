@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             CategoryTableSeeder::class,
             ServiceTableSeeder::class,
             TaskTableSeeder::class,
-            BidTableSeeder::class,
+            // BidTableSeeder::class,
             OrderTableSeeder::class,
             ReviewTableSeeder::class,
             // PermissionTableSeeder::class
