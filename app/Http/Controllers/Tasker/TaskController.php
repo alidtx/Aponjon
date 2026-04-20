@@ -34,13 +34,18 @@ class TaskController extends Controller
     ])
       ->select('id', 'name')
       ->findOrFail($user->id);
-      
-      
+    $recentActivity = Bid::with('task')
+      ->where('tasker_id', $user->id)
+      ->whereIn('status', ['pending', 'accepted'])
+      ->latest()
+      ->limit(10)
+      ->get();
     return Inertia::render('Task/Index', [
       'overview' => new UserResource($userOverview),
+      'activity' => BidResource::collection($recentActivity),
       'totalEarning' => TaskerService::TaskerTotalEarning($user),
       'monthlyErning' => TaskerService::TaskerCurrentMonthEarning($user),
-      'successRate'=>TaskerService::getSuccessRate($user)
+      'successRate' => TaskerService::getSuccessRate($user)
 
     ]);
   }

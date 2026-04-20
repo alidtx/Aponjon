@@ -12,6 +12,10 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
+    activity: {
+        type: Object,
+        default: () => ({})
+    },
     totalEarning: {
         type: Number,
         default: 0
@@ -45,6 +49,8 @@ const props = defineProps({
                     <Overview 
                     :activeBids="props.overview?.data?.bids" 
                     :monthly="monthlyErning" 
+                    :recentActivity="activity" 
+
                     />
                     <AssignedTask />
                 </div>
