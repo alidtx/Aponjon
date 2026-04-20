@@ -70,32 +70,63 @@ class TaskerService
             throw $e;
         }
     }
-    public static function TaskerTotalEarning(User $user): float
+    public static function TaskerTotalEarning(User $tasker): float
     {
-        if (!$user->isTasker()) {
+        if (!$tasker->isTasker()) {
             return 0.0;
         }
 
-        return $user->taskerTasks()
+        return $tasker->taskerTasks()
             ->where('tasks.status', 'completed')
             ->join('orders', 'tasks.id', '=', 'orders.task_id')
             ->where('orders.payment_status', 'paid')
             ->sum('orders.tasker_earning');
     }
 
-    public static function TaskerCurrentMonthEarning(User $user): float
+    public static function TaskerCurrentMonthEarning(User $tasker): float
     {
-        if (!$user->isTasker()) {
+        if (!$tasker->isTasker()) {
             return 0.0;
         }
 
-        return $user->taskerTasks()
+        return $tasker->taskerTasks()
             ->where('tasks.status', 'completed')
             ->whereMonth('tasks.updated_at', now()->month)
             ->whereYear('tasks.updated_at', now()->year)
             ->join('orders', 'tasks.id', '=', 'orders.task_id')
             ->where('orders.payment_status', 'paid')
             ->sum('orders.tasker_earning');
+    }
+
+    public static  function getSuccessRate(User $tasker): float
+    {
+        if (!$tasker->isTasker()) {
+            return 0.0;
+        }
+        
+        $stats = $tasker->bids()
+            ->selectRaw('
+                COUNT(*) as total_bids,
+                SUM(CASE 
+                    WHEN EXISTS (
+                        SELECT 1 FROM tasks 
+                        WHERE tasks.id = bids.task_id 
+                        AND tasks.status = "completed"
+                        AND EXISTS (
+                            SELECT 1 FROM orders 
+                            WHERE orders.task_id = tasks.id 
+                            AND orders.payment_status = "paid"
+                        )
+                    ) THEN 1 ELSE 0 
+                END) as successful_bids
+            ')
+            ->first();
+        
+        if ($stats->total_bids == 0) {
+            return 0.0;
+        }
+        
+        return round(($stats->successful_bids / $stats->total_bids) * 100, 2);
     }
 
 }

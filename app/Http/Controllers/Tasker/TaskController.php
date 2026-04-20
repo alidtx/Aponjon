@@ -24,7 +24,7 @@ class TaskController extends Controller
 
   public function index()
   {
-    
+
     $user = auth()->user();
 
     $userOverview = User::with([
@@ -34,10 +34,14 @@ class TaskController extends Controller
     ])
       ->select('id', 'name')
       ->findOrFail($user->id);
+      
+      
     return Inertia::render('Task/Index', [
       'overview' => new UserResource($userOverview),
       'totalEarning' => TaskerService::TaskerTotalEarning($user),
-      'monthlyErning' => TaskerService::TaskerCurrentMonthEarning($user)
+      'monthlyErning' => TaskerService::TaskerCurrentMonthEarning($user),
+      'successRate'=>TaskerService::getSuccessRate($user)
+
     ]);
   }
 

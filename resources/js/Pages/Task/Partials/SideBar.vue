@@ -15,6 +15,10 @@ const props = defineProps({
      total: {
         type: Number,
         default:0
+    },
+     successRate: {
+        type: Number,
+        default:0
     }
 
 })
@@ -50,7 +54,7 @@ const emptyStars = computed(() => 5 - fullStars.value - (hasHalfStar.value ? 1 :
             <div class="bg-gray-50 rounded-lg p-4 mb-6">
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-sm text-gray-600">সাফল্যের হার</span>
-                    <span class="text-sm font-bold text-green-600">৯২%</span>
+                    <span class="text-sm font-bold text-green-600">{{ successRate }}%</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">মোট আয়</span>

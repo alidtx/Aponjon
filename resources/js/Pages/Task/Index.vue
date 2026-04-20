@@ -19,6 +19,10 @@ const props = defineProps({
     monthlyErning: {
         type: Number,
         default: 0
+    },
+    successRate: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -35,6 +39,7 @@ const props = defineProps({
                 :tasker="props.overview?.data?.name" 
                 :tasker_profile="props.overview?.data?.tasker_profile" 
                 :total="totalEarning" 
+                :successRate="successRate" 
                 />
                 <div class="lg:col-span-3">
                     <Overview 
