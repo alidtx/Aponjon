@@ -23,7 +23,7 @@ class UserResource extends JsonResource
             'avatar' => $this->avatar ?: '/img/avatars/avatar.png',
             'is_verified' => true,
             'location' => $this->location,
-            'customer_tasks' => TaskResource::collection($this->whenLoaded('customerTasks')),
+            'customer_tasks' => new TaskResource($this->whenLoaded('customerTasks')),
             'districts' => new DistrictResource($this->whenLoaded('districts')), 
             'bids' => BidResource::collection($this->whenLoaded('bids')),
             'tasker_tasks' => TaskResource::collection($this->whenLoaded('taskerTasks')),
