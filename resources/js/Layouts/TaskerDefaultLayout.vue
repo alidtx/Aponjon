@@ -1,14 +1,20 @@
 <script setup>
 import NavBar from './NavBar.vue';
 import Footer from './Partials/Footer.vue';
-
+import SideBar from '@/Pages/Task/Partials/SideBar.vue';
 </script>
 
 
-<template>
-  <NavBar/>
-  <div class="max-w-7xl mx-auto px-4 py-8">
-  <slot />
-  <Footer/>
-  </div>
+<template>  
+
+    <NavBar />
+    <div class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <SideBar />
+        <slot />
+      </div>
+    </div>
+    <Footer />
+
+  
 </template>

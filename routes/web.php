@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::middleware(['role:tasker'])->prefix('tasker')->name('tasker.')->group(function () {
             Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
+            Route::get('/tasker-sidebar-profile', [TaskController::class, 'taskerSidebarProfile'])->name('tasker.sidebar.profile');
         });
     });
 
