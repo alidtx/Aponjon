@@ -1,6 +1,10 @@
 <script setup>
-import { ref } from 'vue'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+
+
+const categories = ['পেন্ডিং', 'একসেপ্টেড', 'রিজেক্টেড']
+
+
 </script>
 
 
@@ -8,20 +12,28 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 <template>
 
     <div id="tasks" class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-dark mb-6">অ্যাসাইনড টাস্কস</h2>
+        <h2 class="text-2xl font-bold text-dark">আপনার কাজ সুমহ</h2>
         <TabGroup>
-            <div class="border-b border-gray-200 mb-6">
+            <div class="border-b border-gray-200 pt-4">
                 <nav class="flex space-x-8">
                     <TabList class="flex space-x-4">
-                        <Tab v-for="(category, index) in ['সক্রিয়', 'সম্পন্ন', 'বাতিল']" :key="index"
-                            class="px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ui-selected:bg-primary ui-selected:text-white">
-                            {{ category }}
-                        </Tab>
+                        <TabList class="flex space-x-4">
+                            <Tab v-for="(category, index) in categories" :key="index" v-slot="{ selected }"
+                            class="focus:outline-none"
+                            >
+                                <button :class="[
+                                    'py-2 px-1 font-medium focus:outline-none border-b-2 transition-colors',
+                                    selected
+                                        ? 'border-blue-500 text-blue-600'
+                                        : 'border-transparent text-primary',
+                                ]">
+                                    {{ category }}
+                                </button>
+                            </Tab>
+                        </TabList>
                     </TabList>
                 </nav>
             </div>
-
-
             <div class="space-y-4">
                 <TabPanels class="mt-4">
                     <TabPanel>
