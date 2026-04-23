@@ -24,8 +24,8 @@ const categories = ['পেন্ডিং', 'একসেপ্টেড', 'র
                                 <button :class="[
                                     'py-2 px-1 font-medium focus:outline-none border-b-2 transition-colors',
                                     selected
-                                        ? 'border-blue-500 text-blue-600'
-                                        : 'border-transparent text-primary',
+                                        ? 'border-primary text-primary'
+                                        : 'text-gray-600 hover:bg-gray-50',
                                 ]">
                                     {{ category }}
                                 </button>
