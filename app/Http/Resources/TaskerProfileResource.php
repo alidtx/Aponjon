@@ -27,7 +27,6 @@ class TaskerProfileResource extends JsonResource
             'skills' => $this->skill ?? [],
             'hourly_rate' => $this->hourly_rate,
             'verification_status' => $this->verification_status,
-            'media' => MediaResource::collection($this->media),
             'rating' => (float) $this->rating,
             'completed_task' => $this->completed_task,
             'is_online' => (bool) $this->is_online,

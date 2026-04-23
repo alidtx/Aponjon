@@ -50,23 +50,15 @@ class TaskController extends Controller
     ]);
   }
 
-  public function taskerSidebarProfile()  {
-      $user = auth()->user();
+  public function taskerSidebarInfo()
+  {
+    $taskerSidebarProfile = User::findOrFail(auth()->user()->id)->load([
+      'taskerProfiles',
+      'taskerProfiles.media',
+    ]);
+    return new UserResource($taskerSidebarProfile);
+  }
 
-        $taskerSidebarProfile = User::with([
-            'taskerProfiles:id,user_id,designation',
-            'taskerProfiles.media',
-            'bids',
-        ])
-            ->select('id', 'name')
-            ->findOrFail($user->id);
-        
-        return response()->json([
-            'success' => true,
-            'data' => $taskerSidebarProfile
-        ]);
-    }
-  
   public function createProfile(Request $request)
   {
     return Inertia::render('Task/CreateProfile', [

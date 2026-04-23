@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class TaskerProfile extends Model
 {   
@@ -47,6 +49,17 @@ class TaskerProfile extends Model
     public function media()
     {
         return $this->morphMany(Media::class, 'fileable');
+    }
+    public function userProfilePicture(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->userProfilePhoto ? $this->userProfilePhoto->path : ''
+        );
+    }
+
+    public function userProfilePhoto(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'fileable')->where('name', 'Person Image')->latest();
     }
 
     protected $casts = [

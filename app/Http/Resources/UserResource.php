@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'bids' => BidResource::collection($this->whenLoaded('bids')),
             'tasker_tasks' => TaskResource::collection($this->whenLoaded('taskerTasks')),
             'tasker_profile' => new TaskerProfileResource($this->whenLoaded('taskerProfiles')),
+            'profile_photo' => $this->taskerProfiles?->user_profile_picture,
             'zilas' => new ZilaResource($this->whenLoaded('zillas')),
             'upozilas' => new UpozilaResource($this->whenLoaded('upozilas')),
             'crated_at' => $this->crated_at?->toDateTimeString(),
