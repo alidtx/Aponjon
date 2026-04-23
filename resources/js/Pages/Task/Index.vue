@@ -13,18 +13,10 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
-    totalEarning: {
-        type: Number,
-        default: 0
-    },
     monthlyErning: {
         type: Number,
         default: 0
     },
-    successRate: {
-        type: Number,
-        default: 0
-    }
 })
 
 </script>

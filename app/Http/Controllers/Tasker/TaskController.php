@@ -43,8 +43,6 @@ class TaskController extends Controller
       'overview' => new UserResource($userOverview),
       'activity' => BidResource::collection($recentActivity),
       'monthlyErning' => TaskerService::TaskerCurrentMonthEarning(auth()->user()),
-      'successRate' => TaskerService::getSuccessRate(auth()->user())
-
     ]);
   }
 
