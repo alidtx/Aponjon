@@ -42,6 +42,11 @@ class TaskController extends Controller
     ]);
   }
 
+  public function Bids()
+  {
+    return Inertia::render('Task/Bids');
+  }
+
   public function taskerSidebarInfo()
   {
     $taskerSidebarProfile = User::findOrFail(auth()->user()->id)->load([

@@ -101,7 +101,7 @@ onMounted(() => {
                 <Link :href="route('tasker.dashboard')"
                     class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
                         class="fas fa-chart-pie mr-3"></i>ওভারভিউ</Link>
-                <Link class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
+                <Link :href="route('tasker.bids')" class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
                         class="fas fa-gavel mr-3"></i>আমার বিডস</Link>
                 <Link class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
                         class="fas fa-tasks mr-3"></i>কাজের বিবরনী</Link>
