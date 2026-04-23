@@ -25,17 +25,16 @@ class TaskController extends Controller
   public function index()
   {
 
-    $user = auth()->user();
-
+  
     $userOverview = User::with([
       'taskerProfiles',
       'taskerProfiles.media',
       'bids',
     ])
       ->select('id', 'name')
-      ->findOrFail($user->id);
+      ->findOrFail(auth()->user()->id);
     $recentActivity = Bid::with('task')
-      ->where('tasker_id', $user->id)
+      ->where('tasker_id', auth()->user()->id)
       ->whereIn('status', ['pending', 'accepted'])
       ->latest()
       ->limit(10)
@@ -43,9 +42,8 @@ class TaskController extends Controller
     return Inertia::render('Task/Index', [
       'overview' => new UserResource($userOverview),
       'activity' => BidResource::collection($recentActivity),
-      'totalEarning' => TaskerService::TaskerTotalEarning($user),
-      'monthlyErning' => TaskerService::TaskerCurrentMonthEarning($user),
-      'successRate' => TaskerService::getSuccessRate($user)
+      'monthlyErning' => TaskerService::TaskerCurrentMonthEarning(auth()->user()),
+      'successRate' => TaskerService::getSuccessRate(auth()->user())
 
     ]);
   }
@@ -58,6 +56,17 @@ class TaskController extends Controller
     ]);
     return new UserResource($taskerSidebarProfile);
   }
+  public function TaskerTotalEarning()
+  {
+   return TaskerService::TaskerTotalEarning(auth()->user());
+   
+  }
+  public function TaskerSuccessRate()
+  {
+   return TaskerService::getSuccessRate(auth()->user());
+   
+  }
+
 
   public function createProfile(Request $request)
   {

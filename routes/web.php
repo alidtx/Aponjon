@@ -50,6 +50,9 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['role:tasker'])->prefix('tasker')->name('tasker.')->group(function () {
             Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
             Route::get('/tasker-sidebar-info', [TaskController::class, 'taskerSidebarInfo'])->name('sidebar.info');
+            Route::get('/tasker-sidebar-success-rate', [TaskController::class, 'taskerSidebarSuccessRate'])->name('sidebar.success.rate');
+            Route::get('/tasker-total-earning', [TaskController::class, 'TaskerTotalEarning'])->name('total.earning');
+            Route::get('/tasker-success-rate', [TaskController::class, 'TaskerSuccessRate'])->name('success.rate');
         });
     });
 

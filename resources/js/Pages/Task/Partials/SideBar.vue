@@ -5,6 +5,8 @@ import axios from 'axios'
 
 const loading = ref(false)
 const profile = ref([])
+const total_earning = ref(0)
+const successRate = ref(0)
 const error = ref(null)
 const userName = computed(() => profile.value?.name || '')
 const designation = computed(() => profile.value?.tasker_profile?.designation || '')
@@ -37,9 +39,37 @@ const TaskerProfile = async () => {
     }
 }
 
+const TaskerTotalEarning = async () => {
+    loading.value = true
+    try {
+        const totalEarning = await axios.get(route('tasker.total.earning'))
+        total_earning.value = totalEarning.data
+
+    } catch (err) {
+        error.value = 'Failed to fetch total earning.'
+    } finally {
+        loading.value = false
+    }
+}
+
+const TaskerSuccessRate = async () => {
+    loading.value = true
+    try {
+        const TaskerSuccessRate = await axios.get(route('tasker.success.rate'))
+        successRate.value = TaskerSuccessRate.data
+
+    } catch (err) {
+        error.value = 'Failed to fetch success rate.'
+    } finally {
+        loading.value = false
+    }
+}
+
 onMounted(() => {
     TaskerProfile()
-})
+    TaskerTotalEarning()
+    TaskerSuccessRate()
+})  
 </script>
 
 <template>
@@ -63,7 +93,7 @@ onMounted(() => {
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">মোট আয়</span>
-                    <span class="text-sm font-bold text-primary">৳ {{ Math.round(total) }}</span>
+                    <span class="text-sm font-bold text-primary">৳ {{ Math.round(total_earning) }}</span>
                 </div>
             </div>
             <nav class="space-y-2">

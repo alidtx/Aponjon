@@ -2,7 +2,6 @@
 import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
 import { Head } from '@inertiajs/vue3'
 import Overview from './Partials/Overview.vue';
-import AssignedTask from './Partials/AssignedTask.vue';
 
 
 const props = defineProps({
