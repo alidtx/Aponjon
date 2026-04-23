@@ -9,7 +9,6 @@ use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
-use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskerService;
@@ -25,20 +24,17 @@ class TaskController extends Controller
   public function index()
   {
 
-  
-    $userOverview = User::with([
-      'taskerProfiles',
-      'taskerProfiles.media',
-      'bids',
-    ])
-      ->select('id', 'name')
+
+    $userOverview = User::with('bids')->select('id', 'name')
       ->findOrFail(auth()->user()->id);
+
     $recentActivity = Bid::with('task')
       ->where('tasker_id', auth()->user()->id)
       ->whereIn('status', ['pending', 'accepted'])
       ->latest()
       ->limit(10)
       ->get();
+
     return Inertia::render('Task/Index', [
       'overview' => new UserResource($userOverview),
       'activity' => BidResource::collection($recentActivity),
@@ -56,13 +52,11 @@ class TaskController extends Controller
   }
   public function TaskerTotalEarning()
   {
-   return TaskerService::TaskerTotalEarning(auth()->user());
-   
+    return TaskerService::TaskerTotalEarning(auth()->user());
   }
   public function TaskerSuccessRate()
   {
-   return TaskerService::getSuccessRate(auth()->user());
-   
+    return TaskerService::getSuccessRate(auth()->user());
   }
 
 

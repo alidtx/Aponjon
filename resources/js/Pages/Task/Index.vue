@@ -24,13 +24,10 @@ const props = defineProps({
 
 <template>
     <TaskerDefaultLayout>
+
         <Head title="টাস্কার ড্যাশবোর্ড" />
-                <div class="lg:col-span-3">
-                    <Overview 
-                    :activeBids="props.overview?.data?.bids" 
-                    :monthly="monthlyErning" 
-                    :recentActivity="activity" 
-                    />
-                </div>
+        <div class="lg:col-span-3">
+            <Overview :activeBids="props.overview?.data?.bids" :monthly="monthlyErning" :recentActivity="activity" />
+        </div>
     </TaskerDefaultLayout>
 </template>

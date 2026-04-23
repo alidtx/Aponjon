@@ -10,7 +10,7 @@ const successRate = ref(0)
 const error = ref(null)
 const userName = computed(() => profile.value?.name || '')
 const designation = computed(() => profile.value?.tasker_profile?.designation || '')
-const profile_photo = computed(() => profile.value?.profile_photo) 
+const profile_photo = computed(() => profile.value?.profile_photo)
 const rating = computed(() => profile.value?.tasker_profile?.rating || 0)
 
 
@@ -76,7 +76,8 @@ onMounted(() => {
     <div class="lg:col-span-1">
         <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
             <div class="text-center mb-6">
-                <img :src="profile_photo ||'/img/profile/dummy-image.jpg'" alt="Profile" class="w-20 h-20 rounded-full mx-auto mb-4">
+                <img :src="profile_photo || '/img/profile/dummy-image.jpg'" alt="Profile"
+                    class="w-20 h-20 rounded-full mx-auto mb-4">
                 <h2 class="text-xl font-bold text-dark">{{ userName }}</h2>
                 <p class="text-gray-600 text-sm">{{ designation }}</p>
                 <div class="flex justify-center space-x-1 text-yellow-400 mt-2">
