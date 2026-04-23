@@ -99,12 +99,19 @@ onMounted(() => {
             </div>
             <nav class="space-y-2">
                 <Link :href="route('tasker.dashboard')"
-                    class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
-                        class="fas fa-chart-pie mr-3"></i>ওভারভিউ</Link>
-                <Link :href="route('tasker.bids')" class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
-                        class="fas fa-gavel mr-3"></i>আমার বিডস</Link>
-                <Link class="flex items-center p-3 text-primary bg-blue-50 rounded-lg font-medium"><i
-                        class="fas fa-tasks mr-3"></i>কাজের বিবরনী</Link>
+                    class="flex items-center p-3 rounded-lg font-medium transition-colors"
+                    :class="route().current('tasker.dashboard') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    <i class="fas fa-chart-pie mr-3 text-primary"></i>ওভারভিউ
+                </Link>
+                <Link :href="route('tasker.bids')"
+                    class="flex items-center p-3 rounded-lg font-medium transition-colors"
+                    :class="route().current('tasker.bids') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    <i class="fas fa-gavel mr-3 text-primary"></i>আমার বিডস
+                </Link>
+                <Link href="#" class="flex items-center p-3 rounded-lg font-medium transition-colors"
+                    :class="route().current('tasker.tasks') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    <i class="fas fa-tasks mr-3 text-primary"></i>কাজের বিবরনী
+                </Link>
             </nav>
         </div>
     </div>
