@@ -47,6 +47,11 @@ class TaskController extends Controller
     return Inertia::render('Task/Bids');
   }
 
+  public function AssignedTask()
+  {
+    return Inertia::render('Task/AssignedTask');
+  }
+
   public function taskerSidebarInfo()
   {
     $taskerSidebarProfile = User::findOrFail(auth()->user()->id)->load([

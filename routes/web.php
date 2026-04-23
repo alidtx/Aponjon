@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tasker-total-earning', [TaskController::class, 'TaskerTotalEarning'])->name('total.earning');
             Route::get('/tasker-success-rate', [TaskController::class, 'TaskerSuccessRate'])->name('success.rate');
             Route::get('/bids', [TaskController::class, 'Bids'])->name('bids');
+            Route::get('/assigned-bids', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
         });
     });
 

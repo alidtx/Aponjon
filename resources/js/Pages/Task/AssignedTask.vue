@@ -7,7 +7,7 @@ import PendingBids from './Partials/PendingBids.vue';
 
 <template>
     <TaskerDefaultLayout>
-        <Head title="আপনার কাজ"/>
+        <Head title="অ্যাসাইনড টাস্কস"/>
         <div class="lg:col-span-3">
            <PendingBids /> 
         </div>
