@@ -7,7 +7,7 @@ import AssignedTask from './Partials/AssignedTask.vue';
 
 <template>
     <TaskerDefaultLayout>
-        <Head title="bid page" />
+        <Head title="আপনার কাজ"/>
         <div class="lg:col-span-3">
            <AssignedTask /> 
         </div>
