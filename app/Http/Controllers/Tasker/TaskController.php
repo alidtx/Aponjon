@@ -42,9 +42,9 @@ class TaskController extends Controller
     ]);
   }
 
-  public function Bids()
+  public function pendingBids()
   {
-    return Inertia::render('Task/Bids');
+    return Inertia::render('Task/PendingTask');
   }
 
   public function AssignedTask()
