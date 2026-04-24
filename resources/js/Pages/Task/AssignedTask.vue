@@ -1,7 +1,7 @@
 <script setup>
 import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import PendingBids from './Partials/PendingBids.vue';
+import AssignedBids from './Partials/AssignedBids.vue';
 
 </script>
 
@@ -9,7 +9,7 @@ import PendingBids from './Partials/PendingBids.vue';
     <TaskerDefaultLayout>
         <Head title="অ্যাসাইনড টাস্কস"/>
         <div class="lg:col-span-3">
-           <PendingBids /> 
+           <AssignedBids /> 
         </div>
     </TaskerDefaultLayout>
 </template>

@@ -2,7 +2,7 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 
 
-const categories = ['চলমান', 'সম্পন্ন', 'পরবর্তী জন্য অপেক্ষমান']
+const categories = ['পেন্ডিং', 'একসেপ্টেড', 'রিজেক্টেড']
 
 
 </script>
@@ -12,7 +12,7 @@ const categories = ['চলমান', 'সম্পন্ন', 'পরবর্
 <template>
 
     <div id="tasks" class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-dark">অ্যাসাইনড কাজ সুমহ</h2>
+        <h2 class="text-2xl font-bold text-dark">আপনার অপেক্ষমাণ কাজ</h2>
         <TabGroup>
             <div class="border-b border-gray-200 pt-4">
                 <nav class="flex space-x-8">

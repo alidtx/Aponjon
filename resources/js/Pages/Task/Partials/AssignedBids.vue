@@ -2,7 +2,7 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 
 
-const categories = ['পেন্ডিং', 'একসেপ্টেড', 'রিজেক্টেড']
+const categories = ['চলমান', 'সম্পন্ন', 'পরবর্তী জন্য অপেক্ষমান']
 
 
 </script>
