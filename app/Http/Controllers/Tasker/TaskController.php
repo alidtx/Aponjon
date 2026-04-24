@@ -44,7 +44,7 @@ class TaskController extends Controller
       'monthlyErning' => TaskerService::TaskerCurrentMonthEarning(auth()->user()),
     ]);
   }
-public function pendingBids()
+public function pendingTasks()
     {
         $taskerId = auth()->id();
         

@@ -53,8 +53,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tasker-sidebar-success-rate', [TaskController::class, 'taskerSidebarSuccessRate'])->name('sidebar.success.rate');
             Route::get('/tasker-total-earning', [TaskController::class, 'TaskerTotalEarning'])->name('total.earning');
             Route::get('/tasker-success-rate', [TaskController::class, 'TaskerSuccessRate'])->name('success.rate');
-            Route::get('/pending-bids', [TaskController::class, 'pendingBids'])->name('pending.bids');
-            Route::get('/assigned-bids', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
+            Route::get('/pending-tasks', [TaskController::class, 'pendingTasks'])->name('pending.tasks');
+            Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
         });
     });
 
