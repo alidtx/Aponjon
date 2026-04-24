@@ -34,6 +34,25 @@ class CustomerProfile extends Model
     {
         return $this->belongsTo(Upozila::class);
     }
+
+      public function getFullAddressAttribute(): string
+    {
+        $parts = [];
+
+        if ($this->upozila) {
+            $parts[] = $this->upozila->name;
+        }
+
+        if ($this->zila) {
+            $parts[] = $this->zila->name;
+        }
+
+        if ($this->district) {
+            $parts[] = $this->district->name;
+        }
+
+        return implode(', ', $parts) ?: 'Address not set';
+    }
     public function media()
     {
         return $this->morphMany(Media::class, 'fileable');

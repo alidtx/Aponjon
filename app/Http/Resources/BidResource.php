@@ -25,6 +25,7 @@ class BidResource extends JsonResource
             'specific_date' => $this->specific_date,
             'terms_accepted' => $this->terms_accepted,
             'status'          => $this->status,
+            'full_address' =>  $this->task?->customers?->customerProfile?->full_address,
             'task'   => new TaskResource($this->whenLoaded('task')),
             'tasker' => new UserResource($this->whenLoaded('tasker')),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),

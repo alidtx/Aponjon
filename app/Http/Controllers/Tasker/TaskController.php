@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-
+use function Laravel\Prompts\select;
 
 class TaskController extends Controller
 {
@@ -43,23 +43,33 @@ class TaskController extends Controller
       'monthlyErning' => TaskerService::TaskerCurrentMonthEarning(auth()->user()),
     ]);
   }
+public function pendingBids()
+    {
+        $taskerId = auth()->id();
+        
+        $allBids = self::getAllBidsWithRelations($taskerId);
+        
+        return Inertia::render('Task/PendingTask', [
+            'pendingBids' => BidResource::collection($allBids->where('status', 'pending')),
+            'acceptedBids' => BidResource::collection($allBids->where('status', 'accepted')),
+            'rejectedBids' => BidResource::collection($allBids->where('status', 'rejected')),
+        ]);
+    }
 
-  public function pendingBids()
-  {
-    $tasks = Task::with([
-      'customers:id,name',
-      'customers.customerProfile:id,user_id,district_id,zila_id,upozila_id', 
-      'customers.customerProfile.district:id,name',
-      'customers.customerProfile.zila:id,name',
-      'customers.customerProfile.upozila:id,name',
-    ])->where(['customer_id' => auth()->user()->id])
-    ->select('id', 'customer_id', 'title', 'description', 'location_address', 'location_coordinates', 'district_id', 'zila_id', 'upozila_id', 'budget')
-    ->get();
-    
-    return Inertia::render('Task/PendingTask',[
-      'tasks' => TaskResource::collection($tasks)
-    ]);
-  }
+    private static function getAllBidsWithRelations($taskerId)
+    {
+        return Bid::where('tasker_id', $taskerId)
+            ->with([
+                'task:id,title,customer_id',
+                'task.customers:id,name',
+                'task.customers.customerProfile:id,user_id,district_id,zila_id,upozila_id',
+                'task.customers.customerProfile.district:id,name',
+                'task.customers.customerProfile.zila:id,name',
+                'task.customers.customerProfile.upozila:id,name',
+            ])
+            ->select('id', 'task_id', 'tasker_id', 'amount', 'status', 'created_at')
+            ->get();
+    }
 
   public function AssignedTask()
   {
