@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskerProfileRequest;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\DistrictResource;
+use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
+use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskerService;
@@ -44,7 +46,19 @@ class TaskController extends Controller
 
   public function pendingBids()
   {
-    return Inertia::render('Task/PendingTask');
+    $tasks = Task::with([
+      'customers:id,name',
+      'customers.customerProfile:id,user_id,district_id,zila_id,upozila_id', 
+      'customers.customerProfile.district:id,name',
+      'customers.customerProfile.zila:id,name',
+      'customers.customerProfile.upozila:id,name',
+    ])->where(['customer_id' => auth()->user()->id])
+    ->select('id', 'customer_id', 'title', 'description', 'location_address', 'location_coordinates', 'district_id', 'zila_id', 'upozila_id', 'budget')
+    ->get();
+    
+    return Inertia::render('Task/PendingTask',[
+      'tasks' => TaskResource::collection($tasks)
+    ]);
   }
 
   public function AssignedTask()

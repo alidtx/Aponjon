@@ -61,7 +61,24 @@ class TaskerProfile extends Model
     {
         return $this->morphOne(Media::class, 'fileable')->where('name', 'Person Image')->latest();
     }
+  public function getFullAddressAttribute(): string
+    {
+        $parts = [];
 
+        if ($this->upozila) {
+            $parts[] = $this->upozila->name;
+        }
+
+        if ($this->zila) {
+            $parts[] = $this->zila->name;
+        }
+
+        if ($this->district) {
+            $parts[] = $this->district->name;
+        }
+
+        return implode(', ', $parts) ?: 'Address not set';
+    }
     protected $casts = [
         'skill' => 'array',
         'experience' => 'integer',

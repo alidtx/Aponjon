@@ -48,6 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(TaskerProfile::class);
     }
+       public function customerProfile()
+    {
+        return $this->hasOne(CustomerProfile::class);
+    }
 
     public function customerTasks()
     {
@@ -126,24 +130,6 @@ class User extends Authenticatable
         return 'login_attempts_'.$this->email.'_timeout';
     }
 
-    public function getFullAddressAttribute(): string
-    {
-        $parts = [];
-
-        if ($this->upozila) {
-            $parts[] = $this->upozila->name;
-        }
-
-        if ($this->zila) {
-            $parts[] = $this->zila->name;
-        }
-
-        if ($this->district) {
-            $parts[] = $this->district->name;
-        }
-
-        return implode(', ', $parts) ?: 'Address not set';
-    }
 
     protected $hidden = [
         'password',

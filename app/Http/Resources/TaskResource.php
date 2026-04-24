@@ -29,6 +29,7 @@ class TaskResource extends JsonResource
             'customer_notes'       => $this->customer_notes,
             'bidding_ends_at'       => $this->bidding_ends_at,
             'customer' => new UserResource($this->whenLoaded('customers')),
+            'location11111' => $this->customers?->customerProfile?->full_address,
             'category' => new CategoryResource($this->whenLoaded('category')),
             'tasker'   => new UserResource($this->whenLoaded('taskers')),
             'bid'   => BidResource::collection($this->whenLoaded('bids')), 
