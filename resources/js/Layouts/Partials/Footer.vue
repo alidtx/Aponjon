@@ -7,10 +7,10 @@ const siteConfig = page.props.siteConfig
 
 
 <template>
-   <div class="max-w-6xl mx-auto py-5  border-t border-gray-300">
-        <div class="text-center text-gray-600 text-sm">
-            <p>© {{ new Date().getFullYear() }} {{siteConfig.name}}। সর্বস্বত্ব সংরক্ষিত।</p>
-            <p class="mt-2">{{ siteConfig.scam_policy }}</p>
-        </div>
+ <div class="py-5 max-w-6xl mx-auto border-t border-gray-300 w-full">
+    <div class="px-4 text-center text-gray-600 text-sm">
+        <p>© {{ new Date().getFullYear() }} {{siteConfig.name}}। সর্বস্বত্ব সংরক্ষিত।</p>
+        <p class="mt-2">{{ siteConfig.scam_policy }}</p>
     </div>
+</div>
 </template>
