@@ -7,11 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskerProfileRequest;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\DistrictResource;
-use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
-use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskerService;
@@ -19,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-use function Laravel\Prompts\select;
 
 class TaskController extends Controller
 {
