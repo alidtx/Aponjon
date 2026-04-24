@@ -62,7 +62,7 @@ public function pendingBids()
         return Bid::where('tasker_id', $taskerId)
             ->with([
                 'task:id,title,customer_id',
-                'task.customers:id,name',
+                'task.customers:id,name,phone',
                 'task.customers.customerProfile:id,user_id,district_id,zila_id,upozila_id',
                 'task.customers.customerProfile.district:id,name',
                 'task.customers.customerProfile.zila:id,name',
