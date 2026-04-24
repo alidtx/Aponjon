@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Tasker;
 
+use App\Enum\BidStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskerProfileRequest;
 use App\Http\Resources\BidResource;
@@ -50,9 +51,9 @@ public function pendingBids()
         $allBids = self::getAllBidsWithRelations($taskerId);
         
         return Inertia::render('Task/PendingTask', [
-            'pendingBids' => BidResource::collection($allBids->where('status', 'pending')),
-            'acceptedBids' => BidResource::collection($allBids->where('status', 'accepted')),
-            'rejectedBids' => BidResource::collection($allBids->where('status', 'rejected')),
+            'pendingBids' => BidResource::collection($allBids->where('status', BidStatus::Pending->value)),
+            'acceptedBids' => BidResource::collection($allBids->where('status', BidStatus::Accepted->value)),
+            'rejectedBids' => BidResource::collection($allBids->where('status', BidStatus::Rejected->value)),
         ]);
     }
 
