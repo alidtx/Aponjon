@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enum\PaymentStatus;
 use App\Enum\TaskStatus;
 use App\Models\Task;
 use App\Models\TaskerProfile;
@@ -117,7 +118,7 @@ class TaskerService
                         AND EXISTS (
                             SELECT 1 FROM orders 
                             WHERE orders.task_id = tasks.id 
-                            AND orders.payment_status = "paid"
+                            AND orders.payment_status = "'.PaymentStatus::Paid->value.'"
                         )
                     ) THEN 1 ELSE 0 
                 END) as successful_bids
