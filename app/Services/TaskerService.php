@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enum\TaskStatus;
+use App\Models\Task;
 use App\Models\TaskerProfile;
 use Illuminate\Support\Facades\DB;
 use App\Services\MediaService;
@@ -77,7 +79,7 @@ class TaskerService
         }
 
         return $tasker->taskerTasks()
-            ->where('tasks.status', 'completed')
+            ->where('tasks.status', TaskStatus::Completed->value)
             ->join('orders', 'tasks.id', '=', 'orders.task_id')
             ->where('orders.payment_status', 'paid')
             ->sum('orders.tasker_earning');
@@ -90,7 +92,7 @@ class TaskerService
         }
 
         return $tasker->taskerTasks()
-            ->where('tasks.status', 'completed')
+            ->where('tasks.status', TaskStatus::Completed->value)
             ->whereMonth('tasks.updated_at', now()->month)
             ->whereYear('tasks.updated_at', now()->year)
             ->join('orders', 'tasks.id', '=', 'orders.task_id')
@@ -111,7 +113,7 @@ class TaskerService
                     WHEN EXISTS (
                         SELECT 1 FROM tasks 
                         WHERE tasks.id = bids.task_id 
-                        AND tasks.status = "completed"
+                        AND tasks.status = "' . TaskStatus::Completed->value . '"
                         AND EXISTS (
                             SELECT 1 FROM orders 
                             WHERE orders.task_id = tasks.id 

@@ -31,7 +31,7 @@ class TaskController extends Controller
 
     $recentActivity = Bid::with('task')
       ->where('tasker_id', auth()->user()->id)
-      ->whereIn('status', ['pending', 'accepted'])
+      ->whereIn('status', [BidStatus::Pending->value, BidStatus::Accepted->value])
       ->latest()
       ->limit(10)
       ->get();
