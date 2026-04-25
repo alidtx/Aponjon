@@ -46,7 +46,7 @@ class TaskController extends Controller
   {
     $taskerId = auth()->id();
 
-    $allBids = self::getAllPendingBids($taskerId);
+    $allBids = self::getAllBids($taskerId);
 
     return Inertia::render('Task/PendingTask', [
       'pendingBids' => BidResource::collection($allBids->where('status', BidStatus::Pending->value)),
@@ -57,8 +57,7 @@ class TaskController extends Controller
 
   public function AssignedTask()
   {
-    $allBids = $this->getAllAssignedBids(auth()->id());
-   
+    $allBids = $this->getAllBids(auth()->id());
     return Inertia::render('Task/AssignedTask', [
 
     'inProgressTasks' => BidResource::collection($allBids->filter(
@@ -90,7 +89,7 @@ class TaskController extends Controller
     ]);
   }
 
-  private static function getAllPendingBids($taskerId)
+  private static function getAllBids($taskerId)
   {
     return Bid::where('tasker_id', $taskerId)
       ->with([
@@ -104,22 +103,6 @@ class TaskController extends Controller
       ->select('id', 'task_id', 'tasker_id', 'amount', 'status', 'created_at')
       ->get();
   }
-
-   private static function getAllAssignedBids($taskerId)
-  {
-    return Bid::where('tasker_id', $taskerId)
-      ->with([
-        'task:id,title,customer_id,status,created_at',
-        'task.customers:id,name,phone',
-        'task.customers.customerProfile:id,user_id,district_id,zila_id,upozila_id',
-        'task.customers.customerProfile.district:id,name',
-        'task.customers.customerProfile.zila:id,name',
-        'task.customers.customerProfile.upozila:id,name',
-      ])
-      ->select('id', 'task_id', 'tasker_id', 'amount', 'status', 'created_at')
-      ->get();
-  }
-
 
   public function taskerSidebarInfo()
   {

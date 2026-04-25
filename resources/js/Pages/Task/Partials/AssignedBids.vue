@@ -46,10 +46,10 @@ const props = defineProps({
                                 'bg-gray-100 text-gray-800': index === 2,
                                 'bg-red-100 text-red-800': index === 3
                             }">
-                                {{ index === 0 ? inProgressTasks.length : 
-                                   index === 1 ? assignedTasks.length : 
-                                   index === 2 ? completedTasks.length : 
-                                   disputedTasks.length }}
+                                {{ index === 0 ? inProgressTasks.data.length : 
+                                   index === 1 ? assignedTasks.data.length : 
+                                   index === 2 ? completedTasks.data.length : 
+                                   disputedTasks.data.length }}
                             </span>
                         </button>
                     </Tab>
@@ -59,11 +59,11 @@ const props = defineProps({
             <TabPanels class="mt-6">
                 <!-- In Progress Tab -->
                 <TabPanel>
-                    <div v-if="inProgressTasks.length === 0" class="text-center py-12">
+                    <div v-if="inProgressTasks.data.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন চলমান কাজ নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                        <div v-for="bid in inProgressTasks" :key="bid.id"
+                        <div v-for="bid in inProgressTasks.data" :key="bid.id"
                             class="border border-green-200 rounded-lg p-4 bg-green-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
@@ -115,11 +115,11 @@ const props = defineProps({
 
                 <!-- Assigned Tab -->
                 <TabPanel>
-                    <div v-if="assignedTasks.length === 0" class="text-center py-12">
+                    <div v-if="assignedTasks.data.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন অ্যাসাইনড কাজ নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                        <div v-for="bid in assignedTasks" :key="bid.id"
+                        <div v-for="bid in assignedTasks.data" :key="bid.id"
                             class="border border-blue-200 rounded-lg p-4 bg-blue-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
@@ -171,11 +171,11 @@ const props = defineProps({
 
                 <!-- Completed Tab -->
                 <TabPanel>
-                    <div v-if="completedTasks.length === 0" class="text-center py-12">
+                    <div v-if="completedTasks.data.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন সম্পন্ন কাজ নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                        <div v-for="bid in completedTasks" :key="bid.id"
+                        <div v-for="bid in completedTasks.data" :key="bid.id"
                             class="border border-gray-200 rounded-lg p-4 bg-gray-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
@@ -211,18 +211,18 @@ const props = defineProps({
 
                 <!-- Disputed Tab -->
                 <TabPanel>
-                    <div v-if="disputedTasks.length === 0" class="text-center py-12">
+                    <div v-if="disputedTasks.data.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন বিতর্কিত কাজ নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                        <div v-for="bid in disputedTasks" :key="bid.id"
+                        <div v-for="bid in disputedTasks.data" :key="bid.id"
                             class="border border-red-200 rounded-lg p-4 bg-red-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task?.title || 'কাজের শিরোনাম নেই' }}</h3>
                                     <p class="text-gray-600 text-sm">
                                         {{ bid.task?.customer?.name || 'ক্লায়েন্ট' }} •
-                                        {{ bid.full_address || bid.task?.customers?.customerProfile?.full_address || 'এলাকা' }}
+                                        {{ bid.full_address || bid.task?.customer?.customerProfile?.full_address || 'এলাকা' }}
                                     </p>
                                 </div>
                                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
