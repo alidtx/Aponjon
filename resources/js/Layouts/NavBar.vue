@@ -6,6 +6,7 @@ import DropDownIcon from '@/Components/Icons/DropDownIcon.vue';
 import { MenuItem } from '@headlessui/vue'
 import UserDropdown from '@/Components/UserDropdown.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
+import UserSettingsIcon from '@/Components/Icons/UserSettingsIcon.vue';
 import LogOutIcon from '@/Components/Icons/LogOutIcon.vue';
 import MessageIcon from '@/Components/Icons/MessageIcon.vue';
 
@@ -39,7 +40,17 @@ const user = auth?.user;
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
                             ]">
                                 <EditIcon class="mr-2 h-5 w-5 text-violet-400" />
-                                আপনার প্রোফাইল
+                                প্রোফাইল এডিট করুন
+                            </Link>
+                            </MenuItem>
+
+                            <MenuItem v-slot="{ active }">
+                            <Link :href="route('tasker.profile.edit', user?.id)" :class="[
+                                active ? 'bg-primary text-white' : 'text-gray-900',
+                                'group flex w-full items-center rounded-md px-2 py-2 text-sm'
+                            ]">
+                                <UserSettingsIcon class="mr-2 h-5 w-5 text-violet-400" />
+                                প্রোফাইল সেটিংস করুন
                             </Link>
                             </MenuItem>
 
