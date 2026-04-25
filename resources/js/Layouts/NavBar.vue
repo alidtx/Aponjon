@@ -27,7 +27,7 @@ const user = auth?.user;
                 <div class="flex items-center space-x-4">
                     <MessageIcon />
                     <NotificationIcon />
-                    <UserDropdown name="Ali Rimon">
+                    <UserDropdown :name="user?.name" :user="user">
 
                         <template #icon>
                             <DropDownIcon />
