@@ -1,6 +1,6 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import NotificationIcon from '@/Components/Icons/NotificationIcon.vue';
 import DropDownIcon from '@/Components/Icons/DropDownIcon.vue';
 import { MenuItem } from '@headlessui/vue'
@@ -8,14 +8,11 @@ import UserDropdown from '@/Components/UserDropdown.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import LogOutIcon from '@/Components/Icons/LogOutIcon.vue';
 import MessageIcon from '@/Components/Icons/MessageIcon.vue';
-import { router } from '@inertiajs/vue3'
 
-
-const logout = () => {
-    router.post(route('logout'))
-}
+const page = usePage();
+const auth = page.props.auth;
+const user = auth?.user;
 </script>
-
 
 <template>
     <nav class="bg-white shadow-lg ">
@@ -27,7 +24,7 @@ const logout = () => {
                     </Link>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <MessageIcon/>
+                    <MessageIcon />
                     <NotificationIcon />
                     <UserDropdown name="Ali Rimon">
 
@@ -37,26 +34,23 @@ const logout = () => {
 
                         <template #items>
                             <MenuItem v-slot="{ active }">
-                            <button :class="[
+                            <Link :href="route('profile.edit', user?.id)" :class="[
                                 active ? 'bg-primary text-white' : 'text-gray-900',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
                             ]">
                                 <EditIcon class="mr-2 h-5 w-5 text-violet-400" />
                                 আপনার প্রোফাইল
-                            </button>
+                            </Link>
                             </MenuItem>
 
                             <MenuItem v-slot="{ active }">
-                            <button :class="[
+                            <Link :href="route('logout')" method="post" as="button" :class="[
                                 active ? 'bg-primary text-white' : 'text-gray-900',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
-                            ]"
-                            @click="logout"
-                            >
-                            
+                            ]">
                                 <LogOutIcon class="mr-2 h-5 w-5 text-violet-400" />
                                 লগ আউট করুন
-                            </button>
+                            </Link>
                             </MenuItem>
                         </template>
 
