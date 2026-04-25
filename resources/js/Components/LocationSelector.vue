@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import SelectInput from '@/Components/SelectInput.vue'
 import InputError from '@/Components/InputError.vue'
@@ -27,42 +27,53 @@ const allZilasData = computed(() => props.zilas?.data || props.zilas || [])
 const filteredZilaList = ref([])
 const filteredUpozilaList = ref([])
 
-function getZilasByDistrict(id) {
-    const district = districtsData.value.find(d => d.id == id)
+function loadZilas(districtId) {
+    const district = districtsData.value.find(d => d.id == districtId)
 
     if (district?.zilas) {
         filteredZilaList.value = district.zilas
     } else {
         filteredZilaList.value = allZilasData.value.filter(
-            z => z.district_id == id
+            z => z.district_id == districtId
         )
     }
+}
 
+function loadUpozilas(zilaId) {
+    const zila = allZilasData.value.find(z => z.id == zilaId)
+    filteredUpozilaList.value = zila?.upozilas || []
+}
+
+function handleDistrictChange(val) {
+    emit('update:districtId', val)
     emit('update:zilaId', '')
     emit('update:upozilaId', '')
+
+    loadZilas(val)
+    filteredUpozilaList.value = []
 }
 
-function getUpozilasByZila(id) {
-    const zila = allZilasData.value.find(z => z.id == id)
-
-    filteredUpozilaList.value = zila?.upozilas || []
-
+function handleZilaChange(val) {
+    emit('update:zilaId', val)
     emit('update:upozilaId', '')
+
+    loadUpozilas(val)
 }
 
-watch(() => props.districtId, (val) => {
-    if (val) getZilasByDistrict(val)
-})
+onMounted(() => {
+    if (props.districtId) {
+        loadZilas(props.districtId)
+    }
 
-watch(() => props.zilaId, (val) => {
-    if (val) getUpozilasByZila(val)
+    if (props.zilaId) {
+        loadUpozilas(props.zilaId)
+    }
 })
 </script>
 
 <template>
-
 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-    <div >
+    <div>
         <InputLabel value="বিভাগ" required />
         <SelectInput class="w-full p-3"
             :options="districtsData"
@@ -70,7 +81,7 @@ watch(() => props.zilaId, (val) => {
             valueKey="id"
             defaultVal="বিভাগ নির্বাচন করুন"
             :modelValue="districtId"
-            @update:modelValue="emit('update:districtId', $event)"
+            @update:modelValue="handleDistrictChange"
         />
         <InputError :message="errors?.district_id"/>
     </div>
@@ -82,29 +93,23 @@ watch(() => props.zilaId, (val) => {
             valueKey="id"
             defaultVal="জেলা নির্বাচন করুন"
             :modelValue="zilaId"
-            @update:modelValue="emit('update:zilaId', $event)"
+            @update:modelValue="handleZilaChange"
             :disabled="!districtId"
         />
-        <small v-if="districtId">
-        পাওয়া গেছে: {{ filteredZilaList.length }} টি জেলা
-      </small>
         <InputError :message="errors?.zila_id"/>
     </div>
+
     <div>
         <InputLabel value="উপজেলা" required />
-
         <SelectInput class="w-full p-3"
             :options="filteredUpozilaList"
             labelKey="name"
             valueKey="id"
             defaultVal="উপজেলা নির্বাচন করুন"
             :modelValue="upozilaId"
-            @update:modelValue="emit('update:upozilaId', $event)"
+            @update:modelValue="(val) => emit('update:upozilaId', val)"
             :disabled="!zilaId"
         />
-        <small v-if="zilaId">
-        পাওয়া গেছে: {{ filteredUpozilaList.length }} টি জেলা
-      </small>
         <InputError :message="errors?.upozila_id"/>
     </div>
 
