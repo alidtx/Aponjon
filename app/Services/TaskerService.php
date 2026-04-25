@@ -63,8 +63,13 @@ class TaskerService
                     fileable: $tasker
                 );
             }
-            auth()->user()->update(['is_profile_completed' => true]);
 
+            if (!auth()->user()->is_profile_completed) {
+
+              auth()->user()->update(['is_profile_completed' => true]);
+            
+            }
+            
             DB::commit();
 
             return $tasker;

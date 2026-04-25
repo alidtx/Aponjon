@@ -22,6 +22,11 @@ class TaskerProfileResource extends JsonResource
                     'phone' => $this->user->phone,
                 ];
             }),
+            'experience' => $this->experience,
+            'nid_number' => $this->nid_number,
+            'district_id' => $this->district_id,
+            'zila_id' => $this->zila_id,
+            'upozila_id' => $this->upozila_id,
             'bio' => $this->bio,
             'designation' => $this->designation,
             'skills' => $this->skill ?? [],

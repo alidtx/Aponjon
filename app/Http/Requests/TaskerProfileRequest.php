@@ -26,7 +26,7 @@ class TaskerProfileRequest extends FormRequest
             'nid_number' => ['required', new NidNumberRule()],
             'skills' => 'required|array|min:1',
             'skills.*' => 'string',
-            'experience' => 'required|string|max:500',
+            'experience' => 'required',
             'district_id' => 'required|integer|exists:districts,id',
             'zila_id' => 'required|integer',
             'upozila_id' => 'required|integer',
@@ -34,7 +34,7 @@ class TaskerProfileRequest extends FormRequest
             'hourly_rate' => 'required|numeric|min:0',
             'nid_front' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'nid_back' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'is_terms_and_condition_accept' => 'required|boolean|accepted',
+            'person_image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ];
     }
     

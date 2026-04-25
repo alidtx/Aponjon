@@ -145,12 +145,22 @@ class TaskController extends Controller
   public function editProfile($taskerId)
   {
     $tasker = User::with('taskerProfiles')->findOrFail($taskerId);
-
     return Inertia::render('Task/EditProfile', [
-      'loggedInUser' => new UserResource(Auth::user()),
+      'loggedInUser' => new UserResource($tasker),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
+  }
+  public function updateProfile(TaskerProfileRequest $request, $taskerId)
+  {     
+    try {
+      TaskerService::storeTaskerProfile($request);
+      
+    } catch (\Exception $e) {
+      return redirect()->back()
+        ->with('error', 'Failed to update profile: ' . $e->getMessage())
+        ->withInput();
+    }
   }
 
 }
