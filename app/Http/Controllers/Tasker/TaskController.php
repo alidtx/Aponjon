@@ -142,4 +142,15 @@ class TaskController extends Controller
         ->withInput();
     }
   }
+  public function editProfile($taskerId)
+  {
+    $tasker = User::with('taskerProfiles')->findOrFail($taskerId);
+
+    return Inertia::render('Task/EditProfile', [
+      'loggedInUser' => new UserResource(Auth::user()),
+      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
+      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
+    ]);
+  }
+
 }

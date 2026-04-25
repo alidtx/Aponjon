@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tasker-success-rate', [TaskController::class, 'TaskerSuccessRate'])->name('success.rate');
             Route::get('/pending-tasks', [TaskController::class, 'pendingTasks'])->name('pending.tasks');
             Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
+            Route::get('/edit-profile/{taskerId}', [TaskController::class, 'editProfile'])->name('profile.edit');
         });
     });
 
