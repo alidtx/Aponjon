@@ -43,7 +43,7 @@ const form = useForm({
     hourly_rate: sliderValue.value,
     nid_front: taskerProfile.nid_front || '',
     nid_back: taskerProfile.nid_back || '',
-    person_image: taskerProfile.person_image || '',
+    person_image: props.loggedInUser?.data?.profile_photo || '',
 });
 
 watch(sliderValue, (newValue) => {

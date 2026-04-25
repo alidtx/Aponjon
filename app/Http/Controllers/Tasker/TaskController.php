@@ -11,6 +11,7 @@ use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
+use App\Models\TaskerProfile;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskerService;
