@@ -59,11 +59,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
             Route::get('/edit-profile/{taskerId}', [TaskerProfileController::class, 'editProfile'])->name('profile.edit');
             Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update'); 
-            Route::get('/edit-tasker-profile-settings/{taskerId}', [TaskerProfileSettingController::class, 'editSetting'])
+            Route::get('/edit-tasker-profile-settings', [TaskerProfileSettingController::class, 'editSetting'])
             ->name('edit.tasker.profile.settings'); 
-             Route::post('/update-tasker-profile-settings/{taskerId}', [TaskerProfileSettingController::class, 'updateSetting'])
+             Route::post('/update-tasker-profile-settings', [TaskerProfileSettingController::class, 'updateSetting'])
             ->name('update.tasker.profile.settings'); 
-            Route::delete('/delete-tasker-account/{taskerId}', [TaskerProfileSettingController::class, 'destroy'])
+            Route::delete('/delete-tasker-account', [TaskerProfileSettingController::class, 'destroy'])
             ->name('delete.tasker.account'); 
         });
     });
