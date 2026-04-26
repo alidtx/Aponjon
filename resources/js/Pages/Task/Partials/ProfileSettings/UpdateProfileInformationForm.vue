@@ -1,4 +1,5 @@
 <script setup>
+import UpdateUserSettingIcon from '@/Components/Icons/updateUserSettingIcon.vue';
 import UserSettingsIcon from '@/Components/Icons/UserSettingsIcon.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -27,7 +28,7 @@ const form = useForm({
     <section>
         <div class="mb-6 pb-4 border-b">
                 <div class="flex items-center gap-2 mb-2">
-                    <UserSettingsIcon />
+                    <UpdateUserSettingIcon />
                     <h1 class="text-2xl font-bold text-dark">সেটিংস পরিবর্তন করুন</h1>
                 </div>
                 <p class="text-gray-600 ml-9">আপনার তথ্য আপডেট করুন</p>
