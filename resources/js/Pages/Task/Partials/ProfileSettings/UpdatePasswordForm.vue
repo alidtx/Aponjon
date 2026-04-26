@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { toast } from 'vue3-toastify';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -18,7 +19,12 @@ const form = useForm({
 const updatePassword = () => {
     form.put(route('password.update'), {
         preserveScroll: true,
-        onSuccess: () => form.reset(),
+          onSuccess: (success) => {
+                toast.success('প্রোফাইল সফলভাবে আপডেট করা হয়েছে', {
+                    position: 'bottom-right'
+                });
+                form.reset()
+            },
         onError: () => {
             if (form.errors.password) {
                 form.reset('password', 'password_confirmation');

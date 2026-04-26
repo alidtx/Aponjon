@@ -11,8 +11,6 @@ const user = usePage().props.auth.user;
 
 const form = useForm({
     name: user.name,
-    email: user.email,
-    phone: user.phone,
 });
 </script>
 
@@ -42,7 +40,7 @@ const form = useForm({
             }
         })" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="name" value="নাম" />
+                <InputLabel for="name" value="নাম"  required/>
 
                 <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus
                     autocomplete="name" />
@@ -53,17 +51,14 @@ const form = useForm({
             <div>
                 <InputLabel for="email" value="ইমেইল" />
 
-                <TextInput id="email" type="email" disabled class="mt-1 block w-full" v-model="form.email" required
+                <TextInput id="email" type="email" disabled class="mt-1 block w-full" v-model="user.email" 
                     autocomplete="username" />
-
-                <InputError class="mt-2" :message="form.errors.email" />
             </div>
             <div>
                 <InputLabel for="phone" value="ফোন নম্বর" />
 
-                <TextInput id="phone" disabled type="text" class="mt-1 block w-full" v-model="form.phone" required
+                <TextInput id="phone" disabled type="text" class="mt-1 block w-full" v-model="user.phone" 
                     autocomplete="username" />
-                <InputError class="mt-2" :message="form.errors.phone" />
             </div>
 
             <div class="flex items-center gap-4">

@@ -45,7 +45,7 @@ const user = auth?.user;
                             </MenuItem>
 
                             <MenuItem v-slot="{ active }">
-                            <Link :href="route('tasker.edit.tasker.profile.settings',user?.id)" :class="[
+                            <Link :href="route('tasker.edit.tasker.profile.settings')" :class="[
                                 active ? 'bg-primary text-white' : 'text-gray-900',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
                             ]">
