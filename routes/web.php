@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
+use App\Http\Controllers\Tasker\TaskerProfileSettingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -57,7 +58,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/pending-tasks', [TaskController::class, 'pendingTasks'])->name('pending.tasks');
             Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
             Route::get('/edit-profile/{taskerId}', [TaskerProfileController::class, 'editProfile'])->name('profile.edit');
-            Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update');
+            Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update'); 
+            Route::get('/edit-tasker-profile-settings/{taskerId}', [TaskerProfileSettingController::class, 'editSetting'])
+            ->name('edit.tasker.profile.settings'); 
+             Route::post('/update-tasker-profile-settings/{taskerId}', [TaskerProfileSettingController::class, 'updateSetting'])
+            ->name('update.tasker.profile.settings'); 
+            Route::delete('/delete-tasker-account/{taskerId}', [TaskerProfileSettingController::class, 'destroy'])
+            ->name('delete.tasker.account'); 
         });
     });
 

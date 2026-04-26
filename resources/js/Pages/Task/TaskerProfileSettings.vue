@@ -1,26 +1,18 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import DeleteUserForm from './Partials/DeleteUserForm.vue';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
+import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
+import DeleteUserForm from './Partials/ProfileSettings/DeleteUserForm.vue';
+import UpdatePasswordForm from './Partials/ProfileSettings/UpdatePasswordForm.vue';
+import UpdateProfileInformationForm from './Partials/ProfileSettings/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
-
-defineProps({
-    mustVerifyEmail: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
 </script>
 
-<template>
-    <Head title="Profile" />
 
-    <AuthenticatedLayout>
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+
+<template>
+    <TaskerDefaultLayout>
+        <Head title="ব্যবহারকারীর প্রোফাইল সেটিংস" />
+        <div class="lg:col-span-3">
+            <div class="max-w-7xl space-y-6 sm:px-6 lg:px-8">
                 <div
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
                 >
@@ -43,6 +35,7 @@ defineProps({
                     <DeleteUserForm class="max-w-xl" />
                 </div>
             </div>
-        </div>
-    </AuthenticatedLayout>
+        
+        </div>  
+     </TaskerDefaultLayout>   
 </template>
