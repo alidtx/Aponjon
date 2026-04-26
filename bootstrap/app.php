@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckUserRole;
+use App\Http\Middleware\EnsureAwaitingKycApproval;
 use App\Http\Middleware\EnsureUserApproved;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role'=>CheckUserRole::class,
             'ensure_user_approved'=>EnsureUserApproved::class,
+            'awaiting_kyc_approval'=>EnsureAwaitingKycApproval::class,
         ]);
 
         //

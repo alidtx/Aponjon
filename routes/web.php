@@ -6,6 +6,7 @@ use App\Http\Controllers\KycApprovalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Tasker\TaskController;
+use App\Http\Controllers\Tasker\TaskerProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,8 +33,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])
-        ->name('kyc.awaiting-approval.index');
+    Route::middleware('awaiting_kyc_approval')->get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])
+    ->name('kyc.awaiting-approval.index');
 
     Route::middleware(['role:admin'])->group(function () {
         Route::get('admin', fn() => 'admin');
@@ -55,8 +56,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tasker-success-rate', [TaskController::class, 'TaskerSuccessRate'])->name('success.rate');
             Route::get('/pending-tasks', [TaskController::class, 'pendingTasks'])->name('pending.tasks');
             Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
-            Route::get('/edit-profile/{taskerId}', [TaskController::class, 'editProfile'])->name('profile.edit');
-            Route::post('/update-profile/{taskerId}', [TaskController::class, 'updateProfile'])->name('profile.update');
+            Route::get('/edit-profile/{taskerId}', [TaskerProfileController::class, 'editProfile'])->name('profile.edit');
+            Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update');
         });
     });
 
@@ -68,8 +69,9 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::middleware(['role:tasker'])->prefix('tasker')->name('tasker.')->group(function () {
-        Route::get('/create-profile', [TaskController::class, 'createProfile'])->name('create.profile');
-        Route::post('/store-profile', [TaskController::class, 'storeProfile'])->name('store.profile');
+        Route::get('/create-profile', [TaskerProfileController::class, 'createProfile'])
+        ->name('create.profile')->middleware('awaiting_kyc_approval');
+        Route::post('/store-profile', [TaskerProfileController::class, 'storeProfile'])->name('store.profile');
     });
 });
 
