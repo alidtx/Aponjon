@@ -5,19 +5,13 @@ namespace App\Http\Controllers\Tasker;
 use App\Enum\BidStatus;
 use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TaskerProfileRequest;
 use App\Http\Resources\BidResource;
-use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
-use App\Models\TaskerProfile;
 use App\Models\User;
-use App\Services\LocationService;
 use App\Services\TaskerService;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
+
 
 
 class TaskController extends Controller
