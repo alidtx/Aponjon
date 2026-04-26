@@ -37,18 +37,17 @@ const updatePassword = () => {
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
-                Update Password
+                পাসওয়ার্ড আপডেট করুন
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Ensure your account is using a long, random password to stay
-                secure.
+                আপনার অ্যাকাউন্ট নিরাপদ রাখতে একটি দীর্ঘ, জটিল পাসওয়ার্ড ব্যবহার করুন।
             </p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" value="বর্তমান পাসওয়ার্ড" />
 
                 <TextInput
                     id="current_password"
@@ -57,6 +56,7 @@ const updatePassword = () => {
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="current-password"
+                    placeholder="আপনার বর্তমান পাসওয়ার্ড লিখুন"
                 />
 
                 <InputError
@@ -66,7 +66,7 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" value="নতুন পাসওয়ার্ড" />
 
                 <TextInput
                     id="password"
@@ -75,6 +75,7 @@ const updatePassword = () => {
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="new-password"
+                    placeholder="নতুন পাসওয়ার্ড লিখুন"
                 />
 
                 <InputError :message="form.errors.password" class="mt-2" />
@@ -83,7 +84,7 @@ const updatePassword = () => {
             <div>
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="পাসওয়ার্ড নিশ্চিত করুন"
                 />
 
                 <TextInput
@@ -92,6 +93,7 @@ const updatePassword = () => {
                     type="password"
                     class="mt-1 block w-full"
                     autocomplete="new-password"
+                    placeholder="আবার পাসওয়ার্ড লিখুন"
                 />
 
                 <InputError
@@ -101,7 +103,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton :disabled="form.processing">সংরক্ষণ করুন</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -113,7 +115,7 @@ const updatePassword = () => {
                         v-if="form.recentlySuccessful"
                         class="text-sm text-gray-600"
                     >
-                        Saved.
+                        সংরক্ষিত হয়েছে।
                     </p>
                 </Transition>
             </div>
