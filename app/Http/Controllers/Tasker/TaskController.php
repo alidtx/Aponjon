@@ -121,47 +121,4 @@ class TaskController extends Controller
   {
     return TaskerService::getSuccessRate(auth()->user());
   }
-
-
-  public function createProfile(Request $request)
-  {
-    return Inertia::render('Task/CreateProfile', [
-      'loggedInUser' => new UserResource(Auth::user()),
-      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
-      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
-    ]);
-  }
-  public function storeProfile(TaskerProfileRequest $request)
-  {
-    try {
-      TaskerService::storeTaskerProfile($request);
-
-      return redirect()->route('kyc.awaiting-approval.index');
-    } catch (\Exception $e) {
-      return redirect()->back()
-        ->with('error', 'Failed to save profile: ' . $e->getMessage())
-        ->withInput();
-    }
-  }
-  public function editProfile($taskerId)
-  {
-    $tasker = User::with('taskerProfiles')->findOrFail($taskerId);
-    return Inertia::render('Task/EditProfile', [
-      'loggedInUser' => new UserResource($tasker),
-      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
-      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
-    ]);
-  }
-  public function updateProfile(TaskerProfileRequest $request, $taskerId)
-  {     
-    try {
-      TaskerService::storeTaskerProfile($request);
-      
-    } catch (\Exception $e) {
-      return redirect()->back()
-        ->with('error', 'Failed to update profile: ' . $e->getMessage())
-        ->withInput();
-    }
-  }
-
 }
