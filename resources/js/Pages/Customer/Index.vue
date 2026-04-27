@@ -5,10 +5,6 @@ import SideBar from './Partials/SideBar/SideBar.vue';
 import { ref, computed } from 'vue'
 
 const props = defineProps({
-    user: {
-        type: Object,
-        required: true
-    },
     tasks: {
         type: Object,
         default: () => ({
@@ -114,7 +110,7 @@ const viewDetails = (taskId) => {
 </script>
 
 <template>
-    <CustomerAuthenticatedLayout :user="props.user">
+    <CustomerAuthenticatedLayout>
         <Head title="হোম" />
         <div class="max-w-6xl mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">

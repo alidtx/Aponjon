@@ -4,6 +4,8 @@ use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\KycApprovalController;
 use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Customer\CustomerProfileController;
+use App\Http\Controllers\Customer\CustomerProfileSettingController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
@@ -32,6 +34,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
             Route::get('/create-gig', [CustomerController::class, 'createGig'])->name('create.gig');
             Route::post('/gigs-store', [CustomerController::class, 'gigsStore'])->name('gigs.store');
+            Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');
+            Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update'); 
+            Route::get('/edit-customer-profile-settings', [CustomerProfileSettingController::class, 'editSetting'])
+            ->name('edit.customer.profile.settings'); 
+             Route::post('/update-customer-profile-settings', [CustomerProfileSettingController::class, 'updateSetting'])
+            ->name('update.customer.profile.settings'); 
+            Route::delete('/delete-customer-account', [CustomerProfileSettingController::class, 'destroy'])
+            ->name('delete.customer.account'); 
            
         });
 
