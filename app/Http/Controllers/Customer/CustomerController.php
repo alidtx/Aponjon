@@ -67,7 +67,7 @@ class CustomerController extends Controller
     $categories = Category::where('is_active', true)
       ->get(['id', 'name', 'icon']);
 
-    return Inertia::render('Customer/CreateGig', [
+    return Inertia::render('Customer/CreateGig/Index', [
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
       'categories' => CategoryResource::collection($categories),

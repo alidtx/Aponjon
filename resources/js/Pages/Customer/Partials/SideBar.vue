@@ -103,6 +103,11 @@ onMounted(() => {
                     :class="route().current('customer.dashboard') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-chart-pie mr-3 text-primary"></i>ওভারভিউ
                 </Link>
+                <Link :href="route('customer.create.gig')"
+                    class="flex items-center p-3 rounded-lg font-medium transition-colors"
+                    :class="route().current('customer.create.gig') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    <i class="fas fa-plus mr-3 text-primary"></i>নতুন গিগ তৈরি করুন
+                </Link>
                 <Link :href="route('tasker.assigned.tasks')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
                     :class="route().current('tasker.assigned.tasks') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
