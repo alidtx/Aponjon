@@ -1,6 +1,6 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3'
-import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
+import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -128,7 +128,7 @@ const goToDashboard = () => {
 </script>
 
 <template>
-    <CustomerDefaultLayout>
+    <CustomerAuthenticatedLayout>
 
         <Head title="গিগ তৈরি" />
         <div class="min-h-screen py-8">
@@ -287,5 +287,5 @@ const goToDashboard = () => {
                 </div>
             </div>
         </div>
-    </CustomerDefaultLayout>
+    </CustomerAuthenticatedLayout>
 </template>

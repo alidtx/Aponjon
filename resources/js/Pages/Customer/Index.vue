@@ -1,6 +1,6 @@
 <script setup>
 import { Head } from '@inertiajs/vue3'
-import CustomerDefaultLayout from '@/Layouts/CustomerDefaultLayout.vue';
+import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue';
 import SideBar from './Partials/SideBar/SideBar.vue';
 import { ref, computed } from 'vue'
 
@@ -114,7 +114,7 @@ const viewDetails = (taskId) => {
 </script>
 
 <template>
-    <CustomerDefaultLayout :user="props.user">
+    <CustomerAuthenticatedLayout :user="props.user">
         <Head title="হোম" />
         <div class="max-w-6xl mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -370,5 +370,5 @@ const viewDetails = (taskId) => {
                 </div>
             </div>
         </div>
-    </CustomerDefaultLayout>
+    </CustomerAuthenticatedLayout>
 </template>
