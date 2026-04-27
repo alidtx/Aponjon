@@ -3,14 +3,11 @@
 use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\KycApprovalController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 
 
