@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('awaiting_kyc_approval')->get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])
+    Route::get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])
     ->name('kyc.awaiting-approval.index');
 
     Route::middleware(['role:admin'])->group(function () {
