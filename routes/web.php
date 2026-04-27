@@ -71,15 +71,14 @@ Route::middleware(['auth'])->group(function () {
    
      Route::middleware(['role:customer'])->prefix('customer')->name('customer.')->group(function () {
         Route::get('/create-profile', [CustomerController::class, 'createProfile'])
-        ->name('create.profile')
-         ->name('create.profile')->middleware('awaiting_kyc_approval');
+        ->name('create.profile');
         Route::post('/store-profile', [CustomerController::class, 'storeProfile'])->name('store.profile');
         
     });
     
     Route::middleware(['role:tasker'])->prefix('tasker')->name('tasker.')->group(function () {
         Route::get('/create-profile', [TaskerProfileController::class, 'createProfile'])
-        ->name('create.profile')->middleware('awaiting_kyc_approval');
+        ->name('create.profile');
         Route::post('/store-profile', [TaskerProfileController::class, 'storeProfile'])->name('store.profile');
     });
 });
