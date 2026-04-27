@@ -8,8 +8,14 @@ import MessageIcon from '@/Components/Icons/MessageIcon.vue';
 import DropdownNavItem from '@/Components/DropdownNavItem.vue';
 
 const props = defineProps({
-    name: String,
-    items: Array
+    name: {
+        type: String,
+        default: ''
+    },
+    items: {
+        type: Array,
+        default: () => []
+    }
 });
 
 </script>

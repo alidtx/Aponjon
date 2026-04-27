@@ -1,11 +1,11 @@
 <script setup>
-    import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
+    import DefaultLayout from '@/Layouts/DefaultLayout.vue';
     import { Head } from '@inertiajs/vue3'
 </script>
 
 
 <template>
-    <TaskerDefaultLayout>
+    <DefaultLayout>
       <Head title="এয়োটিং" />  
     <div class="min-h-screen flex items-center justify-center ">
         <div class="bg-white p-8 rounded shadow-md text-center">
@@ -14,5 +14,5 @@
             <a href="/" class="text-primary font-medium">হোম পেজে ফিরে যান</a>
         </div>
     </div>    
-    </TaskerDefaultLayout>
+    </DefaultLayout>
 </template>      
