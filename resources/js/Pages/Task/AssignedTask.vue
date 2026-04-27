@@ -1,5 +1,5 @@
 <script setup>
-import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
+import TaskerAuthenticatedLayout from '@/Layouts/TaskerAuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import AssignedBids from './Partials/AssignedBids.vue';
 
@@ -25,7 +25,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <TaskerDefaultLayout>
+    <TaskerAuthenticatedLayout>
         <Head title="অ্যাসাইনড টাস্কস"/>
         <div class="lg:col-span-3">
             <AssignedBids 
@@ -35,5 +35,5 @@ const props = defineProps({
                 :disputed-tasks="disputedTasks"
             /> 
         </div>
-    </TaskerDefaultLayout>
+    </TaskerAuthenticatedLayout>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
+import TaskerAuthenticatedLayout from '@/Layouts/TaskerAuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import Form from './Partials/Form.vue';
 
@@ -25,10 +25,10 @@ const props = defineProps({
 
 
 <template>
-    <TaskerDefaultLayout>
+    <TaskerAuthenticatedLayout>
         <Head title="এডিট টাস্কার প্রোফাইল" />
         <div class="lg:col-span-3">
             <Form :districts="districts" :zilas="zilas" :loggedInUser="loggedInUser" />
         </div>  
-     </TaskerDefaultLayout>   
+     </TaskerAuthenticatedLayout>   
 </template>

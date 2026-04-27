@@ -1,5 +1,5 @@
 <script setup>
-import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
+import TaskerAuthenticatedLayout from '@/Layouts/TaskerAuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import PendingBids from './Partials/PendingBids.vue';
 
@@ -21,7 +21,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <TaskerDefaultLayout>
+    <TaskerAuthenticatedLayout>
         <Head title="আপনার কাজ"/>
         <div class="lg:col-span-3">
            <PendingBids 
@@ -30,5 +30,5 @@ const props = defineProps({
            :rejected="rejectedBids" 
            /> 
         </div>
-    </TaskerDefaultLayout>
+    </TaskerAuthenticatedLayout>
 </template>

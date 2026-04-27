@@ -1,5 +1,5 @@
 <script setup>
-import TaskerDefaultLayout from '@/Layouts/TaskerDefaultLayout.vue';
+import TaskerAuthenticatedLayout from '@/Layouts/TaskerAuthenticatedLayout.vue';
 import DeleteUserForm from './Partials/ProfileSettings/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/ProfileSettings/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/ProfileSettings/UpdateProfileInformationForm.vue';
@@ -9,7 +9,7 @@ import { Head } from '@inertiajs/vue3';
 
 
 <template>
-    <TaskerDefaultLayout>
+    <TaskerAuthenticatedLayout>
         <Head title="ব্যবহারকারীর প্রোফাইল সেটিংস" />
         <div class="lg:col-span-3">
             <div class="max-w-7xl space-y-6 sm:px-6 lg:px-8">
@@ -37,5 +37,5 @@ import { Head } from '@inertiajs/vue3';
             </div>
         
         </div>  
-     </TaskerDefaultLayout>   
+     </TaskerAuthenticatedLayout>   
 </template>
