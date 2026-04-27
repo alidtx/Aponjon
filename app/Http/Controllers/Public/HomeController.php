@@ -20,7 +20,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return Inertia::render('PublicResources/Home', [
+        return Inertia::render('Home/Index', [
             'user' => auth()->check() ? new UserResource(auth()->user()) : null,
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),

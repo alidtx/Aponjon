@@ -1,11 +1,11 @@
 <script setup>
 import { Head } from '@inertiajs/vue3'
 import PublicDefaultLayout from '@/Layouts/PublicDefaultLayout.vue';
-import Hero from '@/Layouts/Partials/PublicResources/Sections/Hero.vue';
-import Service from '@/Layouts/Partials/PublicResources/Sections/Service.vue';
-import HowItWork from '@/Layouts/Partials/PublicResources/Sections/HowItWork.vue';
-import TaskerRegistration from '@/Layouts/Partials/PublicResources/Sections/TaskerRegistration.vue';
-import Testimonial from '@/Layouts/Partials/PublicResources/Sections/Testimonials.vue';
+import Hero from './Sections/Hero.vue';
+import Service from './Sections/Service.vue';
+import HowItWork from './Sections/HowItWork.vue';
+import TaskerRegistration from './Sections/TaskerRegistration.vue';
+import Testimonial from './Sections/Testimonials.vue';
 import { provide } from 'vue'
 
 const props = defineProps({

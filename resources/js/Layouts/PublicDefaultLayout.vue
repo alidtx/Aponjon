@@ -1,6 +1,6 @@
 <script setup>
-import NavBar from '@/Layouts/Partials/PublicResources/NavBar/Index.vue';
-import Footer from '@/Layouts/Partials/PublicResources/Footer/Index.vue';
+import HomeNav from './HomeNav.vue';
+import HomeFooter from './HomeFooter.vue';
 
 const props=defineProps({
   canLogin: Boolean,
@@ -16,11 +16,11 @@ const props=defineProps({
 
 
 <template>
-    <NavBar 
+    <HomeNav
     :canLogin="canLogin"
     :canRegister="canRegister"
     :user="props.user"
     />
     <slot />
-    <Footer />
+    <HomeFooter />
 </template>
