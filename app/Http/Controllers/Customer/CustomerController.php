@@ -54,7 +54,7 @@ class CustomerController extends Controller
   }
 
   public function createProfile () {
-    return Inertia::render('Customer/CreateProfile',[
+    return Inertia::render('Customer/CreateProfile/Index',[
       'loggedInUser' => new UserResource(Auth::user()),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
