@@ -43,7 +43,7 @@ class TaskController extends Controller
 
     $allBids = self::getAllBids($taskerId);
 
-    return Inertia::render('Tasker/PendingTask', [
+    return Inertia::render('Tasker/PendingBids/Index', [
       'pendingBids' => BidResource::collection($allBids->where('status', BidStatus::Pending->value)),
       'acceptedBids' => BidResource::collection($allBids->where('status', BidStatus::Accepted->value)),
       'rejectedBids' => BidResource::collection($allBids->where('status', BidStatus::Rejected->value)),
