@@ -31,7 +31,7 @@ class TaskController extends Controller
       ->limit(10)
       ->get();
 
-    return Inertia::render('Tasker/Index', [
+    return Inertia::render('Tasker/Dashboard/Index', [
       'overview' => new UserResource($userOverview),
       'activity' => BidResource::collection($recentActivity),
       'monthlyErning' => TaskerService::TaskerCurrentMonthEarning(auth()->user()),
