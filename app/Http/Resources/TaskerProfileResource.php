@@ -14,14 +14,6 @@ class TaskerProfileResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->whenLoaded('user', function () {
-                return [
-                    'id' => $this->user->id,
-                    'name' => $this->user->name,
-                    'email' => $this->user->email,
-                    'phone' => $this->user->phone,
-                ];
-            }),
             'experience' => $this->experience,
             'nid_number' => $this->nid_number,
             'district_id' => $this->district_id,
@@ -35,6 +27,7 @@ class TaskerProfileResource extends JsonResource
             'rating' => (float) $this->rating,
             'completed_task' => $this->completed_task,
             'is_online' => (bool) $this->is_online,
+            'profile_photo' => $this->user_profile_picture,
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }

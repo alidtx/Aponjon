@@ -10,7 +10,7 @@ const successRate = ref(0)
 const error = ref(null)
 const userName = computed(() => profile.value?.name || '')
 const designation = computed(() => profile.value?.tasker_profile?.designation || '')
-const profile_photo = computed(() => profile.value?.profile_photo)
+const profile_photo = computed(() => profile.value?.tasker_profile?.profile_photo)
 const rating = computed(() => profile.value?.tasker_profile?.rating || 0)
 
 
