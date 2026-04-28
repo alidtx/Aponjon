@@ -4,7 +4,7 @@ import { usePage } from '@inertiajs/vue3';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import UserSettingsIcon from '@/Components/Icons/UserSettingsIcon.vue';
 import LogOutIcon from '@/Components/Icons/LogOutIcon.vue';
-import SideBar from '@/Pages/Customer/Partials/SideBar.vue';
+import SideBar from '../Pages/Customer/SideBar.vue';
 import Footer from './Footer.vue'; 
 
 
