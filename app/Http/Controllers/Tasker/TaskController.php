@@ -53,7 +53,7 @@ class TaskController extends Controller
   public function AssignedTask()
   {
     $allBids = $this->getAllBids(auth()->id());
-    return Inertia::render('Tasker/AssignedTask', [
+    return Inertia::render('Tasker/AssignedTasks/Index', [
 
     'inProgressTasks' => BidResource::collection($allBids->filter(
           fn($bid) =>
