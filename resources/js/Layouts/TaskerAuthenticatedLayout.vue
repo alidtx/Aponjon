@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from './NavBar.vue';
 import Footer from './Footer.vue';
-import SideBar from '@/Pages/Tasker/Partials/SideBar.vue';
+import SideBar from '@/Pages/Tasker/SideBar.vue';
 import { usePage } from '@inertiajs/vue3';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import UserSettingsIcon from '@/Components/Icons/UserSettingsIcon.vue';
