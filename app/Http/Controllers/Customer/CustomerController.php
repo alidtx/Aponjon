@@ -43,7 +43,7 @@ class CustomerController extends Controller
         ->get(),
     ];
 
-    return Inertia::render('Customer/Index', [
+    return Inertia::render('Customer/Dashboard/Index', [
       'user' => new UserResource($user),
       'tasks' => [
         'active' => TaskResource::collection($tasks['active']),
