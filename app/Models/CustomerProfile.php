@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class CustomerProfile extends Model
 {
@@ -57,4 +58,16 @@ class CustomerProfile extends Model
     {
         return $this->morphMany(Media::class, 'fileable');
     }
+    public function userProfilePicture(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->userProfilePhoto ? $this->userProfilePhoto->path : ''
+        );
+    }
+
+    public function userProfilePhoto(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'fileable')->where('name', 'Person Image')->latest();
+    }
+
 }

@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['ensure_user_approved'])->group(function () {
         Route::middleware(['role:customer'])->prefix('customer')->name('customer.')->group(function () {
             Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
+            Route::get('/tasker-sidebar-info', [CustomerController::class, 'CustomerSidebarInfo'])->name('sidebar.info');
             Route::get('/create-gig', [CustomerController::class, 'createGig'])->name('create.gig');
             Route::post('/gigs-store', [CustomerController::class, 'gigsStore'])->name('gigs.store');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');

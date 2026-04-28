@@ -9,9 +9,9 @@ const total_earning = ref(0)
 const successRate = ref(0)
 const error = ref(null)
 const userName = computed(() => profile.value?.name || '')
-const designation = computed(() => profile.value?.tasker_profile?.designation || '')
-const profile_photo = computed(() => profile.value?.profile_photo)
-const rating = computed(() => profile.value?.tasker_profile?.rating || 0)
+const designation = computed(() => profile.value?.customer_profile?.designation || '')
+const profile_photo = computed(() => profile.value?.customer_profile?.profile_photo)
+const rating = computed(() => profile.value?.customer_profile?.rating || 0)
 
 
 const fullStars = computed(() => {
@@ -29,7 +29,7 @@ const emptyStars = computed(() => {
 const TaskerProfile = async () => {
     loading.value = true
     try {
-        const response = await axios.get(route('tasker.sidebar.info'))
+        const response = await axios.get(route('customer.sidebar.info'))
         profile.value = response.data.data
 
     } catch (err) {
@@ -42,7 +42,7 @@ const TaskerProfile = async () => {
 const TaskerTotalEarning = async () => {
     loading.value = true
     try {
-        const totalEarning = await axios.get(route('tasker.total.earning'))
+        const totalEarning = await axios.get(route('customer.total.earning'))
         total_earning.value = totalEarning.data
 
     } catch (err) {

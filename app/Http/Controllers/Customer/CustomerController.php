@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Category;
+use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,15 @@ class CustomerController extends Controller
       ],
     ]);
   }
+ public function CustomerSidebarInfo()
+  {
+    $CustomerSidebarProfile = User::findOrFail(auth()->user()->id)->load([
+      'customerProfile',
+      'customerProfile.media',
+    ]);
+    return new UserResource($CustomerSidebarProfile);
+  }
+
 
   public function createProfile () {
     return Inertia::render('Customer/CreateProfile/Index',[
