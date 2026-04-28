@@ -42,7 +42,7 @@ class CustomerProfileController extends Controller
   public function editProfile($customerId)
   {
     $customer = User::with('customerProfile')->findOrFail($customerId);
-    return Inertia::render('Customer/EditProfile', [
+    return Inertia::render('Customer/EditProfile/Index', [
       'loggedInUser' => new UserResource($customer),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
