@@ -31,7 +31,7 @@ class TaskController extends Controller
       ->limit(10)
       ->get();
 
-    return Inertia::render('Task/Index', [
+    return Inertia::render('Tasker/Index', [
       'overview' => new UserResource($userOverview),
       'activity' => BidResource::collection($recentActivity),
       'monthlyErning' => TaskerService::TaskerCurrentMonthEarning(auth()->user()),
@@ -43,7 +43,7 @@ class TaskController extends Controller
 
     $allBids = self::getAllBids($taskerId);
 
-    return Inertia::render('Task/PendingTask', [
+    return Inertia::render('Tasker/PendingTask', [
       'pendingBids' => BidResource::collection($allBids->where('status', BidStatus::Pending->value)),
       'acceptedBids' => BidResource::collection($allBids->where('status', BidStatus::Accepted->value)),
       'rejectedBids' => BidResource::collection($allBids->where('status', BidStatus::Rejected->value)),
@@ -53,7 +53,7 @@ class TaskController extends Controller
   public function AssignedTask()
   {
     $allBids = $this->getAllBids(auth()->id());
-    return Inertia::render('Task/AssignedTask', [
+    return Inertia::render('Tasker/AssignedTask', [
 
     'inProgressTasks' => BidResource::collection($allBids->filter(
           fn($bid) =>

@@ -14,7 +14,7 @@ class TaskerProfileSettingController extends Controller
 {
     public function editSetting()
     {
-        return Inertia::render('Task/TaskerProfileSettings');
+        return Inertia::render('Tasker/TaskerProfileSettings');
     }
 
 

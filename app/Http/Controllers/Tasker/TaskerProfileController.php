@@ -21,7 +21,7 @@ class TaskerProfileController extends Controller
 
   public function createProfile(Request $request)
   {
-    return Inertia::render('Task/CreateProfile', [
+    return Inertia::render('Tasker/CreateProfile', [
       'loggedInUser' => new UserResource(Auth::user()),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
@@ -42,7 +42,7 @@ class TaskerProfileController extends Controller
   public function editProfile($taskerId)
   {
     $tasker = User::with('taskerProfiles')->findOrFail($taskerId);
-    return Inertia::render('Task/EditProfile', [
+    return Inertia::render('Tasker/EditProfile', [
       'loggedInUser' => new UserResource($tasker),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
