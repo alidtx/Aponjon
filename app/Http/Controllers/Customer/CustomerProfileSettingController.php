@@ -14,7 +14,7 @@ class CustomerProfileSettingController extends Controller
 {
     public function editSetting()
     {
-        return Inertia::render('Customer/CustomerProfileSettings');
+        return Inertia::render('Customer/CustomerSettings/Index', );
     }
 
 

@@ -1,7 +1,7 @@
 <script setup>
-import DeleteUserForm from './Partials/ProfileSettings/DeleteUserForm.vue';
-import UpdatePasswordForm from './Partials/ProfileSettings/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from './Partials/ProfileSettings/UpdateProfileInformationForm.vue';
+import DeleteUserForm from './ProfileSettings/DeleteUserForm.vue';
+import UpdatePasswordForm from './ProfileSettings/UpdatePasswordForm.vue';
+import UpdateProfileInformationForm from './ProfileSettings/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
 import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue';
 </script>
