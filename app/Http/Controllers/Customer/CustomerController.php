@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Enum\BidStatus;
-use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GigRequest;
 use App\Http\Resources\BidResource;
@@ -14,7 +13,6 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
 use App\Models\Category;
-use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskService;
