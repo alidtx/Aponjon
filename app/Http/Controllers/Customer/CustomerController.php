@@ -61,6 +61,14 @@ class CustomerController extends Controller
     ]);
     return new UserResource($CustomerSidebarProfile);
   }
+  public function CustomerTotalSpend()
+  {
+    $totalSpend = auth()->user()->customerTasks()
+      ->where('status', 'completed')
+      ->sum('price');
+
+    return response()->json($totalSpend);
+  }
 
   public function createGig()
   {

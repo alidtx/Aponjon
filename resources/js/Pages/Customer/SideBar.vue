@@ -26,7 +26,7 @@ const emptyStars = computed(() => {
     return 5 - fullStars.value - (hasHalfStar.value ? 1 : 0)
 })
 
-const TaskerProfile = async () => {
+const CustomerProfile = async () => {
     loading.value = true
     try {
         const response = await axios.get(route('customer.sidebar.info'))
@@ -39,7 +39,7 @@ const TaskerProfile = async () => {
     }
 }
 
-const TaskerTotalEarning = async () => {
+const CustomerTotalSpent = async () => {
     loading.value = true
     try {
         const totalEarning = await axios.get(route('customer.total.earning'))
@@ -52,11 +52,11 @@ const TaskerTotalEarning = async () => {
     }
 }
 
-const TaskerSuccessRate = async () => {
+const CustomerSuccessRate = async () => {
     loading.value = true
     try {
-        const TaskerSuccessRate = await axios.get(route('tasker.success.rate'))
-        successRate.value = TaskerSuccessRate.data
+        const CustomerSuccessRate = await axios.get(route('customer.success.rate'))
+        successRate.value = CustomerSuccessRate.data
 
     } catch (err) {
         error.value = 'Failed to fetch success rate.'
@@ -66,9 +66,9 @@ const TaskerSuccessRate = async () => {
 }
 
 onMounted(() => {
-    TaskerProfile()
-    TaskerTotalEarning()
-    TaskerSuccessRate()
+    CustomerProfile()
+    CustomerTotalSpent()
+    CustomerSuccessRate()
 })  
 </script>
 
