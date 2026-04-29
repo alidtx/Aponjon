@@ -23,7 +23,7 @@ const initials = computed(() => {
     <Menu as="div" class="relative inline-block text-left">
         <div>
             <MenuButton
-                class="flex cursor-pointer items-center justify-start rounded-full border border-transparent p-0.5 transition duration-300 hover:bg-gray-50 focus:border-primary-500 focus:outline-none md:w-[140px] md:gap-2">
+                class="flex bg-gray-100 cursor-pointer items-center justify-start rounded-full border border-transparent p-0.5 transition duration-300 hover:bg-gray-200 focus:border-primary-500 focus:outline-none md:w-[140px] md:gap-2">
                 <div
                     class="h-9 w-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold tracking-wide uppercase">
                     {{ initials }}
