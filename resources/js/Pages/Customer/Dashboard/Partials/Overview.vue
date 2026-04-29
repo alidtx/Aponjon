@@ -2,29 +2,29 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    
+
     monthly: {
         type: Number,
         default: 0
     },
-     inProgress: {
+    inProgress: {
         type: Number,
         default: 0
     },
-     inBiding: {
+    inBiding: {
         type: Number,
         default: 0
     },
-    recentActivity: {
+    pendingActivity: {
+        type: Object,
+        default: () => ({})
+    },
+    acceptedActivity: {
         type: Object,
         default: () => ({})
     },
 })
 
-const appliedTask = computed(() => {
-    return props.recentActivity?.data?.filter(bid => bid.status === 'pending') || []
-})
-const approvedTask = computed(() => { return props.recentActivity?.data?.filter(bid => bid.status === 'accepted') || [] })
 const formatTime = (date) => {
     return new Date(date).toLocaleString('bn-BD', {
         hour: 'numeric',
@@ -65,13 +65,13 @@ const formatTime = (date) => {
                 <div class="text-lg font-bold text-dark">৪.৫</div>
                 <div class="text-sm text-gray-600">গড় রেটিং</div>
             </div>
-            
+
         </div>
         <div>
             <h3 class="text-lg font-bold text-dark mb-4">সাম্প্রতিক এক্টিভিটি</h3>
             <div class="space-y-3">
 
-                <div v-for="(bid, index) in approvedTask" :key="bid.id || index"
+                <div v-for="(acitvity, index) in acceptedActivity.data" :key="acitvity.id || index"
                     class="flex items-center p-3 border border-gray-200 rounded-lg">
                     <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                         <i class="fas fa-check text-green-600 text-sm"></i>
@@ -79,20 +79,20 @@ const formatTime = (date) => {
 
                     <div class="flex-1">
                         <p class="text-dark text-sm">
-                            {{ bid.task?.title || 'টাস্ক' }} - বিড গ্রহণ করা হয়েছে
+                            {{ acitvity?.title || 'কাজের' }} - কাজতটি গ্রহণ করেছেন
                         </p>
 
                         <p class="text-xs text-gray-600">
-                            {{ formatTime(bid.created_at) }}
+                            {{ formatTime(acitvity?.bid?.[0]?.created_at) }}
                         </p>
                     </div>
 
                     <span class="text-green-600 font-medium text-sm">
-                        ৳{{ Math.round(bid.amount) }}
+                        ৳{{ acitvity?.bid?.[0]?.amount }}
                     </span>
                 </div>
 
-                <div v-for="(bid, index) in appliedTask" :key="bid.id || index"
+                <div v-for="(activity, index) in props.pendingActivity.data" :key="activity.id || index"
                     class="flex items-center p-3 border border-gray-200 rounded-lg">
                     <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                         <i class="fas fa-gavel text-blue-600 text-sm"></i>
@@ -100,16 +100,16 @@ const formatTime = (date) => {
 
                     <div class="flex-1">
                         <p class="text-dark text-sm">
-                            {{ bid.task?.title || 'টাস্ক' }} - বিড করা হয়েছে
+                            {{ activity?.title || 'কাজের' }} - কাজের জন্য আবেদন করেছেন
                         </p>
 
                         <p class="text-xs text-gray-600">
-                            {{ formatTime(bid.created_at) }}
+                            {{ formatTime(activity?.bid?.[0]?.created_at) }}
                         </p>
                     </div>
 
                     <span class="text-green-600 font-medium text-sm">
-                        ৳{{ Math.round(bid.amount) }}
+                        ৳{{ Math.round(activity?.bid?.[0]?.amount || 0) }}
                     </span>
                 </div>
             </div>

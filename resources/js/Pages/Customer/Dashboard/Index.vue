@@ -8,10 +8,6 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
-    activity: {
-        type: Object,
-        default: () => ({})
-    },
     inProgress: {
         type: Number,
         default: 0
@@ -20,7 +16,15 @@ const props = defineProps({
         type: Number,
         default: 0
     },
-    monthlyErning: {
+    pendingActivity: {
+        type: Object,
+        default: () => ({})
+    },
+    acceptedActivity: {
+        type: Object,
+        default: () => ({})
+    },
+    monthlySpend: {
         type: Number,
         default: 0
     },
@@ -33,8 +37,13 @@ const props = defineProps({
         <Head title="হোম" />
        <div class="lg:col-span-3">
             <Overview 
-             :activeBids="props.overview?.data?.bids" :monthly="monthlyErning" :recentActivity="activity"
-             :inProgress="props.inProgress" :inBiding="props.inBiding" />
+             :activeBids="props.overview?.data?.bids" 
+             :monthly="monthlySpend" 
+             :inProgress="props.inProgress" 
+             :inBiding="props.inBiding" 
+             :pendingActivity="props.pendingActivity" 
+             :acceptedActivity="props.acceptedActivity" 
+             />
         </div>
     </CustomerAuthenticatedLayout>
 </template>

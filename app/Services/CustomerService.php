@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enum\BidStatus;
 use App\Enum\PaymentStatus;
 use App\Enum\TaskStatus;
 use App\Models\CustomerProfile;
@@ -133,5 +134,24 @@ class CustomerService
                 TaskStatus::Posted->value,
             ])
             ->first();
+    }
+    public static function getActivityByStatus(User $user, BidStatus $status)
+    {
+        return $user->customerTasks()
+            ->whereHas('bids', fn ($q) => $q->where('status', $status->value))
+            ->with([
+                'bids' => fn ($q) => $q->where('status', $status->value)
+            ])
+            ->latest()
+            ->limit(10)
+            ->get();
+    }
+
+    public static function getAllActivities(User $user): array
+    {
+        return [
+            'pending'  => self::getActivityByStatus($user, BidStatus::Pending),
+            'accepted' => self::getActivityByStatus($user, BidStatus::Accepted),
+        ];
     }
 }

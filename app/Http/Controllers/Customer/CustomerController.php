@@ -8,6 +8,7 @@ use App\Http\Requests\GigRequest;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DistrictResource;
+use App\Http\Resources\TaskResource;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
@@ -37,12 +38,15 @@ class CustomerController extends Controller
         ->latest()
         ->limit(10)
         ->get();
+    $activities = CustomerService::getAllActivities($user);
 
     return Inertia::render('Customer/Dashboard/Index', [
         'inProgress' => (int) $taskCounts->in_progress,
         'inBiding'   => (int) $taskCounts->in_biding,
         'activity'      => BidResource::collection($recentActivity),
-        'monthlyErning' => CustomerService::customerCurrentMonthspend($user),
+        'pendingActivity'  => TaskResource::collection($activities['pending']),
+        'acceptedActivity' => TaskResource::collection($activities['accepted']),
+        'monthlySpend' => CustomerService::customerCurrentMonthspend($user),
     ]);
 }
  public function CustomerSidebarInfo()
