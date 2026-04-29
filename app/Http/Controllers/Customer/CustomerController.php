@@ -63,11 +63,7 @@ class CustomerController extends Controller
   }
   public function CustomerTotalSpend()
   {
-    $totalSpend = auth()->user()->customerTasks()
-      ->where('status', 'completed')
-      ->sum('price');
-
-    return response()->json($totalSpend);
+    return CustomerService::CustomerTotalSpend(auth()->user());
   }
 
   public function createGig()

@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const loading = ref(false)
 const profile = ref([])
-const total_earning = ref(0)
+const total_spend = ref(0)
 const successRate = ref(0)
 const error = ref(null)
 const userName = computed(() => profile.value?.name || '')
@@ -39,14 +39,14 @@ const CustomerProfile = async () => {
     }
 }
 
-const CustomerTotalSpent = async () => {
+const CustomerTotalSpend = async () => {
     loading.value = true
     try {
-        const totalEarning = await axios.get(route('customer.total.earning'))
-        total_earning.value = totalEarning.data
+        const totalSpend = await axios.get(route('customer.total.spend'))
+        total_spend.value = totalSpend.data
 
     } catch (err) {
-        error.value = 'Failed to fetch total earning.'
+        error.value = 'Failed to fetch total spend.'
     } finally {
         loading.value = false
     }
@@ -67,7 +67,7 @@ const CustomerSuccessRate = async () => {
 
 onMounted(() => {
     CustomerProfile()
-    CustomerTotalSpent()
+    CustomerTotalSpend()
     CustomerSuccessRate()
 })  
 </script>
@@ -93,8 +93,8 @@ onMounted(() => {
                     <span class="text-sm font-bold text-green-600">{{ successRate }}%</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-600">মোট আয়</span>
-                    <span class="text-sm font-bold text-primary">৳ {{ Math.round(total_earning) }}</span>
+                    <span class="text-sm text-gray-600">মোট খরচ</span>
+                    <span class="text-sm font-bold text-primary">৳ {{ Math.round(total_spend) }}</span>
                 </div>
             </div>
             <nav class="space-y-2">

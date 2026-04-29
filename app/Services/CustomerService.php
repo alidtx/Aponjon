@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Enum\PaymentStatus;
+use App\Enum\TaskStatus;
 use App\Models\CustomerProfile;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Services\MediaService;
 
@@ -69,5 +72,17 @@ class CustomerService
             DB::rollBack();
             throw $e;
         }
+    }
+     public static function CustomerTotalSpend(User $customer): float
+    {
+        if (!$customer->isCustomer()) {
+            return 0.0;
+        }
+
+        return $customer->customerTasks()
+            ->where('tasks.status', TaskStatus::Completed->value)
+            ->join('orders', 'tasks.id', '=', 'orders.task_id')
+            ->where('orders.payment_status', PaymentStatus::Paid->value)
+            ->sum('orders.amount');
     }
 }
