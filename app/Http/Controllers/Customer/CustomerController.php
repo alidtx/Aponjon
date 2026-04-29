@@ -2,57 +2,51 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Enum\BidStatus;
+use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomerProfileRequest;
 use App\Http\Requests\GigRequest;
+use App\Http\Resources\BidResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DistrictResource;
-use App\Http\Resources\TaskResource;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
+use App\Models\Bid;
 use App\Models\Category;
+use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskService;
-use Illuminate\Support\Facades\Auth;
 use App\Services\CustomerService;
 
 class CustomerController extends Controller
 {
 
-  public function index()
-  {
+ public function index()
+{
     $user = auth()->user();
 
-    if (!$user->isCustomer()) {
-      abort(403, 'Unauthorized');
-    }
+   abort_unless($user->isCustomer(), 403, 'Unauthorized');
 
-    $tasks = [
-      'active' => $user->customerTasks()
-        ->where('status', 'in_progress')
-        ->with(['taskers', 'bids'])
-        ->get(),
-      'completed' => $user->customerTasks()
-        ->where('status', 'completed')
-        ->with('taskers')
-        ->get(),
-      'cancelled' => $user->customerTasks()
-        ->where('status', 'cancelled')
-        ->with('taskers')
-        ->get(),
-    ];
+   $taskCounts = CustomerService::getTaskCounts($user);
+    $recentActivity = Bid::with('task') 
+        ->where('tasker_id', $user->id)
+        ->whereIn('status', [
+            BidStatus::Pending->value,
+            BidStatus::Accepted->value
+        ])
+        ->latest()
+        ->limit(10)
+        ->get();
 
     return Inertia::render('Customer/Dashboard/Index', [
-      'user' => new UserResource($user),
-      'tasks' => [
-        'active' => TaskResource::collection($tasks['active']),
-        'completed' => TaskResource::collection($tasks['completed']),
-        'cancelled' => TaskResource::collection($tasks['cancelled']),
-      ],
+        'inProgress' => (int) $taskCounts->in_progress,
+        'inBiding'   => (int) $taskCounts->in_biding,
+        'activity'      => BidResource::collection($recentActivity),
+        'monthlyErning' => CustomerService::customerCurrentMonthspend($user),
     ]);
-  }
+}
  public function CustomerSidebarInfo()
   {
     $CustomerSidebarProfile = User::findOrFail(auth()->user()->id)->load([

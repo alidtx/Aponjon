@@ -106,4 +106,32 @@ class CustomerService
 
         return round(($successfulTasks / $totalTasks) * 100, 2);
     }
+
+     public static function customerCurrentMonthspend(User $tasker): float
+    {
+        if (!$tasker->isCustomer()) {
+            return 0.0;
+        }
+
+        return $tasker->customerTasks()
+            ->where('tasks.status', TaskStatus::Completed->value)
+            ->whereMonth('tasks.updated_at', now()->month)
+            ->whereYear('tasks.updated_at', now()->year)
+            ->join('orders', 'tasks.id', '=', 'orders.task_id')
+            ->where('orders.payment_status', PaymentStatus::Paid->value)
+            ->sum('orders.amount');
+    }
+
+    public static function getTaskCounts(User $user): object
+    {
+        return $user->customerTasks()
+            ->selectRaw("
+                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as in_progress,
+                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as in_biding
+            ", [
+                TaskStatus::InProgress->value,
+                TaskStatus::Posted->value,
+            ])
+            ->first();
+    }
 }
