@@ -65,6 +65,10 @@ class CustomerController extends Controller
   {
     return CustomerService::CustomerTotalSpend(auth()->user());
   }
+  public function CustomerSuccessRate()
+  {
+    return CustomerService::getSuccessRate(auth()->user());
+  }
 
   public function createGig()
   {

@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
             Route::get('/customer-sidebar-info', [CustomerController::class, 'CustomerSidebarInfo'])->name('sidebar.info');
             Route::get('/customer-total-spend', [CustomerController::class, 'CustomerTotalSpend'])->name('total.spend');
+            Route::get('/customer-success-rate', [CustomerController::class, 'CustomerSuccessRate'])->name('success.rate');
             Route::get('/create-gig', [CustomerController::class, 'createGig'])->name('create.gig');
             Route::post('/gigs-store', [CustomerController::class, 'gigsStore'])->name('gigs.store');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');

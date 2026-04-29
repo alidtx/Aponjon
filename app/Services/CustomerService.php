@@ -11,8 +11,8 @@ use App\Services\MediaService;
 
 
 class CustomerService
-{   
- public static function storeCustomerProfile($request)
+{
+    public static function storeCustomerProfile($request)
     {
         DB::beginTransaction();
         try {
@@ -29,7 +29,7 @@ class CustomerService
             if ($request->hasFile('person_image')) {
 
                 MediaService::deleteByName($customer, 'Person Image');
-            
+
                 MediaService::upload(
                     file: $request->file('person_image'),
                     path: 'customer/documents',
@@ -41,7 +41,7 @@ class CustomerService
             if ($request->hasFile('nid_front')) {
 
                 MediaService::deleteByName($customer, 'NID Front');
-            
+
                 MediaService::upload(
                     file: $request->file('nid_front'),
                     path: 'customer/documents',
@@ -63,17 +63,16 @@ class CustomerService
             if (!auth()->user()->is_profile_completed) {
 
                 auth()->user()->update(['is_profile_completed' => true]);
-            }    
+            }
             DB::commit();
-            
+
             return $customer;
-            
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
-     public static function CustomerTotalSpend(User $customer): float
+    public static function CustomerTotalSpend(User $customer): float
     {
         if (!$customer->isCustomer()) {
             return 0.0;
@@ -84,5 +83,27 @@ class CustomerService
             ->join('orders', 'tasks.id', '=', 'orders.task_id')
             ->where('orders.payment_status', PaymentStatus::Paid->value)
             ->sum('orders.amount');
+    }
+
+    public static function getSuccessRate(User $customer): float
+    {
+        if (!$customer->isCustomer()) {
+            return 0.0;
+        }
+
+        $totalTasks = $customer->customerTasks()->count();
+
+        if ($totalTasks === 0) {
+            return 0.0;
+        }
+
+        $successfulTasks = $customer->customerTasks()
+            ->where('status', TaskStatus::Completed->value)
+            ->whereHas('order', function ($query) {
+                $query->where('payment_status', PaymentStatus::Paid->value);
+            })
+            ->count();
+
+        return round(($successfulTasks / $totalTasks) * 100, 2);
     }
 }
