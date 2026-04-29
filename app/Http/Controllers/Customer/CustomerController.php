@@ -62,15 +62,6 @@ class CustomerController extends Controller
     return new UserResource($CustomerSidebarProfile);
   }
 
-
-  public function createProfile () {
-    return Inertia::render('Customer/CreateProfile/Index',[
-      'loggedInUser' => new UserResource(Auth::user()),
-      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
-      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
-    ]);  
-  } 
-
   public function createGig()
   {
 
@@ -84,18 +75,6 @@ class CustomerController extends Controller
     ]);
   }
 
-  public function StoreProfile(CustomerProfileRequest $request)  {
-
-    try {
-            CustomerService::storeCustomerProfile($request);
-            return redirect()->route('kyc.awaiting-approval.index');
-            
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Failed to save profile: ' . $e->getMessage())
-                ->withInput();
-        }
-  }
   public function gigsStore(GigRequest $request)
   {
     TaskService::store($request);
