@@ -14,10 +14,12 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Bid;
 use App\Models\Category;
+use App\Models\Task;
 use App\Models\User;
 use App\Services\LocationService;
 use App\Services\TaskService;
 use App\Services\CustomerService;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -29,7 +31,7 @@ class CustomerController extends Controller
    abort_unless($user->isCustomer(), 403, 'Unauthorized');
 
    $taskCounts = CustomerService::getTaskCounts($user);
-   
+
     return Inertia::render('Customer/Dashboard/Index', [
         'inProgress' => (int) $taskCounts->in_progress,
         'inBiding'   => (int) $taskCounts->in_biding,
@@ -52,10 +54,10 @@ class CustomerController extends Controller
   {
     return CustomerService::getSuccessRate(auth()->user());
   }
-  public function bidActivity()
-  {
-    return CustomerService::getAllActivities(auth()->user());
-  }
+ public function bidActivity(Request $request)
+{   
+    return CustomerService::getAllActivities(auth()->user(), $request);
+}
 
   public function createGig()
   {

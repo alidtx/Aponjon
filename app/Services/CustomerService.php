@@ -3,13 +3,15 @@
 namespace App\Services;
 
 use App\Enum\BidStatus;
+use App\Enum\PaginationLimits;
 use App\Enum\PaymentStatus;
 use App\Enum\TaskStatus;
 use App\Models\CustomerProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Services\MediaService;
-
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 class CustomerService
 {
@@ -135,8 +137,13 @@ class CustomerService
             ])
             ->first();
     }
-    public static function getActivityByStatus(User $user, BidStatus $status)
+
+    public static function getActivityByStatus(User $user, BidStatus $status, $request): LengthAwarePaginator
     {
+
+        $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIFTEEN->value);
+        $perPage = max(1, min(100, $perPage));
+
         return $user->customerTasks()
             ->select(['id', 'customer_id', 'title'])
             ->whereHas('bids', function ($q) use ($status) {
@@ -149,23 +156,20 @@ class CustomerService
                         'task_id',
                         'amount',
                         'status',
-                        'created_at',
-                        'updated_at',
-
+                        'created_at'
                     ])
                         ->where('status', $status->value);
                 }
             ])
             ->latest()
-            ->limit(10)
-            ->get();
+            ->paginate($perPage);
     }
 
-    public static function getAllActivities(User $user): array
+    public static function getAllActivities(User $user, Request $request): array
     {
         return [
-            'pending'  => self::getActivityByStatus($user, BidStatus::Pending),
-            'accepted' => self::getActivityByStatus($user, BidStatus::Accepted),
+            'pending'  => self::getActivityByStatus($user, BidStatus::Pending, $request),
+            'accepted' => self::getActivityByStatus($user, BidStatus::Accepted, $request),
         ];
     }
 }

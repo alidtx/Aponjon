@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios'
+import { TailwindPagination } from 'laravel-vue-pagination'
 
 const props = defineProps({
 
@@ -19,8 +20,8 @@ const props = defineProps({
 })
 const loading = ref(false)
 const activities = ref({
-  pending: [],
-  accepted: []
+    pending: [],
+    accepted: []
 })
 const error = ref(null)
 
@@ -28,13 +29,29 @@ const bidActivity = async () => {
     loading.value = true
     try {
         const response = await axios.get(route('customer.bid.activity'))
-        activities.value = response.data
+        activities.value = {
+            pending: (response.data.pending.data || []).filter(Boolean),
+            accepted: (response.data.accepted.data || []).filter(Boolean)
+        }
 
     } catch (err) {
         error.value = 'Failed to fetch bid activity.'
     } finally {
         loading.value = false
     }
+}
+
+const getFilteredResults = (page = 1) => {
+    router.visit(route('customer.bid.activity'), {
+        data: {
+            page: page,
+            per_page: parseInt(perPage.value),
+        },
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false
+        }
+    })
 }
 
 const formatTime = (date) => {
@@ -85,7 +102,7 @@ onMounted(() => {
             <h3 class="text-lg font-bold text-dark mb-4">সাম্প্রতিক এক্টিভিটি</h3>
             <div class="space-y-3">
 
-                <div v-for="(acitvity, index) in activities.accepted" :key="acitvity.id || index"
+                <div v-for="(activity, index) in activities.accepted || []" :key="activity.id || index"
                     class="flex items-center p-3 border border-gray-200 rounded-lg">
                     <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                         <i class="fas fa-check text-green-600 text-sm"></i>
@@ -93,16 +110,16 @@ onMounted(() => {
 
                     <div class="flex-1">
                         <p class="text-dark text-sm">
-                            {{ acitvity?.title || 'কাজের' }} - কাজতটি গ্রহণ করেছেন
+                            {{ activity?.title || 'কাজের' }} - কাজটি গ্রহণ করেছেন
                         </p>
 
                         <p class="text-xs text-gray-600">
-                            {{ formatTime(acitvity?.bids?.[0]?.updated_at) }}
+                            {{ formatTime(activity?.bids?.[0]?.updated_at) }}
                         </p>
                     </div>
 
                     <span class="text-green-600 font-medium text-sm">
-                        ৳{{ acitvity?.bids?.[0]?.amount }}
+                        ৳{{ Math.round(activity?.bids?.[0]?.amount || 0) }}
                     </span>
                 </div>
 
@@ -127,6 +144,10 @@ onMounted(() => {
                     </span>
                 </div>
             </div>
+        </div>
+        <div class="flex justify-center items-center space-x-2 mt-8">
+            <TailwindPagination :data="activities" @pagination-change-page="getFilteredResults" :limit="1"
+                class="mx-5" />
         </div>
     </div>
 
