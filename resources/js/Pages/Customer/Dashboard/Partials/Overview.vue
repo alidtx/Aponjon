@@ -1,5 +1,6 @@
 <script setup>
-import { computed } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios'
 
 const props = defineProps({
 
@@ -15,15 +16,26 @@ const props = defineProps({
         type: Number,
         default: 0
     },
-    pendingActivity: {
-        type: Object,
-        default: () => ({})
-    },
-    acceptedActivity: {
-        type: Object,
-        default: () => ({})
-    },
 })
+const loading = ref(false)
+const activities = ref({
+  pending: [],
+  accepted: []
+})
+const error = ref(null)
+
+const bidActivity = async () => {
+    loading.value = true
+    try {
+        const response = await axios.get(route('customer.bid.activity'))
+        activities.value = response.data
+
+    } catch (err) {
+        error.value = 'Failed to fetch bid activity.'
+    } finally {
+        loading.value = false
+    }
+}
 
 const formatTime = (date) => {
     return new Date(date).toLocaleString('bn-BD', {
@@ -33,7 +45,9 @@ const formatTime = (date) => {
     })
 }
 
-
+onMounted(() => {
+    bidActivity()
+})
 </script>
 
 
@@ -71,7 +85,7 @@ const formatTime = (date) => {
             <h3 class="text-lg font-bold text-dark mb-4">সাম্প্রতিক এক্টিভিটি</h3>
             <div class="space-y-3">
 
-                <div v-for="(acitvity, index) in acceptedActivity.data" :key="acitvity.id || index"
+                <div v-for="(acitvity, index) in activities.accepted" :key="acitvity.id || index"
                     class="flex items-center p-3 border border-gray-200 rounded-lg">
                     <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                         <i class="fas fa-check text-green-600 text-sm"></i>
@@ -83,16 +97,16 @@ const formatTime = (date) => {
                         </p>
 
                         <p class="text-xs text-gray-600">
-                            {{ formatTime(acitvity?.bid?.[0]?.created_at) }}
+                            {{ formatTime(acitvity?.bids?.[0]?.updated_at) }}
                         </p>
                     </div>
 
                     <span class="text-green-600 font-medium text-sm">
-                        ৳{{ acitvity?.bid?.[0]?.amount }}
+                        ৳{{ acitvity?.bids?.[0]?.amount }}
                     </span>
                 </div>
 
-                <div v-for="(activity, index) in props.pendingActivity.data" :key="activity.id || index"
+                <div v-for="(activity, index) in activities.pending" :key="activity.id || index"
                     class="flex items-center p-3 border border-gray-200 rounded-lg">
                     <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                         <i class="fas fa-gavel text-blue-600 text-sm"></i>
@@ -104,12 +118,12 @@ const formatTime = (date) => {
                         </p>
 
                         <p class="text-xs text-gray-600">
-                            {{ formatTime(activity?.bid?.[0]?.created_at) }}
+                            {{ formatTime(activity?.bids?.[0]?.created_at) }}
                         </p>
                     </div>
 
                     <span class="text-green-600 font-medium text-sm">
-                        ৳{{ Math.round(activity?.bid?.[0]?.amount || 0) }}
+                        ৳{{ Math.round(activity?.bids?.[0]?.amount || 0) }}
                     </span>
                 </div>
             </div>

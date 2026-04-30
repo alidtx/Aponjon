@@ -108,7 +108,7 @@ class CustomerService
         return round(($successfulTasks / $totalTasks) * 100, 2);
     }
 
-     public static function customerCurrentMonthspend(User $tasker): float
+    public static function customerCurrentMonthspend(User $tasker): float
     {
         if (!$tasker->isCustomer()) {
             return 0.0;
@@ -138,9 +138,23 @@ class CustomerService
     public static function getActivityByStatus(User $user, BidStatus $status)
     {
         return $user->customerTasks()
-            ->whereHas('bids', fn ($q) => $q->where('status', $status->value))
+            ->select(['id', 'customer_id', 'title'])
+            ->whereHas('bids', function ($q) use ($status) {
+                $q->where('status', $status->value);
+            })
             ->with([
-                'bids' => fn ($q) => $q->where('status', $status->value)
+                'bids' => function ($q) use ($status) {
+                    $q->select([
+                        'id',
+                        'task_id',
+                        'amount',
+                        'status',
+                        'created_at',
+                        'updated_at',
+
+                    ])
+                        ->where('status', $status->value);
+                }
             ])
             ->latest()
             ->limit(10)

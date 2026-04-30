@@ -29,23 +29,10 @@ class CustomerController extends Controller
    abort_unless($user->isCustomer(), 403, 'Unauthorized');
 
    $taskCounts = CustomerService::getTaskCounts($user);
-    $recentActivity = Bid::with('task') 
-        ->where('tasker_id', $user->id)
-        ->whereIn('status', [
-            BidStatus::Pending->value,
-            BidStatus::Accepted->value
-        ])
-        ->latest()
-        ->limit(10)
-        ->get();
-    $activities = CustomerService::getAllActivities($user);
-
+   
     return Inertia::render('Customer/Dashboard/Index', [
         'inProgress' => (int) $taskCounts->in_progress,
         'inBiding'   => (int) $taskCounts->in_biding,
-        'activity'      => BidResource::collection($recentActivity),
-        'pendingActivity'  => TaskResource::collection($activities['pending']),
-        'acceptedActivity' => TaskResource::collection($activities['accepted']),
         'monthlySpend' => CustomerService::customerCurrentMonthspend($user),
     ]);
 }
@@ -64,6 +51,10 @@ class CustomerController extends Controller
   public function CustomerSuccessRate()
   {
     return CustomerService::getSuccessRate(auth()->user());
+  }
+  public function bidActivity()
+  {
+    return CustomerService::getAllActivities(auth()->user());
   }
 
   public function createGig()

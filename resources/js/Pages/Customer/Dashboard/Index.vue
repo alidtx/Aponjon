@@ -16,14 +16,6 @@ const props = defineProps({
         type: Number,
         default: 0
     },
-    pendingActivity: {
-        type: Object,
-        default: () => ({})
-    },
-    acceptedActivity: {
-        type: Object,
-        default: () => ({})
-    },
     monthlySpend: {
         type: Number,
         default: 0
@@ -41,8 +33,6 @@ const props = defineProps({
              :monthly="monthlySpend" 
              :inProgress="props.inProgress" 
              :inBiding="props.inBiding" 
-             :pendingActivity="props.pendingActivity" 
-             :acceptedActivity="props.acceptedActivity" 
              />
         </div>
     </CustomerAuthenticatedLayout>
