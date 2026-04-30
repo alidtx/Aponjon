@@ -156,7 +156,8 @@ class CustomerService
                         'task_id',
                         'amount',
                         'status',
-                        'created_at'
+                        'created_at',
+                        'updated_at'
                     ])
                         ->where('status', $status->value);
                 }
