@@ -1,252 +1,184 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3'
-import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import TextArea from '@/Components/TextArea.vue';
-import SelectInput from '@/Components/SelectInput.vue';
-import Services from './Partials/Services.vue';
-import { ref, computed } from 'vue'
-import InputError from '@/Components/InputError.vue';
-import LocationSelector from '@/Components/LocationSelector.vue';
-import CreateGigIcon from '@/Components/Icons/CreateGigIcon.vue';
+import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue'
+import DataTable from '@/Components/DataTable/Index.vue'
+import { ref } from 'vue'
 
-const props = defineProps({
-    districts: {
-        type: Object,
-        default: () => ({})
+const userData = ref([
+    {
+        id: 1,
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        role: 'Admin',
+        status: 'Active',
+        joinDate: '2024-01-15'
     },
-    zilas: {
-        type: Object,
-        default: () => ({})
+    {
+        id: 2,
+        name: 'Jane Smith',
+        email: 'jane.smith@example.com',
+        role: 'User',
+        status: 'Active',
+        joinDate: '2024-02-20'
     },
-    categories: {
-        type: Object,
-        default: () => []
+    {
+        id: 3,
+        name: 'Michael Johnson',
+        email: 'michael.j@example.com',
+        role: 'Editor',
+        status: 'Inactive',
+        joinDate: '2024-01-10'
     },
-    success: {
-        type: String,
-        default: ''
+    {
+        id: 4,
+        name: 'Emily Brown',
+        email: 'emily.brown@example.com',
+        role: 'User',
+        status: 'Active',
+        joinDate: '2024-03-05'
+    },
+    {
+        id: 5,
+        name: 'David Wilson',
+        email: 'david.wilson@example.com',
+        role: 'Admin',
+        status: 'Suspended',
+        joinDate: '2023-12-01'
+    },
+    {
+        id: 6,
+        name: 'Sarah Martinez',
+        email: 'sarah.m@example.com',
+        role: 'Editor',
+        status: 'Active',
+        joinDate: '2024-02-14'
+    },
+    {
+        id: 7,
+        name: 'Robert Taylor',
+        email: 'robert.t@example.com',
+        role: 'User',
+        status: 'Inactive',
+        joinDate: '2024-01-28'
+    },
+    {
+        id: 8,
+        name: 'Lisa Anderson',
+        email: 'lisa.a@example.com',
+        role: 'Admin',
+        status: 'Active',
+        joinDate: '2024-03-10'
+    },
+    {
+        id: 9,
+        name: 'James Thomas',
+        email: 'james.t@example.com',
+        role: 'User',
+        status: 'Active',
+        joinDate: '2024-02-01'
+    },
+    {
+        id: 10,
+        name: 'Maria Garcia',
+        email: 'maria.g@example.com',
+        role: 'Editor',
+        status: 'Suspended',
+        joinDate: '2023-11-15'
     }
-})
+])
 
-const districtsData = computed(() => {
-    const data = props.districts?.data || props.districts
-    return data || []
-})
-
-const allZilasData = computed(() => {
-    const data = props.zilas?.data || props.zilas
-    return data || []
-})
-
-const form = useForm({
-    title: '',
-    description: '',
-    budget: '',
-    emergency: '',
-    district_id: '',
-    zila_id: '',
-    upozila_id: '',
-    location_address: '',
-    category_id: ''
-});
-
-const filteredZilaList = ref([])
-const filteredUpozilaList = ref([])
-const showSuccessMessage = ref(false)
-const backendMessage = ref('')
-
-const Options = [
-    { value: 'normal', label: 'সাধারণ (২৪-৪৮ ঘন্টা)' },
-    { value: 'urgent', label: 'জরুরি (১২-২৪ ঘন্টা)' },
-    { value: 'emergency', label: 'ইমার্জেন্সি (৬-১২ ঘন্টা)' },
-    { value: 'other', label: 'অনান্য' },
-]
-
-const getZilasByDistric = (districtId) => {
-    if (!districtId) {
-        filteredZilas.value = []
-        return
-    }
-
-    const districtsArray = JSON.parse(JSON.stringify(districtsData.value))
-    const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
-    const selectedDistrict = districtsArray.find(district => district.id == districtId)
-
-    if (selectedDistrict && selectedDistrict.zilas && selectedDistrict.zilas.length > 0) {
-        filteredZilaList.value = selectedDistrict.zilas
-        return
-    }
-
-    const zilas = zilasArray.filter(zila => {
-        const districtIdField = zila.district_id || zila.district?.id
-        return districtIdField == districtId
-    })
-    filteredZilaList.value = zilas
+const hasMore = ref(true)
+const page = ref(1)
+const isLoading = ref(false)
+const handleRowClick = (row) => {
+    console.log('Row clicked:', row)
+    alert(`Selected: ${row.name} (${row.email})`)
 }
 
-const getUpozilasByZila = (zilaId) => {
-    if (!zilaId) {
-        filteredUpozilas.value = []
-        return
-    }
-
-    const zilasArray = JSON.parse(JSON.stringify(allZilasData.value))
-    const selectedZila = zilasArray.find(zila => zila.id == zilaId)
-    if (selectedZila && selectedZila.upozilas) {
-        filteredUpozilaList.value = selectedZila.upozilas
-    } else {
-        filteredUpozilaList.value = []
-    }
+const editUser = (id) => {
+    const user = userData.value.find(u => u.id === id)
+    console.log('Edit user:', id, user)
+    alert(`Edit user: ${user?.name}`)
 }
 
-const submit = () => {
-    form.post(route('customer.gigs.store'), {
-        onSuccess: (res) => {
-            if (res.props.flash?.type === 'success') {
-                showSuccessMessage.value = true
-                backendMessage.value = res.props.flash?.message || 'আপনার গিগ সফলভাবে তৈরি হয়েছে!'
-                form.reset()
+const loadMoreData = async (params, loadMore = false) => {
+    if (isLoading.value) return
+    
+    isLoading.value = true
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    if (loadMore && page.value < 3) {
+        page.value++
+        const moreUsers = [
+            {
+                id: 11,
+                name: 'Kevin White',
+                email: 'kevin.w@example.com',
+                role: 'User',
+                status: 'Active',
+                joinDate: '2024-03-15'
+            },
+            {
+                id: 12,
+                name: 'Amanda Lee',
+                email: 'amanda.l@example.com',
+                role: 'Editor',
+                status: 'Active',
+                joinDate: '2024-03-18'
             }
-        },
-    });
+        ]
+        
+        userData.value.push(...moreUsers)
+        
+        if (page.value >= 3) {
+            hasMore.value = false
+        }
+    }
+    
+    isLoading.value = false
 }
-
-const createAnotherGig = () => {
-    showSuccessMessage.value = false
-    backendMessage.value = ''
+const handleColumnUpdate = (columns) => {
+    console.log('Columns updated:', columns)
 }
-
-const goToDashboard = () => {
-    router.visit(route('customer.dashboard'))
-}
+const tableHeader = ref([
+    { name: 'ID', data: 'id', orderable: true, contentType: 'text' },
+    { name: 'Name', data: 'name', orderable: true, contentType: 'text' },
+    { name: 'Email', data: 'email', orderable: true, contentType: 'text' },
+    { name: 'Role', data: 'role', orderable: true, contentType: 'text' },
+    { name: 'Status', data: 'status', orderable: true, contentType: 'text', isLabel: true },
+    { name: 'Join Date', data: 'joinDate', orderable: true, contentType: 'text' },
+    { name: 'Actions', data: 'id', orderable: false, contentType: 'slots', slotsName: 'actions' }
+])
 </script>
 
 <template>
     <CustomerAuthenticatedLayout>
-
         <Head title="গিগ তৈরি" />
-        <div v-if="showSuccessMessage" class="mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
-                    @click="createAnotherGig">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        আরেকটি গিগ তৈরি করুন
-                    </h3>
-                    <p class="text-sm text-gray-600">
-                        একই কাস্টমার হিসেবে আরেকটি নতুন গিগ পোস্ট করুন
-                    </p>
-                    <div class="mt-4">
-                        <span
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-                            নতুন গিগ তৈরি করুন
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Go to Dashboard Box -->
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
-                    @click="goToDashboard">
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        ড্যাশবোর্ডে যান
-                    </h3>
-                    <p class="text-sm text-gray-600">
-                        আপনার ড্যাশবোর্ডে ফিরে যান এবং অন্যান্য গিগগুলো দেখুন
-                    </p>
-                    <div class="mt-4">
-                        <span
-                            class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
-                            ড্যাশবোর্ড দেখুন
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-if="!showSuccessMessage" class="lg:col-span-3">
-           <div class="max-w-4xl mx-auto px-4">
-            <div class="bg-white rounded-lg shadow-md p-8">
-               <div class="mb-6 pb-4 border-b">
-                <div class="flex items-center gap-2 mb-2">
-                    <CreateGigIcon />
-                    <h1 class="text-2xl font-bold text-dark">নতুন গিগ তৈরি</h1>
-                </div>
-                <p class="text-gray-600 ml-9">আপনার নতুন গিগের বিস্তারিত প্রদান করুন</p>
-            </div>
-                <form id="serviceRequestForm" @submit.prevent="submit">
-                    <Services :serviceCategories="categories" v-model="form.category_id"
-                        :error="form.errors.category_id" />
-
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
-                        <div class="space-y-6">
-                            <div>
-                                <InputLabel for="title" value="টাস্কের শিরোনাম" required />
-                                <TextInput id="title" type="text" class="w-full p-3"
-                                    placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" v-model="form.title"
-                                    :error="form.errors.title" />
-                                <InputError class="mt-2" :message="form.errors.title" />
-                            </div>
-                            <div>
-                                <InputLabel for="description" value="বিস্তারিত বর্ণনা" required />
-                                <TextArea id="description" class="w-full p-3"
-                                    placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..."
-                                    v-model="form.description" :error="form.errors.description" />
-                                <InputError class="mt-2" :message="form.errors.description" />
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <InputLabel for="budget" value="আনুমানিক বাজেট (৳)" required />
-                                    <TextInput id="budget" type="number" class="w-full p-3"
-                                        placeholder="আনুমানিক বাজেট লিখুন" v-model="form.budget"
-                                        :error="form.errors.budget" />
-                                    <InputError class="mt-2" :message="form.errors.budget" />
-                                </div>
-                                <div>
-                                    <InputLabel for="emergency" value="জরুরিতা" required />
-                                    <SelectInput id="emergency" class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন"
-                                        :options="Options" labelKey="label" valueKey="value" v-model="form.emergency"
-                                        :error="form.errors.schedule_for" />
-                                    <InputError class="mt-2" :message="form.errors.emergency" />
-                                </div>
-                            </div>
+        <div class="lg:col-span-3">
+                <DataTable
+                    :tableHeader="tableHeader"
+                    :tableData="userData"
+                    :hasMorePages="hasMore"
+                    :currentPage="page"
+                    @rowClicked="handleRowClick"
+                    @getFilteredResults="loadMoreData"
+                    @updateColumns="handleColumnUpdate"
+                >
+                    <template #actions="{ rowData }">
+                        <div class="flex items-center gap-2">
+                            <button 
+                                @click="editUser(rowData.id)"
+                                class="rounded-md bg-brand-primary-surface-subtle px-3 py-1 text-sm font-medium text-brand-primary-text-subtle transition-colors hover:bg-brand-primary-surface-default hover:text-white"
+                            >
+                                Edit
+                            </button>
                         </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
-                        <LocationSelector :districts="districts" :zilas="zilas" v-model:districtId="form.district_id"
-                            v-model:zilaId="form.zila_id" v-model:upozilaId="form.upozila_id" :errors="form.errors" />
-                    </div>
-
-                    <div class="mb-4">
-                        <InputLabel for="location_address" value="সম্পূর্ণ ঠিকানা" required />
-                        <TextArea id="location_address" class="w-full p-3"
-                            placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." v-model="form.location_address"
-                            :error="form.errors.location_address" />
-                        <InputError class="mt-2" :message="form.errors.location_address" />
-                    </div>
-
-                    <PrimaryButton type="submit" :disabled="form.processing">
-                        <span v-if="form.processing">সাবমিট হচ্ছে...</span>
-                        <span v-else>গিগ তৈরি করুন</span>
-                    </PrimaryButton>
-                </form>
-            </div>
-            </div>
-        </div>
+                    </template>
+                </DataTable>
+        </div>        
     </CustomerAuthenticatedLayout>
 </template>
+
+<style scoped>
+/* Add any custom styles here */
+</style>

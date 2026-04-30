@@ -6,6 +6,7 @@ use App\Http\Controllers\KycApprovalController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Customer\CustomerProfileController;
 use App\Http\Controllers\Customer\CustomerProfileSettingController;
+use App\Http\Controllers\Customer\GigController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
@@ -36,8 +37,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/customer-total-spend', [CustomerController::class, 'CustomerTotalSpend'])->name('total.spend');
             Route::get('/customer-success-rate', [CustomerController::class, 'CustomerSuccessRate'])->name('success.rate');
             Route::get('/bid-activity', [CustomerController::class, 'bidActivity'])->name('bid.activity');
-            Route::get('/create-gig', [CustomerController::class, 'createGig'])->name('create.gig');
-            Route::post('/gigs-store', [CustomerController::class, 'gigsStore'])->name('gigs.store');
+            Route::get('/gig', [GigController::class, 'Index'])->name('gig');
+            Route::get('/create-gig', [GigController::class, 'createGig'])->name('create.gig');
+            Route::post('/gigs-store', [GigController::class, 'gigsStore'])->name('gigs.store');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');
             Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update'); 
             Route::get('/edit-customer-profile-settings', [CustomerProfileSettingController::class, 'editSetting'])

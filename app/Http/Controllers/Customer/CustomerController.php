@@ -2,22 +2,10 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Enum\BidStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GigRequest;
-use App\Http\Resources\BidResource;
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\DistrictResource;
-use App\Http\Resources\TaskResource;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\ZilaResource;
-use App\Models\Bid;
-use App\Models\Category;
-use App\Models\Task;
 use App\Models\User;
-use App\Services\LocationService;
-use App\Services\TaskService;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 
@@ -59,25 +47,4 @@ class CustomerController extends Controller
     return CustomerService::getAllActivities(auth()->user(), $request);
 }
 
-  public function createGig()
-  {
-
-    $categories = Category::where('is_active', true)
-      ->get(['id', 'name', 'icon']);
-
-    return Inertia::render('Customer/CreateGig/Index', [
-      'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
-      'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
-      'categories' => CategoryResource::collection($categories),
-    ]);
-  }
-
-  public function gigsStore(GigRequest $request)
-  {
-    TaskService::store($request);
-    return redirect()->back()->with([
-      'type' => 'success',
-      'message' => 'আপনার গিগ সফলভাবে তৈরি হয়েছে!',
-    ]);
-  }
 }
