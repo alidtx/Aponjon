@@ -102,46 +102,56 @@ onMounted(() => {
             <h3 class="text-lg font-bold text-dark mb-4">সাম্প্রতিক এক্টিভিটি</h3>
             <div class="space-y-3">
 
-                <div v-for="(activity, index) in activities.accepted || []" :key="activity.id || index"
-                    class="flex items-center p-3 border border-gray-200 rounded-lg">
-                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                        <i class="fas fa-check text-green-600 text-sm"></i>
+                <div v-for="(activity, index) in activities.accepted || []" :key="activity.id || index" class="mb-3">
+
+                    <div v-for="(bid, bidIndex) in activity.bids || []" :key="bid.id || bidIndex"
+                        class="flex items-center p-3 border border-gray-200 rounded-lg mb-2">
+
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-check text-green-600 text-sm"></i>
+                        </div>
+
+                        <div class="flex-1">
+                            <p class="text-dark text-sm">
+                                {{ activity?.title || 'কাজের' }} - কাজটি গ্রহণ করেছেন
+                            </p>
+
+                            <p class="text-xs text-gray-600">
+                                {{ formatTime(bid?.updated_at) }}
+                            </p>
+                        </div>
+
+                        <span class="text-green-600 font-medium text-sm">
+                            ৳{{ Math.round(bid?.amount || 0) }}
+                        </span>
                     </div>
 
-                    <div class="flex-1">
-                        <p class="text-dark text-sm">
-                            {{ activity?.title || 'কাজের' }} - কাজটি গ্রহণ করেছেন
-                        </p>
-
-                        <p class="text-xs text-gray-600">
-                            {{ formatTime(activity?.bids?.[0]?.updated_at) }}
-                        </p>
-                    </div>
-
-                    <span class="text-green-600 font-medium text-sm">
-                        ৳{{ Math.round(activity?.bids?.[0]?.amount || 0) }}
-                    </span>
                 </div>
 
-                <div v-for="(activity, index) in activities.pending" :key="activity.id || index"
-                    class="flex items-center p-3 border border-gray-200 rounded-lg">
-                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                        <i class="fas fa-gavel text-blue-600 text-sm"></i>
+                <div v-for="(activity, index) in activities.pending || []" :key="activity.id || index" class="mb-3">
+
+                    <div v-for="(bid, bidIndex) in activity.bids || []" :key="bid.id || bidIndex"
+                        class="flex items-center p-3 border border-gray-200 rounded-lg mb-2">
+
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-gavel text-blue-600 text-sm"></i>
+                        </div>
+
+                        <div class="flex-1">
+                            <p class="text-dark text-sm">
+                                {{ activity?.title || 'কাজের' }} - কাজের জন্য আবেদন করেছেন
+                            </p>
+
+                            <p class="text-xs text-gray-600">
+                                {{ formatTime(bid?.created_at) }}
+                            </p>
+                        </div>
+
+                        <span class="text-green-600 font-medium text-sm">
+                            ৳{{ Math.round(bid?.amount || 0) }}
+                        </span>
                     </div>
 
-                    <div class="flex-1">
-                        <p class="text-dark text-sm">
-                            {{ activity?.title || 'কাজের' }} - কাজের জন্য আবেদন করেছেন
-                        </p>
-
-                        <p class="text-xs text-gray-600">
-                            {{ formatTime(activity?.bids?.[0]?.created_at) }}
-                        </p>
-                    </div>
-
-                    <span class="text-green-600 font-medium text-sm">
-                        ৳{{ Math.round(activity?.bids?.[0]?.amount || 0) }}
-                    </span>
                 </div>
             </div>
         </div>
