@@ -3,30 +3,31 @@
 namespace App\Services;
 
 use App\Models\Task;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Enum\PaginationLimits;
 use App\Models\Category;
-use App\Services\MediaService;
-use App\Models\TaskerProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TaskService
 {
+
+
     public static function store($request)
     {
         return Task::create([
-            'task_number' => RandomGigNum::generateWithPrefix('GIG'),
-            'customer_id' => auth()->id(),
-            'title' => $request->title,
-            'description' => $request->description,
+            'task_number'      => RandomGigNum::generateWithPrefix('GIG'),
+            'customer_id'      => auth()->id(),
+            'title'            => $request->title,
+            'slug'             => Str::slug($request->title),
+            'description'      => $request->description,
             'location_address' => $request->location_address,
-            'budget' => $request->budget,
-            'emergency' => $request->emergency,
-            'category_id' => $request->category_id,
-            'district_id' => $request->district_id,
-            'zila_id' => $request->zila_id,
-            'upozila_id' => $request->upozila_id,
+            'budget'           => $request->budget,
+            'emergency'        => $request->emergency,
+            'category_id'      => $request->category_id,
+            'district_id'      => $request->district_id,
+            'zila_id'          => $request->zila_id,
+            'upozila_id'       => $request->upozila_id,
         ]);
     }
 
@@ -157,5 +158,4 @@ class TaskService
 
         return $categories;
     }
-
 }
