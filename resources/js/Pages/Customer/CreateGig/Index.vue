@@ -34,7 +34,7 @@ const closeModal = () => {
     selectedTask.value = null
 }
 
-const editUser = (id) => {
+const editTask = (id) => {
     const user = props.customerTasks?.data?.find(u => u.id === id)
     console.log('Edit:', id, user)
 }
@@ -103,9 +103,8 @@ const getFilteredResults = (pageNumber = 1) => {
                     @rowClicked="handleRowClick" @getFilteredResults="loadMoreData" @updateColumns="handleColumnUpdate">
                     <template #actions="{ rowData }">
 
-                        <Link @click.stop="editUser(rowData.id)"
+                        <Link :href="route('customer.gigs.edit', rowData.id)" @click.stop
                             class="inline-flex items-center px-3 py-1 mr-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
-
                             এডিট
                         </Link>
 

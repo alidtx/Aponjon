@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/gig', [GigController::class, 'Index'])->name('gig');
             Route::get('/create-gig', [GigController::class, 'createGig'])->name('create.gig');
             Route::post('/gigs-store', [GigController::class, 'gigsStore'])->name('gigs.store');
+            Route::get('/gigs-edit/{taskId}', [GigController::class, 'gigsEdit'])->name('gigs.edit');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');
             Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update'); 
             Route::get('/edit-customer-profile-settings', [CustomerProfileSettingController::class, 'editSetting'])

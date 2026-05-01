@@ -57,4 +57,12 @@ class GigController extends Controller
       'message' => 'আপনার গিগ সফলভাবে তৈরি হয়েছে!',
     ]);
   }
+
+  public function gigsEdit ($taskId)
+  {
+  return Inertia::render('Customer/CreateGig/Create');
+
+  }
+
+
 }
