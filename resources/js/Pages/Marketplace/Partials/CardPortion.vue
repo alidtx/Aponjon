@@ -15,7 +15,7 @@ const props = defineProps({
     },
 })
 
-
+console.log(props.cardData)
 const perPage = ref(props.cardData?.per_page ?? 15)
 const isLoading = ref(false)
 const handleLoadingChange = (loading) => {

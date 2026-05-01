@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Services\LocationService;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Inertia\Inertia;
 
 
@@ -21,7 +22,7 @@ class GigController extends Controller
 
   public function index(Request $request)
   {
-    $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIFTEEN->value);
+    $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIVE->value);
     $perPage = max(1, min(100, $perPage));
 
     $customerTasks = auth()->user()

@@ -1,5 +1,6 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3'
+import { Head, Link, router } from '@inertiajs/vue3'
+import { TailwindPagination } from 'laravel-vue-pagination'
 import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue'
 import DataTable from '@/Components/DataTable/Index.vue'
 import { ref } from 'vue'
@@ -11,6 +12,8 @@ const props= defineProps({
     }
 
 })
+
+console.log()
 
 const hasMore = ref(true)
 const page = ref(1)
@@ -72,6 +75,22 @@ const tableHeader = ref([
     { name: 'স্ট্যাটাস', data: 'status', orderable: true, contentType: 'text', isLabel: true },
     { name: 'অ্যাকশন', data: 'action', orderable: false, contentType: 'slots', slotsName: 'actions' }
 ])
+
+const perPage = ref(props.customerTasks.data?.per_page ?? 5)
+const getFilteredResults = (page = 1) => {
+    isLoading.value = true
+    router.visit(route('customer.gig'), {
+        data: {
+            page: page,
+            per_page: parseInt(perPage.value),
+        },
+        preserveScroll: true,
+        onFinish: () => {
+            isLoading.value = false
+        }
+    })
+}
+
 </script>
 
 <template>
@@ -97,6 +116,10 @@ const tableHeader = ref([
                         </div>
                     </template>
                 </DataTable>
+            <div class="flex justify-center items-center space-x-2 mt-8">
+             <TailwindPagination :data="props.customerTasks" @pagination-change-page="getFilteredResults" :limit="1"
+                class="mx-5" />
+            </div>
             </div>
         </div>
     </CustomerAuthenticatedLayout>
