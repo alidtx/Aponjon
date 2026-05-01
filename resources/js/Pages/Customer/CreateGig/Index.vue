@@ -130,7 +130,7 @@ const getFilteredResults = (pageNumber = 1) => {
             <div class="p-6 space-y-3" v-if="selectedTask">
 
                 <TaskDetail 
-                :task="props.customerTasks.data"
+                :task="selectedTask"
                 />
 
                 <div class="flex justify-end pt-4">

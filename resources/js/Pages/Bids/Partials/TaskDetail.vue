@@ -8,7 +8,7 @@ const props = defineProps({
         default: () => null
     }
 })
-
+console.log(props.task);
 
 const urgency = computed(() => {
     const map = {
