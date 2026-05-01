@@ -18,6 +18,14 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    currentPage: {
+        type: Number,
+        default: 1,
+    },
+    itemsPerPage: {
+        type: Number,
+        default: 10,
+    },
 })
 
 const emit = defineEmits(['updateColumns', 'rowClicked', 'changePage'])
@@ -25,7 +33,7 @@ const emit = defineEmits(['updateColumns', 'rowClicked', 'changePage'])
 const columns = ref(
     localStorage.getItem('tableColumns')
         ? JSON.parse(localStorage.getItem('tableColumns'))
-        : props.tableHeader
+        : [{ name: 'ক্রমিক নং', data: 'serial', orderable: false, contentType: 'text' }, ...props.tableHeader]
 )
 
 const dataArray = ref(props.tableData)
@@ -77,6 +85,10 @@ const sortData = (column, order) => {
 const getObjValue = (obj, path) => {
     return path.split('.').reduce((acc, part) => acc && acc[part], obj)
 }
+
+const getSerialNumber = (index) => {
+    return ((props.currentPage - 1) * props.itemsPerPage) + index + 1
+}
 </script>
 
 <template>
@@ -126,7 +138,10 @@ const getObjValue = (obj, path) => {
                             :key="i"
                             class="border-b px-4 py-3 text-sm text-gray-700"
                         >
-                            <div v-if="header.contentType === 'text'">
+                            <div v-if="header.contentType === 'text' && header.data === 'serial'">
+                                {{ getSerialNumber(index) }}
+                            </div>
+                            <div v-else-if="header.contentType === 'text'">
                                 {{ getObjValue(row, header.data) ?? 'N/A' }}
                             </div>
 
@@ -158,7 +173,5 @@ const getObjValue = (obj, path) => {
                 </tbody>
             </table>
         </div>
-
-        <!-- Tailwind Pagination -->
     </div>
 </template>

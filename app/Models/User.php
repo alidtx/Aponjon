@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function customerTasks()
     {
-        return $this->hasOne(Task::class, 'customer_id');
+        return $this->hasMany(Task::class, 'customer_id');
     }
 
     public function taskerTasks()

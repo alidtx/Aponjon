@@ -1,91 +1,16 @@
 <script setup>
-import { Head, useForm, router, Link } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue'
 import DataTable from '@/Components/DataTable/Index.vue'
 import { ref } from 'vue'
 
-const userData = ref([
-    {
-        id: 1,
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        role: 'Admin',
-        status: 'Active',
-        joinDate: '2024-01-15'
-    },
-    {
-        id: 2,
-        name: 'Jane Smith',
-        email: 'jane.smith@example.com',
-        role: 'User',
-        status: 'Active',
-        joinDate: '2024-02-20'
-    },
-    {
-        id: 3,
-        name: 'Michael Johnson',
-        email: 'michael.j@example.com',
-        role: 'Editor',
-        status: 'Inactive',
-        joinDate: '2024-01-10'
-    },
-    {
-        id: 4,
-        name: 'Emily Brown',
-        email: 'emily.brown@example.com',
-        role: 'User',
-        status: 'Active',
-        joinDate: '2024-03-05'
-    },
-    {
-        id: 5,
-        name: 'David Wilson',
-        email: 'david.wilson@example.com',
-        role: 'Admin',
-        status: 'Suspended',
-        joinDate: '2023-12-01'
-    },
-    {
-        id: 6,
-        name: 'Sarah Martinez',
-        email: 'sarah.m@example.com',
-        role: 'Editor',
-        status: 'Active',
-        joinDate: '2024-02-14'
-    },
-    {
-        id: 7,
-        name: 'Robert Taylor',
-        email: 'robert.t@example.com',
-        role: 'User',
-        status: 'Inactive',
-        joinDate: '2024-01-28'
-    },
-    {
-        id: 8,
-        name: 'Lisa Anderson',
-        email: 'lisa.a@example.com',
-        role: 'Admin',
-        status: 'Active',
-        joinDate: '2024-03-10'
-    },
-    {
-        id: 9,
-        name: 'James Thomas',
-        email: 'james.t@example.com',
-        role: 'User',
-        status: 'Active',
-        joinDate: '2024-02-01'
-    },
-    {
-        id: 10,
-        name: 'Maria Garcia',
-        email: 'maria.g@example.com',
-        role: 'Editor',
-        status: 'Suspended',
-        joinDate: '2023-11-15'
+const props= defineProps({
+    customerTasks:{
+        type:Object,
+         default: () => ({})
     }
-])
+
+})
 
 const hasMore = ref(true)
 const page = ref(1)
@@ -141,13 +66,11 @@ const handleColumnUpdate = (columns) => {
     console.log('Columns updated:', columns)
 }
 const tableHeader = ref([
-    { name: 'ID', data: 'id', orderable: true, contentType: 'text' },
-    { name: 'Name', data: 'name', orderable: true, contentType: 'text' },
-    { name: 'Email', data: 'email', orderable: true, contentType: 'text' },
-    { name: 'Role', data: 'role', orderable: true, contentType: 'text' },
-    { name: 'Status', data: 'status', orderable: true, contentType: 'text', isLabel: true },
-    { name: 'Join Date', data: 'joinDate', orderable: true, contentType: 'text' },
-    { name: 'Actions', data: 'id', orderable: false, contentType: 'slots', slotsName: 'actions' }
+    { name: 'কাজের নাম', data: 'title', orderable: true, contentType: 'text' },
+    { name: 'কাজের নম্বর', data: 'task_number', orderable: true, contentType: 'text' },
+    { name: 'বাজেট', data: 'budget', orderable: true, contentType: 'text' }, 
+    { name: 'স্ট্যাটাস', data: 'status', orderable: true, contentType: 'text', isLabel: true },
+    { name: 'অ্যাকশন', data: 'action', orderable: false, contentType: 'slots', slotsName: 'actions' }
 ])
 </script>
 
@@ -163,7 +86,7 @@ const tableHeader = ref([
                         নতুন কাজ তৈরি করুন
                     </Link>
                 </div>
-                <DataTable :tableHeader="tableHeader" :tableData="userData" :hasMorePages="hasMore" :currentPage="page"
+                <DataTable :tableHeader="tableHeader" :tableData="props.customerTasks?.data" :hasMorePages="hasMore" :currentPage="page"
                     @rowClicked="handleRowClick" @getFilteredResults="loadMoreData" @updateColumns="handleColumnUpdate">
                     <template #actions="{ rowData }">
                         <div class="flex items-center gap-2">
