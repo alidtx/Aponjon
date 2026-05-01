@@ -6,6 +6,7 @@ import DataTable from '@/Components/DataTable/Index.vue'
 import { ref } from 'vue'
 import Modal from '@/Components/Modal.vue'
 import TaskDetail from '@/Pages/Bids/Partials/TaskDetail.vue'
+import EditIcon from '@/Components/Icons/EditIcon.vue'
 
 
 const props = defineProps({
@@ -94,34 +95,31 @@ const getFilteredResults = (pageNumber = 1) => {
                         আপনার কাজ গুলোর লিস্ট
                     </h2>
 
-                    <Link :href="route('customer.create.gig')"
-                        class="px-4 py-1 bg-primary text-white rounded-lg">
+                    <Link :href="route('customer.create.gig')" class="px-4 py-1 bg-primary text-white rounded-lg">
                         নতুন কাজ তৈরি করুন
                     </Link>
                 </div>
-                <DataTable
-                    :tableHeader="tableHeader"
-                    :tableData="props.customerTasks?.data"
-                    @rowClicked="handleRowClick"
-                    @getFilteredResults="loadMoreData"
-                    @updateColumns="handleColumnUpdate"
-                >
+                <DataTable :tableHeader="tableHeader" :tableData="props.customerTasks?.data"
+                    @rowClicked="handleRowClick" @getFilteredResults="loadMoreData" @updateColumns="handleColumnUpdate">
                     <template #actions="{ rowData }">
-                        <button
-                            @click="editUser(rowData.id)"
-                            class="px-3 py-1 text-sm bg-gray-100 rounded"
-                        >
-                            Edit
+
+                        <Link @click.stop="editUser(rowData.id)"
+                            class="inline-flex items-center px-3 py-1 mr-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+
+                            এডিট
+                        </Link>
+
+                        <button @click.stop="confirmDelete(rowData.id)"
+                            class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200">
+
+                            ডিলেট
                         </button>
                     </template>
                 </DataTable>
 
                 <div class="flex justify-center mt-8">
-                    <TailwindPagination
-                        :data="props.customerTasks"
-                        @pagination-change-page="getFilteredResults"
-                        :limit="1"
-                    />
+                    <TailwindPagination :data="props.customerTasks" @pagination-change-page="getFilteredResults"
+                        :limit="1" />
                 </div>
 
             </div>
@@ -129,15 +127,10 @@ const getFilteredResults = (pageNumber = 1) => {
         <Modal :show="isOpenModel" @close="closeModal">
             <div class="p-6 space-y-3" v-if="selectedTask">
 
-                <TaskDetail 
-                :task="selectedTask"
-                />
+                <TaskDetail :task="selectedTask" />
 
                 <div class="flex justify-end pt-4">
-                    <button
-                        @click="closeModal"
-                        class="px-4 py-2 bg-gray-200 rounded-lg"
-                    >
+                    <button @click="closeModal" class="px-4 py-2 bg-gray-200 rounded-lg">
                         Close
                     </button>
                 </div>
