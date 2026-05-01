@@ -33,7 +33,7 @@ const emit = defineEmits(['updateColumns', 'rowClicked', 'changePage'])
 const columns = ref(
     localStorage.getItem('tableColumns')
         ? JSON.parse(localStorage.getItem('tableColumns'))
-        : [{ name: 'ক্রমিক নং', data: 'serial', orderable: false, contentType: 'text' }, ...props.tableHeader]
+        : [{ name: '#', data: 'serial', orderable: false, contentType: 'text' }, ...props.tableHeader]
 )
 
 const dataArray = ref(props.tableData)
