@@ -1,15 +1,17 @@
-
+<!-- Components/TaskDetailsPartial.vue -->
 <script setup>
 import { computed } from 'vue'
+import { useTimeAgo } from '@/composables/useTimeAgo'
+import { useLocation } from '@/composables/geoLocation'
 
 const props = defineProps({
     task: {
         type: Object,
-        default: () => null
+        required: true
     }
 })
 
-
+// Emergency urgency configuration
 const urgency = computed(() => {
     const map = {
         normal: { label: 'সাধারণ', icon: 'fa-circle', color: 'green', bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200' },
@@ -20,7 +22,7 @@ const urgency = computed(() => {
     return map[level] || map.normal
 })
 
-
+// Status configuration
 const status = computed(() => {
     const map = {
         pending: { label: 'পেন্ডিং', icon: 'fa-clock', bg: 'bg-yellow-100', text: 'text-yellow-800' },
@@ -32,7 +34,7 @@ const status = computed(() => {
     return map[current] || map.pending
 })
 
-
+// Formatters
 const formatBudget = (amount) => {
     if (!amount) return '৳ ০'
     return new Intl.NumberFormat('bn-BD', {
@@ -53,51 +55,11 @@ const formatDate = (date) => {
         minute: '2-digit'
     })
 }
-
-
-const getLocation = () => {
-    if (!props.task) return 'N/A'
-    const parts = []
-    if (props.task.district?.name) parts.push(props.task.district.name)
-    if (props.task.zila?.name) parts.push(props.task.zila.name)
-    if (props.task.upozila?.name) parts.push(props.task.upozila.name)
-    return parts.length ? parts.join(', ') : 'N/A'
-}
-
-
-const getTimeAgo = (date) => {
-    if (!date) return 'N/A'
-    const seconds = Math.floor((new Date() - new Date(date)) / 1000)
-    if (seconds < 0) return 'এখনই'
-    
-    const intervals = {
-        year: 31536000,
-        month: 2592000,
-        day: 86400,
-        hour: 3600,
-        minute: 60
-    }
-    
-    for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-        const interval = Math.floor(seconds / secondsInUnit)
-        if (interval >= 1) {
-            const banglaUnits = {
-                year: 'বছর',
-                month: 'মাস',
-                day: 'দিন',
-                hour: 'ঘন্টা',
-                minute: 'মিনিট'
-            }
-            return `${interval} ${banglaUnits[unit]} আগে`
-        }
-    }
-    return 'এখনই'
-}
 </script>
 
 <template>
-    <div v-if="task" class="space-y-6">
-        
+    <div class="space-y-6">
+        <!-- Header with Badges -->
         <div class="border-b pb-4">
             <div class="flex flex-wrap gap-2 mb-3">
                 <span :class="['inline-flex items-center px-3 py-1 rounded-full text-sm font-medium', urgency.bg, urgency.text]">
@@ -109,12 +71,14 @@ const getTimeAgo = (date) => {
                     {{ status.label }}
                 </span>
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ task.title || 'N/A' }}</h3>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ task.title }}</h3>
             <p class="text-sm text-gray-500">
                 <i class="fas fa-hashtag mr-1"></i>
                 টাস্ক নম্বর: {{ task.task_number || 'N/A' }}
             </p>
         </div>
+
+        <!-- Statistics Cards -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-center">
                 <i class="fas fa-chart-line text-blue-600 text-xl mb-2"></i>
@@ -130,29 +94,33 @@ const getTimeAgo = (date) => {
             
             <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 text-center">
                 <i class="fas fa-map-marker-alt text-green-600 text-xl mb-2"></i>
-                <p class="text-sm font-medium text-gray-900">{{ getLocation() }}</p>
+                <p class="text-sm font-medium text-gray-900">{{ useLocation(task) }}</p>
                 <p class="text-xs text-gray-600">অবস্থান</p>
             </div>
             
             <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 text-center">
                 <i class="fas fa-clock text-orange-600 text-xl mb-2"></i>
-                <p class="text-sm font-medium text-gray-900">{{ getTimeAgo(task.created_at) }}</p>
+                <p class="text-sm font-medium text-gray-900">{{ useTimeAgo(task.created_at) }}</p>
                 <p class="text-xs text-gray-600">পোস্ট করা হয়েছে</p>
             </div>
         </div>
 
-        <div v-if="task.description">
+        <!-- Description -->
+        <div>
             <h4 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
                 <i class="fas fa-align-left text-primary mr-2"></i>
                 বিস্তারিত বিবরণ
             </h4>
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
                 <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                    {{ task.description }}
+                    {{ task.description || 'কোন বিবরণ দেওয়া হয়নি।' }}
                 </p>
             </div>
         </div>
+
+        <!-- Information Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Basic Info -->
             <div>
                 <h4 class="text-md font-semibold text-gray-900 mb-3 flex items-center">
                     <i class="fas fa-info-circle text-primary mr-2"></i>
@@ -189,6 +157,8 @@ const getTimeAgo = (date) => {
                     </div>
                 </div>
             </div>
+
+            <!-- Location Details -->
             <div v-if="task.location_address">
                 <h4 class="text-md font-semibold text-gray-900 mb-3 flex items-center">
                     <i class="fas fa-location-dot text-primary mr-2"></i>
@@ -202,6 +172,8 @@ const getTimeAgo = (date) => {
                 </div>
             </div>
         </div>
+
+        <!-- Customer Notes -->
         <div v-if="task.customer_notes" class="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
             <div class="flex items-start">
                 <i class="fas fa-quote-left text-yellow-600 mr-2 mt-1"></i>
@@ -212,14 +184,10 @@ const getTimeAgo = (date) => {
             </div>
         </div>
     </div>
-    
-    <div v-else class="text-center py-8">
-        <i class="fas fa-spinner fa-pulse text-4xl text-gray-400 mb-3"></i>
-        <p class="text-gray-500">লোড হচ্ছে...</p>
-    </div>
 </template>
 
 <style scoped>
+/* Smooth animations */
 .space-y-6 > * {
     animation: fadeInUp 0.4s ease-out;
 }

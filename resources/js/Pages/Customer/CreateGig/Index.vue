@@ -4,127 +4,146 @@ import { TailwindPagination } from 'laravel-vue-pagination'
 import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue'
 import DataTable from '@/Components/DataTable/Index.vue'
 import { ref } from 'vue'
+import Modal from '@/Components/Modal.vue'
+import TaskDetail from '@/Pages/Bids/Partials/TaskDetail.vue'
 
-const props= defineProps({
-    customerTasks:{
-        type:Object,
-         default: () => ({})
+
+const props = defineProps({
+    customerTasks: {
+        type: Object,
+        default: () => ({ data: [], links: {}, meta: {} })
     }
-
 })
 
-console.log()
 
 const hasMore = ref(true)
 const page = ref(1)
 const isLoading = ref(false)
+
+const isOpenModel = ref(false)
+const selectedTask = ref(null)
+
 const handleRowClick = (row) => {
-    console.log('Row clicked:', row)
-    alert(`Selected: ${row.name} (${row.email})`)
+    selectedTask.value = row
+    isOpenModel.value = true
+}
+
+const closeModal = () => {
+    isOpenModel.value = false
+    selectedTask.value = null
 }
 
 const editUser = (id) => {
-    const user = userData.value.find(u => u.id === id)
-    console.log('Edit user:', id, user)
-    alert(`Edit user: ${user?.name}`)
+    const user = props.customerTasks?.data?.find(u => u.id === id)
+    console.log('Edit:', id, user)
 }
 
-const loadMoreData = async (params, loadMore = false) => {
+const loadMoreData = async () => {
     if (isLoading.value) return
 
     isLoading.value = true
-    await new Promise(resolve => setTimeout(resolve, 1000))
 
-    if (loadMore && page.value < 3) {
-        page.value++
-        const moreUsers = [
-            {
-                id: 11,
-                name: 'Kevin White',
-                email: 'kevin.w@example.com',
-                role: 'User',
-                status: 'Active',
-                joinDate: '2024-03-15'
-            },
-            {
-                id: 12,
-                name: 'Amanda Lee',
-                email: 'amanda.l@example.com',
-                role: 'Editor',
-                status: 'Active',
-                joinDate: '2024-03-18'
-            }
-        ]
-
-        userData.value.push(...moreUsers)
-
-        if (page.value >= 3) {
-            hasMore.value = false
-        }
-    }
+    await new Promise(resolve => setTimeout(resolve, 500))
 
     isLoading.value = false
 }
+
+
 const handleColumnUpdate = (columns) => {
     console.log('Columns updated:', columns)
 }
+
 const tableHeader = ref([
     { name: 'কাজের নাম', data: 'title', orderable: true, contentType: 'text' },
     { name: 'কাজের নম্বর', data: 'task_number', orderable: true, contentType: 'text' },
-    { name: 'বাজেট', data: 'budget', orderable: true, contentType: 'text' }, 
+    { name: 'বাজেট', data: 'budget', orderable: true, contentType: 'text' },
     { name: 'স্ট্যাটাস', data: 'status', orderable: true, contentType: 'text', isLabel: true },
     { name: 'অ্যাকশন', data: 'action', orderable: false, contentType: 'slots', slotsName: 'actions' }
 ])
 
-const perPage = ref(props.customerTasks.data?.per_page ?? 5)
-const getFilteredResults = (page = 1) => {
+
+const perPage = ref(5)
+
+const getFilteredResults = (pageNumber = 1) => {
     isLoading.value = true
-    router.visit(route('customer.gig'), {
-        data: {
-            page: page,
-            per_page: parseInt(perPage.value),
-        },
+
+    router.get(route('customer.gig'), {
+        page: pageNumber,
+        per_page: perPage.value,
+    }, {
         preserveScroll: true,
+        preserveState: true,
         onFinish: () => {
             isLoading.value = false
         }
     })
 }
-
 </script>
 
 <template>
     <CustomerAuthenticatedLayout>
 
         <Head title="গিগ তৈরি" />
+
         <div class="lg:col-span-3">
-            <div id="createGig" class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+
+                <!-- HEADER -->
                 <div class="flex justify-between items-center py-3">
-                    <h2 class="text-2xl font-bold text-dark ">আপনার কাজ গুলোর লিস্ট</h2>
-                    <Link :href="route('customer.create.gig')" class="px-4 py-1 bg-primary text-white rounded-lg">
+                    <h2 class="text-2xl font-bold text-dark">
+                        আপনার কাজ গুলোর লিস্ট
+                    </h2>
+
+                    <Link :href="route('customer.create.gig')"
+                        class="px-4 py-1 bg-primary text-white rounded-lg">
                         নতুন কাজ তৈরি করুন
                     </Link>
                 </div>
-                <DataTable :tableHeader="tableHeader" :tableData="props.customerTasks?.data" :hasMorePages="hasMore" :currentPage="page"
-                    @rowClicked="handleRowClick" @getFilteredResults="loadMoreData" @updateColumns="handleColumnUpdate">
+                <DataTable
+                    :tableHeader="tableHeader"
+                    :tableData="props.customerTasks?.data"
+                    @rowClicked="handleRowClick"
+                    @getFilteredResults="loadMoreData"
+                    @updateColumns="handleColumnUpdate"
+                >
                     <template #actions="{ rowData }">
-                        <div class="flex items-center gap-2">
-                            <button @click="editUser(rowData.id)"
-                                class="rounded-md bg-brand-primary-surface-subtle px-3 py-1 text-sm font-medium text-brand-primary-text-subtle transition-colors hover:bg-brand-primary-surface-default hover:text-white">
-                                Edit
-                            </button>
-                        </div>
+                        <button
+                            @click="editUser(rowData.id)"
+                            class="px-3 py-1 text-sm bg-gray-100 rounded"
+                        >
+                            Edit
+                        </button>
                     </template>
                 </DataTable>
-            <div class="flex justify-center items-center space-x-2 mt-8">
-             <TailwindPagination :data="props.customerTasks" @pagination-change-page="getFilteredResults" :limit="1"
-                class="mx-5" />
-            </div>
+
+                <div class="flex justify-center mt-8">
+                    <TailwindPagination
+                        :data="props.customerTasks"
+                        @pagination-change-page="getFilteredResults"
+                        :limit="1"
+                    />
+                </div>
+
             </div>
         </div>
+        <Modal :show="isOpenModel" @close="closeModal">
+            <div class="p-6 space-y-3" v-if="selectedTask">
+
+                <TaskDetail 
+                :task="props.customerTasks.data"
+                />
+
+                <div class="flex justify-end pt-4">
+                    <button
+                        @click="closeModal"
+                        class="px-4 py-2 bg-gray-200 rounded-lg"
+                    >
+                        Close
+                    </button>
+                </div>
+
+            </div>
+        </Modal>
+
     </CustomerAuthenticatedLayout>
 </template>
-
-<style scoped>
-/* Add any custom styles here */
-</style>
