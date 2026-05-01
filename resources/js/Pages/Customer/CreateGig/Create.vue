@@ -128,7 +128,7 @@ const goToDashboard = () => {
     <CustomerAuthenticatedLayout>
 
         <Head title="গিগ তৈরি" />
-        <div  class="mb-8 lg:col-span-3 ">
+        <div  v-if="showSuccessMessage" class="mb-8 lg:col-span-3 ">
             <div class="grid grid-cols-1 md:mt-12 md:grid-cols-2 gap-6">
                 <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
                     @click="createAnotherGig">
