@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Enum\PaginationLimits;
+use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GigRequest;
 use App\Http\Resources\CategoryResource;
@@ -28,6 +29,7 @@ class GigController extends Controller
 
     $customerTasks = auth()->user()
       ->customerTasks()
+      ->where('status', TaskStatus::Posted->value)
       ->with('category:id,name')
       ->latest()
       ->paginate($perPage);
