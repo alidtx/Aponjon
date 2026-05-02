@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
@@ -24,12 +24,21 @@ const selectedService = ref(props.modelValue);
 const hasInteracted = ref(false);
 
 watch(() => props.modelValue, (newValue) => {
-    selectedService.value = newValue;
-});
+    if (newValue !== null && newValue !== undefined) {
+        selectedService.value = newValue;
+    }
+}, { immediate: true });
 
 watch(() => props.error, (newError) => {
     if (newError) {
         hasInteracted.value = false;
+    }
+});
+
+onMounted(() => {
+    if (props.modelValue) {
+        selectedService.value = props.modelValue;
+        hasInteracted.value = true;
     }
 });
 
