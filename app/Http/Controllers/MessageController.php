@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MessageController extends Controller
 {
+  public function index ()  
+  {
+      return Inertia::render('Customer/Chats/Index');
+  }
+
     public function send(Request $request)
 {
     $message = Message::create([

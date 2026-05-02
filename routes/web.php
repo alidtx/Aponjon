@@ -7,6 +7,7 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Customer\CustomerProfileController;
 use App\Http\Controllers\Customer\CustomerProfileSettingController;
 use App\Http\Controllers\Customer\GigController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
@@ -42,7 +43,8 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/gigs-store', [GigController::class, 'gigsStore'])->name('gigs.store');
             Route::get('/gigs-edit/{taskId}', [GigController::class, 'gigsEdit'])->name('gigs.edit');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');
-            Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update'); 
+            Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update');
+            Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
             Route::get('/edit-customer-profile-settings', [CustomerProfileSettingController::class, 'editSetting'])
             ->name('edit.customer.profile.settings'); 
              Route::post('/update-customer-profile-settings', [CustomerProfileSettingController::class, 'updateSetting'])
