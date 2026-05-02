@@ -33,7 +33,9 @@ const props = defineProps({
                     <slot />
                 </div>
                 <div v-else class="flex items-center space-x-4">
-                    <MessageIcon />
+                    <Link :href="route('customer.messages.index')">
+                        <MessageIcon />
+                    </Link>
                     <NotificationIcon />
                     <UserDropdown :name="props.name">
                         <template #icon>
