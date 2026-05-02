@@ -74,4 +74,14 @@ public function gigsEdit($taskId)
     ]);
 }
 
+ public function gigsUpdate(GigRequest $request, $taskId)
+  {
+    TaskService::update($request,$taskId);
+    return redirect()->back()->with([
+      'type' => 'success',
+      'message' => 'আপনার গিগ সফলভাবে তৈরি হয়েছে!',
+    ]);
+  }
+
+
 }

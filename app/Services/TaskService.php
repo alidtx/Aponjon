@@ -31,6 +31,28 @@ class TaskService
         ]);
     }
 
+    public static function update($request, $taskId)
+    {
+        $task = Task::where('id', $taskId)
+            ->where('customer_id', auth()->id())
+            ->firstOrFail();
+
+        $task->update([
+            'title'            => $request->title,
+            'slug'             => Str::slug($request->title),
+            'description'      => $request->description,
+            'location_address' => $request->location_address,
+            'budget'           => $request->budget,
+            'emergency'        => $request->emergency,
+            'category_id'      => $request->category_id,
+            'district_id'      => $request->district_id,
+            'zila_id'          => $request->zila_id,
+            'upozila_id'       => $request->upozila_id,
+        ]);
+
+        return $task;
+    }
+
     public static function getPaginate(Request $request): LengthAwarePaginator
     {
         $slug = $request->query('slug');

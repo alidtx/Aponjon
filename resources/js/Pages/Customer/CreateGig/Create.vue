@@ -11,6 +11,7 @@ import { ref, computed } from 'vue'
 import InputError from '@/Components/InputError.vue';
 import LocationSelector from '@/Components/LocationSelector.vue';
 import CreateGigIcon from '@/Components/Icons/CreateGigIcon.vue';
+import { toast } from 'vue3-toastify';
 
 const props = defineProps({
     districts: {
@@ -45,18 +46,23 @@ const allZilasData = computed(() => {
     const data = props.zilas?.data || props.zilas
     return data || []
 })
+const task = computed(() => {
+    return props.customerTask?.data ?? props.customerTask ?? {}
+})
 
 const form = useForm({
-    title: props.customerTask?.data?.title || '',
-    description: props.customerTask?.data?.description || '',
-    budget: props.customerTask?.data?.budget || '',
-    emergency: props.customerTask?.data?.emergency || '',
-    district_id: props.customerTask?.data?.district_id || '',
-    zila_id: props.customerTask?.data?.zila_id || '',
-    upozila_id: props.customerTask?.data?.upozila_id || '',
-    location_address: props.customerTask?.data?.location_address || '',
-    category_id: props.customerTask?.data?.category_id || ''
-});
+    title: task.value?.title ?? '',
+    description: task.value?.description ?? '',
+    budget: task.value?.budget ?? '',
+    emergency: task.value?.emergency ?? '',
+    district_id: task.value?.district_id ?? '',
+    zila_id: task.value?.zila_id ?? '',
+    upozila_id: task.value?.upozila_id ?? '',
+    location_address: task.value?.location_address ?? '',
+    category_id: task.value?.category_id ?? ''
+})
+
+const isEdit = computed(() => !!task.value?.id)
 
 const filteredZilaList = ref([])
 const filteredUpozilaList = ref([])
@@ -108,15 +114,26 @@ const getUpozilasByZila = (zilaId) => {
 }
 
 const submit = () => {
-    form.post(route('customer.gigs.store'), {
-        onSuccess: (res) => {
-            if (res.props.flash?.type === 'success') {
+    if (isEdit.value) {
+        form.post(route('customer.gigs.update', task.value.id), {
+            onSuccess: () => {
                 showSuccessMessage.value = true
-                backendMessage.value = res.props.flash?.message || 'আপনার গিগ সফলভাবে তৈরি হয়েছে!'
+                toast.success('আপনার গিগ সফলভাবে আপডেট হয়েছে', {
+                    position: 'bottom-right'
+                });
+            }
+        })
+    } else {
+        form.post(route('customer.gigs.store'), {
+            onSuccess: () => {
+                showSuccessMessage.value = true
+                 toast.success('আপনার গিগ সফলভাবে তৈরি হয়েছে!', {
+                    position: 'bottom-right'
+                });
                 form.reset()
             }
-        },
-    });
+        })
+    }
 }
 
 const createAnotherGig = () => {
@@ -133,7 +150,7 @@ const goToDashboard = () => {
     <CustomerAuthenticatedLayout>
 
         <Head title="গিগ তৈরি" />
-        <div  v-if="showSuccessMessage" class="mb-8 lg:col-span-3 ">
+        <div v-if="showSuccessMessage" class="mb-8 lg:col-span-3 ">
             <div class="grid grid-cols-1 md:mt-12 md:grid-cols-2 gap-6">
                 <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer"
                     @click="createAnotherGig">
@@ -182,75 +199,82 @@ const goToDashboard = () => {
             </div>
         </div>
         <div v-if="!showSuccessMessage" class="lg:col-span-3">
-           <div class="max-w-4xl mx-auto px-4">
-            <div class="bg-white rounded-lg shadow-md p-8">
-               <div class="mb-6 pb-4 border-b">
-                <div class="flex items-center gap-2 mb-2">
-                    <CreateGigIcon />
-                    <h1 class="text-2xl font-bold text-dark">নতুন গিগ তৈরি</h1>
-                </div>
-                <p class="text-gray-600 ml-9">আপনার নতুন গিগের বিস্তারিত প্রদান করুন</p>
-            </div>
-                <form id="serviceRequestForm" @submit.prevent="submit">
-                    <Services :serviceCategories="categories" v-model="form.category_id"
-                        :error="form.errors.category_id" />
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <div class="mb-6 pb-4 border-b">
+                        <div class="flex items-center gap-2 mb-2">
+                            <CreateGigIcon />
+                            <h1 class="text-2xl font-bold text-dark">নতুন গিগ তৈরি</h1>
+                        </div>
+                        <p class="text-gray-600 ml-9">আপনার নতুন গিগের বিস্তারিত প্রদান করুন</p>
+                    </div>
+                    <form id="serviceRequestForm" @submit.prevent="submit">
+                        <Services :serviceCategories="categories" v-model="form.category_id"
+                            :error="form.errors.category_id" />
 
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
-                        <div class="space-y-6">
-                            <div>
-                                <InputLabel for="title" value="টাস্কের শিরোনাম" required />
-                                <TextInput id="title" type="text" class="w-full p-3"
-                                    placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" v-model="form.title"
-                                    :error="form.errors.title" />
-                                <InputError class="mt-2" :message="form.errors.title" />
-                            </div>
-                            <div>
-                                <InputLabel for="description" value="বিস্তারিত বর্ণনা" required />
-                                <TextArea id="description" class="w-full p-3"
-                                    placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..."
-                                    v-model="form.description" :error="form.errors.description" />
-                                <InputError class="mt-2" :message="form.errors.description" />
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-bold text-dark mb-6">টাস্কের বিস্তারিত</h3>
+                            <div class="space-y-6">
                                 <div>
-                                    <InputLabel for="budget" value="আনুমানিক বাজেট (৳)" required />
-                                    <TextInput id="budget" type="number" class="w-full p-3"
-                                        placeholder="আনুমানিক বাজেট লিখুন" v-model="form.budget"
-                                        :error="form.errors.budget" />
-                                    <InputError class="mt-2" :message="form.errors.budget" />
+                                    <InputLabel for="title" value="টাস্কের শিরোনাম" required />
+                                    <TextInput id="title" type="text" class="w-full p-3"
+                                        placeholder="উদা: বাড়ির জন্য ইলেকট্রিক ওয়্যারিং" v-model="form.title"
+                                        :error="form.errors.title" />
+                                    <InputError class="mt-2" :message="form.errors.title" />
                                 </div>
                                 <div>
-                                    <InputLabel for="emergency" value="জরুরিতা" required />
-                                    <SelectInput id="emergency" class="w-full p-3" defaultVal="জরুরিতা নির্বাচন করুন"
-                                        :options="Options" labelKey="label" valueKey="value" v-model="form.emergency"
-                                        :error="form.errors.schedule_for" />
-                                    <InputError class="mt-2" :message="form.errors.emergency" />
+                                    <InputLabel for="description" value="বিস্তারিত বর্ণনা" required />
+                                    <TextArea id="description" class="w-full p-3"
+                                        placeholder="আপনার কাজের সম্পূর্ণ বিস্তারিত বর্ণনা দিন..."
+                                        v-model="form.description" :error="form.errors.description" />
+                                    <InputError class="mt-2" :message="form.errors.description" />
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <InputLabel for="budget" value="আনুমানিক বাজেট (৳)" required />
+                                        <TextInput id="budget" type="number" class="w-full p-3"
+                                            placeholder="আনুমানিক বাজেট লিখুন" v-model="form.budget"
+                                            :error="form.errors.budget" />
+                                        <InputError class="mt-2" :message="form.errors.budget" />
+                                    </div>
+                                    <div>
+                                        <InputLabel for="emergency" value="জরুরিতা" required />
+                                        <SelectInput id="emergency" class="w-full p-3"
+                                            defaultVal="জরুরিতা নির্বাচন করুন" :options="Options" labelKey="label"
+                                            valueKey="value" v-model="form.emergency"
+                                            :error="form.errors.schedule_for" />
+                                        <InputError class="mt-2" :message="form.errors.emergency" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mb-4">
-                        <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
-                        <LocationSelector :districts="districts" :zilas="zilas" v-model:districtId="form.district_id"
-                            v-model:zilaId="form.zila_id" v-model:upozilaId="form.upozila_id" :errors="form.errors" />
-                    </div>
+                        <div class="mb-4">
+                            <h3 class="text-xl font-bold text-dark mb-6">লোকেশন তথ্য</h3>
+                            <LocationSelector :districts="districts" :zilas="zilas"
+                                v-model:districtId="form.district_id" v-model:zilaId="form.zila_id"
+                                v-model:upozilaId="form.upozila_id" :errors="form.errors" />
+                        </div>
 
-                    <div class="mb-4">
-                        <InputLabel for="location_address" value="সম্পূর্ণ ঠিকানা" required />
-                        <TextArea id="location_address" class="w-full p-3"
-                            placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." v-model="form.location_address"
-                            :error="form.errors.location_address" />
-                        <InputError class="mt-2" :message="form.errors.location_address" />
-                    </div>
+                        <div class="mb-4">
+                            <InputLabel for="location_address" value="সম্পূর্ণ ঠিকানা" required />
+                            <TextArea id="location_address" class="w-full p-3"
+                                placeholder="বাড়ি নম্বর, রোড নম্বর, এলাকা..." v-model="form.location_address"
+                                :error="form.errors.location_address" />
+                            <InputError class="mt-2" :message="form.errors.location_address" />
+                        </div>
 
-                    <PrimaryButton type="submit" :disabled="form.processing">
-                        <span v-if="form.processing">সাবমিট হচ্ছে...</span>
-                        <span v-else>গিগ তৈরি করুন</span>
-                    </PrimaryButton>
-                </form>
-            </div>
+                        <PrimaryButton type="submit" :disabled="form.processing">
+                            <span v-if="form.processing">
+                                {{ isEdit ? 'আপডেট হচ্ছে...' : 'সাবমিট হচ্ছে...' }}
+                            </span>
+
+                            <span v-else>
+                                {{ isEdit ? 'গিগ আপডেট করুন' : 'গিগ তৈরি করুন' }}
+                            </span>
+                        </PrimaryButton>
+                    </form>
+                </div>
             </div>
         </div>
     </CustomerAuthenticatedLayout>
