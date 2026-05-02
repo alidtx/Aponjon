@@ -25,6 +25,11 @@ const props = defineProps({
         type: Object,
         default: () => []
     },
+
+    customerTask: {
+        type: Object,
+        default: () => []
+    },
     success: {
         type: String,
         default: ''
@@ -42,15 +47,15 @@ const allZilasData = computed(() => {
 })
 
 const form = useForm({
-    title: '',
-    description: '',
-    budget: '',
-    emergency: '',
-    district_id: '',
-    zila_id: '',
-    upozila_id: '',
-    location_address: '',
-    category_id: ''
+    title: props.customerTask?.data?.title || '',
+    description: props.customerTask?.data?.description || '',
+    budget: props.customerTask?.data?.budget || '',
+    emergency: props.customerTask?.data?.emergency || '',
+    district_id: props.customerTask?.data?.district_id || '',
+    zila_id: props.customerTask?.data?.zila_id || '',
+    upozila_id: props.customerTask?.data?.upozila_id || '',
+    location_address: props.customerTask?.data?.location_address || '',
+    category_id: props.customerTask?.data?.category_id || ''
 });
 
 const filteredZilaList = ref([])

@@ -10,6 +10,7 @@ use App\Http\Resources\DistrictResource;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\Category;
+use App\Models\Task;
 use App\Services\LocationService;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class GigController extends Controller
       ->with('category:id,name')
       ->latest()
       ->paginate($perPage);
-      
+
     return Inertia::render('Customer/CreateGig/Index', [
       'customerTasks' => TaskResource::collection($customerTasks),
     ]);
@@ -58,11 +59,19 @@ class GigController extends Controller
     ]);
   }
 
-  public function gigsEdit ($taskId)
-  {
-  return Inertia::render('Customer/CreateGig/Create');
+public function gigsEdit($taskId)
+{
+    $categories = Category::where('is_active', true)
+        ->get(['id', 'name', 'icon']);
 
-  }
-
+    $customerTask = Task::with('category')->findOrFail($taskId);
+    
+    return Inertia::render('Customer/CreateGig/Create', [
+        'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
+        'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
+        'categories' => CategoryResource::collection($categories),
+        'customerTask' => new TaskResource($customerTask),
+    ]);
+}
 
 }
