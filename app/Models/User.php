@@ -48,7 +48,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(TaskerProfile::class);
     }
-       public function customerProfile()
+    public function customerProfile()
     {
         return $this->hasOne(CustomerProfile::class);
     }
@@ -76,6 +76,16 @@ class User extends Authenticatable
     public function receivedReviews()
     {
         return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 
     public function scopeCustomers($query)
@@ -120,14 +130,14 @@ class User extends Authenticatable
         return $this->hasOne(Otp::class)->latestOfMany();
     }
 
-     public function getLoginAttemptsCacheKeyAttribute(): string
+    public function getLoginAttemptsCacheKeyAttribute(): string
     {
-        return 'login_attempts_'.$this->email;
+        return 'login_attempts_' . $this->email;
     }
 
     public function getLoginAttemptsTimeoutCacheKeyAttribute(): string
     {
-        return 'login_attempts_'.$this->email.'_timeout';
+        return 'login_attempts_' . $this->email . '_timeout';
     }
 
 
