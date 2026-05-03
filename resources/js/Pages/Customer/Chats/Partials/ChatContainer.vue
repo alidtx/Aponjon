@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, nextTick, onMounted } from 'vue'
+import { ref, watch, nextTick, onMounted} from 'vue'
 import axios from 'axios'
 
 const props = defineProps({
@@ -35,7 +35,7 @@ async function sendMessage() {
     if (!newMessage.value.trim() || !props.selectedUser) return
     
     try {
-        await axios.post('/chats/send', {
+        await axios.post(route('customer.chats.send') , {
             receiver_id: props.selectedUser.id,
             message: newMessage.value
         })

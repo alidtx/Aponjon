@@ -23,7 +23,7 @@ function openChat(user) {
 
 async function fetchMessages(userId) {
     try {
-        const response = await axios.get(`/chats/messages/${userId}`)
+        const response = await axios.get(route('customer.chats.messages',userId))
         messages.value = response.data
     } catch (error) {
         console.error('Error fetching messages:', error)
@@ -32,8 +32,8 @@ async function fetchMessages(userId) {
 
 async function markMessagesAsRead(userId) {
     try {
-        await axios.post(`/chats/mark-as-read/${userId}`)
-        
+        await axios.post(route('customer.chats.mark-as-read', userId))
+
         const chatUser = props.chatUsers.find(u => u.id === userId)
         if (chatUser) {
             chatUser.unread_count = 0

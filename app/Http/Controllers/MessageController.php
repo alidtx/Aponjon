@@ -22,8 +22,6 @@ class MessageController extends Controller
         ->where('id', '!=', $user->id)
         ->select('id', 'name', 'email')
         ->get();
-
-        // Add last message and unread count
         foreach ($chatUsers as $chatUser) {
             $lastMessage = Message::where(function ($q) use ($user, $chatUser) {
                 $q->where('sender_id', $user->id)->where('receiver_id', $chatUser->id);
@@ -54,7 +52,6 @@ class MessageController extends Controller
             $q->where('sender_id', $user->id)->where('receiver_id', $authUser->id);
         })->orderBy('created_at', 'asc')->get();
 
-        // Mark messages as read
         Message::where('sender_id', $user->id)
             ->where('receiver_id', $authUser->id)
             ->where('is_read', false)
@@ -77,10 +74,8 @@ class MessageController extends Controller
             'is_read' => false
         ]);
 
-        // Load sender relationship
         $message->load('sender');
 
-        // Broadcast to receiver's private channel
         broadcast(new MessageSent($message))->toOthers();
 
         return response()->json($message);
