@@ -40,12 +40,12 @@ class CustomerChatController extends Controller
 
     public function markAsRead($userId)
     {
-        Message::where('sender_id', $userId)
-            ->where('receiver_id', auth()->id())
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
+    
+    ChatService::markAsRead(auth()->user(), $userId);
 
-        return response()->json(['success' => true]);
+    return response()->json([
+        'success' => true
+    ]);
     }
 
 }

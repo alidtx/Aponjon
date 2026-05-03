@@ -84,4 +84,15 @@ class ChatService
 
         return $message;
     }
+    public static function markAsRead(User $authUser, int $userId): bool
+    {
+        Message::where('sender_id', $userId)
+            ->where('receiver_id', $authUser->id)
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true
+            ]);
+
+        return true;
+    }
 }
