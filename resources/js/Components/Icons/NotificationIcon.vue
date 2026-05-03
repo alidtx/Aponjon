@@ -33,7 +33,7 @@ defineProps({
 
         </div>
         <span class="text-[11px] text-gray-500">
-            Notification
+            নোটিফিকেশন
         </span>
 
     </div>

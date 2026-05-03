@@ -29,7 +29,7 @@ defineProps({
       </span>
     </div>
     <span class="text-[11px]  text-violet-400">
-      Message
+      মেসেজ
     </span>
 
   </div>

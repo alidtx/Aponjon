@@ -2,6 +2,7 @@
 
 use App\Events\MessageSent;
 use App\Http\Controllers\Bid\BidController;
+use App\Http\Controllers\Customer\CustomerBidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\KycApprovalController;
 use App\Http\Controllers\Public\HomeController;
@@ -39,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/customer-total-spend', [CustomerController::class, 'CustomerTotalSpend'])->name('total.spend');
             Route::get('/customer-success-rate', [CustomerController::class, 'CustomerSuccessRate'])->name('success.rate');
             Route::get('/bid-activity', [CustomerController::class, 'bidActivity'])->name('bid.activity');
+            Route::get('/bid', [CustomerBidController::class, 'index'])->name('bids');
             Route::get('/gig', [GigController::class, 'Index'])->name('gig');
             Route::get('/create-gig', [GigController::class, 'createGig'])->name('create.gig');
             Route::post('/gigs-store', [GigController::class, 'gigsStore'])->name('gigs.store');
