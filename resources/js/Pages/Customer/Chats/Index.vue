@@ -62,10 +62,22 @@ function handleNewMessage(message) {
 }
 
 onMounted(() => {
-    if (window.Echo) {
-        echoInstance.value = window.Echo.private(`chat.${props.authUser.id}`)
-            .listen('MessageSent', (e) => {
-                handleNewMessage(e.message)
+ 
+    if (window.Echo && props.authUser) {
+
+        const channelName = `chat.${props.authUser.id}`
+        console.log(`Listening to channel: ${channelName}`)
+        
+        echoInstance.value = window.Echo
+            .private(channelName)
+            .listen('.MessageSent', (e) => { 
+                console.log('🔔 MESSAGE RECEIVED IN VUE!', e)
+                if (e && e.message) {
+                    handleNewMessage(e.message)
+                }
+            })
+            .subscribed(() => {
+                console.log('✅ Successfully subscribed to channel!')
             })
     }
 })

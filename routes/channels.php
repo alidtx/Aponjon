@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Log;
 
-/*
-|--------------------------------------------------------------------------
-| Broadcast Channels
-|--------------------------------------------------------------------------
-| Here you may register all of the event broadcasting channels that
-| your application supports.
-*/
-
-Broadcast::channel('chat.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+Broadcast::channel('chat.{userId}', function ($user, $userId) {
+    // Log for debugging
+    Log::info('Channel authorization', [
+        'user_id' => $user->id,
+        'channel_user_id' => $userId,
+        'is_match' => (int) $user->id === (int) $userId
+    ]);
+    
+    return (int) $user->id === (int) $userId;
 });
