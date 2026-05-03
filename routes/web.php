@@ -8,6 +8,7 @@ use App\Http\Controllers\Customer\CustomerProfileController;
 use App\Http\Controllers\Customer\CustomerProfileSettingController;
 use App\Http\Controllers\Customer\GigController;
 use App\Http\Controllers\Customer\CustomerChatController;
+use App\Http\Controllers\Tasker\TaskerChatController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
@@ -67,7 +68,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/pending-tasks', [TaskController::class, 'pendingTasks'])->name('pending.tasks');
             Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
             Route::get('/edit-profile/{taskerId}', [TaskerProfileController::class, 'editProfile'])->name('profile.edit');
-            Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update'); 
+            Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update');
+            Route::get('/chats', [TaskerChatController::class, 'index'])->name('chats.index');
+            Route::get('/chats/messages/{user}', [TaskerChatController::class, 'getMessages'])->name('chats.messages');
+            Route::post('/chats/send', [TaskerChatController::class, 'send'])->name('chats.send');
+            Route::post('/chats/mark-as-read/{user}', [TaskerChatController::class, 'markAsRead'])->name('chats.mark-as-read'); 
             Route::get('/edit-tasker-profile-settings', [TaskerProfileSettingController::class, 'editSetting'])
             ->name('edit.tasker.profile.settings'); 
              Route::post('/update-tasker-profile-settings', [TaskerProfileSettingController::class, 'updateSetting'])
