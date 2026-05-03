@@ -3,6 +3,30 @@ import { Head } from '@inertiajs/vue3'
 import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue';
 import ChatSideBar from './Partials/ChatSideBar.vue';
 import ChatContainer from './Partials/ChatContainer.vue';
+import { ref, onMounted } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+
+
+
+const props = defineProps({
+    chatUsers: Array,
+    authUser: Object
+})
+
+const selectedUser = ref(null)
+const messages = ref([])
+
+function openChat(user) {
+    selectedUser.value = user
+}
+
+onMounted(() => {
+    window.Echo.private(`chat.${props.authUser.id}`)
+        .listen('MessageSent', (e) => {
+            messages.value.push(e.message)
+        })
+})
 </script>
 
 <template>
@@ -13,7 +37,7 @@ import ChatContainer from './Partials/ChatContainer.vue';
             <div class="flex h-screen">
                 <div class="w-full max-w-7xl mx-auto flex-1 min-h-0 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 border border-white/20">
                     <ChatSideBar/>
-                   <ChatContainer/>
+                    <ChatContainer/>
                 </div>
             </div>
 
