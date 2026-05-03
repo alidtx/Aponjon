@@ -1,6 +1,6 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import NotificationIcon from '@/Components/Icons/NotificationIcon.vue';
 import DropDownIcon from '@/Components/Icons/DropDownIcon.vue';
 import UserDropdown from '@/Components/UserDropdown.vue';
@@ -18,6 +18,14 @@ const props = defineProps({
     }
 });
 
+const page = usePage()
+const user = page.props.auth?.user
+
+const chatRoute =
+    user?.role === 'tasker'
+        ? route('tasker.chats.index')
+        : route('customer.chats.index')
+
 </script>
 
 <template>
@@ -33,8 +41,8 @@ const props = defineProps({
                     <slot />
                 </div>
                 <div v-else class="flex items-center space-x-4">
-                    <Link :href="route('customer.chats.index')">
-                        <MessageIcon />
+                    <Link :href="chatRoute">
+                    <MessageIcon />
                     </Link>
                     <NotificationIcon />
                     <UserDropdown :name="props.name">
