@@ -79,7 +79,7 @@ onUnmounted(() => {
 
 <template>
     <CustomerAuthenticatedLayout>
-        <Head title="Chat Room" />
+        <Head title="চ্যাঁট রুম" />
         <div class="lg:col-span-3">
             <div class="flex h-screen">
                 <div class="w-full max-w-7xl mx-auto flex-1 min-h-0 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 border border-white/20">
