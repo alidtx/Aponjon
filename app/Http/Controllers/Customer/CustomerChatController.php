@@ -6,58 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Events\MessageSent;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\ChatService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerChatController extends Controller
 {
  public function index()
-    {
-        $user = auth()->user();
-
-        $chatUsers = User::whereHas('sentMessages', function ($q) use ($user) {
-            $q->where('receiver_id', $user->id);
-        })->orWhereHas('receivedMessages', function ($q) use ($user) {
-            $q->where('sender_id', $user->id);
-        })
-        ->where('id', '!=', $user->id)
-        ->select('id', 'name', 'email')
-        ->get();
-        foreach ($chatUsers as $chatUser) {
-            $lastMessage = Message::where(function ($q) use ($user, $chatUser) {
-                $q->where('sender_id', $user->id)->where('receiver_id', $chatUser->id);
-            })->orWhere(function ($q) use ($user, $chatUser) {
-                $q->where('sender_id', $chatUser->id)->where('receiver_id', $user->id);
-            })->latest()->first();
-            
-            $chatUser->last_message = $lastMessage;
-            $chatUser->unread_count = Message::where('sender_id', $chatUser->id)
-                ->where('receiver_id', $user->id)
-                ->where('is_read', false)
-                ->count();
-        }
-
-        return Inertia::render('Customer/Chats/Index', [
+    {   
+      
+         $chatUsers=ChatService::getChatUsers(auth()->user()); 
+          return Inertia::render('Customer/Chats/Index', [
             'chatUsers' => $chatUsers,
-            'authUser' => $user,
+            'authUser' => auth()->user(),
         ]);
     }
 
     public function getMessages(User $user)
     {
-        $authUser = auth()->user();
-        
-        $messages = Message::where(function ($q) use ($authUser, $user) {
-            $q->where('sender_id', $authUser->id)->where('receiver_id', $user->id);
-        })->orWhere(function ($q) use ($authUser, $user) {
-            $q->where('sender_id', $user->id)->where('receiver_id', $authUser->id);
-        })->orderBy('created_at', 'asc')->get();
-
-        Message::where('sender_id', $user->id)
-            ->where('receiver_id', $authUser->id)
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
-
+        $messages=ChatService::getMessages(auth()->user(), $user);
         return response()->json($messages);
     }
 
@@ -67,18 +34,7 @@ class CustomerChatController extends Controller
             'receiver_id' => 'required|exists:users,id',
             'message' => 'required|string|max:1000'
         ]);
-
-        $message = Message::create([
-            'sender_id' => auth()->id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
-            'is_read' => false
-        ]);
-
-        $message->load('sender');
-
-        broadcast(new MessageSent($message))->toOthers();
-
+         $message = ChatService::send( auth()->user(),$request->only('receiver_id', 'message'));
         return response()->json($message);
     }
 
