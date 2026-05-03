@@ -45,7 +45,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/gigs-update/{taskId}', [GigController::class, 'gigsUpdate'])->name('gigs.update');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');
             Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update');
-            Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+            Route::get('/chats', [MessageController::class, 'index'])->name('chats.index');
+            Route::get('/chats/messages/{user}', [MessageController::class, 'getMessages']);
+            Route::post('/chats/send', [MessageController::class, 'send']);
+            Route::post('/chats/mark-as-read/{user}', [MessageController::class, 'markAsRead']);
             Route::get('/edit-customer-profile-settings', [CustomerProfileSettingController::class, 'editSetting'])
             ->name('edit.customer.profile.settings'); 
              Route::post('/update-customer-profile-settings', [CustomerProfileSettingController::class, 'updateSetting'])

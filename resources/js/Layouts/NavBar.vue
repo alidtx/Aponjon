@@ -33,7 +33,7 @@ const props = defineProps({
                     <slot />
                 </div>
                 <div v-else class="flex items-center space-x-4">
-                    <Link :href="route('customer.messages.index')">
+                    <Link :href="route('customer.chats.index')">
                         <MessageIcon />
                     </Link>
                     <NotificationIcon />

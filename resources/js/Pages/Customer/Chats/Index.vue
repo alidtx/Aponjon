@@ -3,11 +3,8 @@ import { Head } from '@inertiajs/vue3'
 import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.vue';
 import ChatSideBar from './Partials/ChatSideBar.vue';
 import ChatContainer from './Partials/ChatContainer.vue';
-import { ref, onMounted } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-
-
-
+import { ref, onMounted, onUnmounted } from 'vue'
+import axios from 'axios'
 
 const props = defineProps({
     chatUsers: Array,
@@ -16,37 +13,95 @@ const props = defineProps({
 
 const selectedUser = ref(null)
 const messages = ref([])
+const echoInstance = ref(null)
 
 function openChat(user) {
     selectedUser.value = user
+    fetchMessages(user.id)
+    markMessagesAsRead(user.id)
+}
+
+async function fetchMessages(userId) {
+    try {
+        const response = await axios.get(`/chats/messages/${userId}`)
+        messages.value = response.data
+    } catch (error) {
+        console.error('Error fetching messages:', error)
+    }
+}
+
+async function markMessagesAsRead(userId) {
+    try {
+        await axios.post(`/chats/mark-as-read/${userId}`)
+        
+        const chatUser = props.chatUsers.find(u => u.id === userId)
+        if (chatUser) {
+            chatUser.unread_count = 0
+        }
+    } catch (error) {
+        console.error('Error marking messages as read:', error)
+    }
+}
+
+function handleNewMessage(message) {
+    if (selectedUser.value && 
+        (message.sender_id === selectedUser.value.id || message.receiver_id === selectedUser.value.id)) {
+        messages.value.push(message)
+    
+        if (message.sender_id === selectedUser.value.id) {
+            markMessagesAsRead(selectedUser.value.id)
+        }
+    }
+    const chatUser = props.chatUsers.find(u => u.id === message.sender_id)
+    if (chatUser) {
+        chatUser.last_message = message
+        if (selectedUser.value?.id !== message.sender_id) {
+            chatUser.unread_count = (chatUser.unread_count || 0) + 1
+        }
+    }
 }
 
 onMounted(() => {
-    window.Echo.private(`chat.${props.authUser.id}`)
-        .listen('MessageSent', (e) => {
-            messages.value.push(e.message)
-        })
+    if (window.Echo) {
+        echoInstance.value = window.Echo.private(`chat.${props.authUser.id}`)
+            .listen('MessageSent', (e) => {
+                handleNewMessage(e.message)
+            })
+    }
+})
+
+onUnmounted(() => {
+    if (echoInstance.value) {
+        echoInstance.value.stopListening('MessageSent')
+    }
 })
 </script>
 
 <template>
     <CustomerAuthenticatedLayout>
-
-        <Head title="চ্যাট রুম" />
+        <Head title="Chat Room" />
         <div class="lg:col-span-3">
             <div class="flex h-screen">
                 <div class="w-full max-w-7xl mx-auto flex-1 min-h-0 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 border border-white/20">
-                    <ChatSideBar/>
-                    <ChatContainer/>
+                    <ChatSideBar 
+                        :chat-users="chatUsers" 
+                        :auth-user="authUser"
+                        :selected-user="selectedUser"
+                        @select-user="openChat"
+                    />
+                    <ChatContainer 
+                        :selected-user="selectedUser"
+                        :messages="messages"
+                        :auth-user="authUser"
+                        @message-sent="fetchMessages(selectedUser.id)"
+                    />
                 </div>
             </div>
-
         </div>
     </CustomerAuthenticatedLayout>
 </template>
 
 <style scoped>
-
 .messages-scroll::-webkit-scrollbar {
     width: 5px;
 }
