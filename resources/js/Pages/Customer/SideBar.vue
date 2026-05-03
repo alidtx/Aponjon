@@ -108,15 +108,10 @@ onMounted(() => {
                     :class="route().current('customer.gig') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-plus mr-3 text-primary"></i>নতুন কাজ তৈরি করুন
                 </Link>
-                <Link :href="route('tasker.assigned.tasks')"
-                    class="flex items-center p-3 rounded-lg font-medium transition-colors"
-                    :class="route().current('tasker.assigned.tasks') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
-                    <i class="fas fa-tasks mr-3 text-primary"></i>আপনাকে দেওয়া কাজ
-                </Link>
                 <Link :href="route('tasker.pending.tasks')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
                     :class="route().current('tasker.pending.tasks') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
-                    <i class="fas fa-gavel mr-3 text-primary"></i>আপনার অপেক্ষমাণ কাজ
+                    <i class="fas fa-gavel mr-3 text-primary"></i>আবেদনকৃত কাজসমূহ
                 </Link>
             </nav>
         </div>

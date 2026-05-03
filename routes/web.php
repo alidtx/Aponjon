@@ -16,24 +16,6 @@ use App\Http\Controllers\Tasker\TaskerProfileSettingController;
 use App\Models\Message;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test-message', function () {
-    // Create test message
-    $message = Message::create([
-        'message' => 'Test at ' . now()->format('H:i:s'),
-        'sender_id' => 1,
-        'receiver_id' => 2,
-        'is_read' => false,
-        'created_at' => now(),
-        'updated_at' => now()
-    ]);
-    
-    // Broadcast
-    event(new MessageSent($message));
-    
-    return "Test message #{$message->id} sent to user {$message->receiver_id}! <br> Message: {$message->message}";
-});
-
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/marketplace', [HomeController::class, 'marketplace'])->name('marketplace');
 Route::get('/category', [HomeController::class, 'category'])->name('category');
