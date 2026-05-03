@@ -7,7 +7,7 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Customer\CustomerProfileController;
 use App\Http\Controllers\Customer\CustomerProfileSettingController;
 use App\Http\Controllers\Customer\GigController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\Customer\CustomerChatController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
@@ -45,10 +45,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/gigs-update/{taskId}', [GigController::class, 'gigsUpdate'])->name('gigs.update');
             Route::get('/edit-profile/{customerId}', [CustomerProfileController::class, 'editProfile'])->name('profile.edit');
             Route::post('/update-profile/{customerId}', [CustomerProfileController::class, 'updateProfile'])->name('profile.update');
-            Route::get('/chats', [MessageController::class, 'index'])->name('chats.index');
-            Route::get('/chats/messages/{user}', [MessageController::class, 'getMessages'])->name('chats.messages');
-            Route::post('/chats/send', [MessageController::class, 'send'])->name('chats.send');
-            Route::post('/chats/mark-as-read/{user}', [MessageController::class, 'markAsRead'])->name('chats.mark-as-read');
+            Route::get('/chats', [CustomerChatController::class, 'index'])->name('chats.index');
+            Route::get('/chats/messages/{user}', [CustomerChatController::class, 'getMessages'])->name('chats.messages');
+            Route::post('/chats/send', [CustomerChatController::class, 'send'])->name('chats.send');
+            Route::post('/chats/mark-as-read/{user}', [CustomerChatController::class, 'markAsRead'])->name('chats.mark-as-read');
             Route::get('/edit-customer-profile-settings', [CustomerProfileSettingController::class, 'editSetting'])
             ->name('edit.customer.profile.settings'); 
              Route::post('/update-customer-profile-settings', [CustomerProfileSettingController::class, 'updateSetting'])
