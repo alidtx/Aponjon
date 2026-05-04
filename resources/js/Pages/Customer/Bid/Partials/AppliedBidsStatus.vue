@@ -73,7 +73,7 @@ onMounted(() => {
 
 <template>
     <div id="tasks" class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">আপনার কাজ সমূহ</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">আবেদনকৃত কাজসমূহ</h2>
 
         <TabGroup @change="handleTabChange">
             <div class="border-b border-gray-200">
@@ -118,7 +118,7 @@ onMounted(() => {
                     </div>
                     <div v-else class="space-y-4">
                          <div v-for="bid in pendingBid" :key="bid.id"
-                            class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">=
+                            class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
@@ -147,10 +147,13 @@ onMounted(() => {
 
                             <div class="flex justify-end space-x-2">
                                 <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-sm">
-                                    বিড এডিট করুন
+                                    মেসেজ দিন
                                 </button>
-                                <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
-                                    বিড বাতিল করুন
+                                <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-red-600 text-sm">
+                                    বিসিট প্রোফাইল
+                                </button>
+                                <button class="px-3 py-1 bg-green-500 text-white rounded hover:bg-red-600 text-sm">
+                                    একচেপ্ট করুন
                                 </button>
                             </div>
                         </div>
@@ -198,11 +201,14 @@ onMounted(() => {
                                 </div>
                                 <div class="flex space-x-2">
                                     <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-sm">
-                                        <i class="fas fa-phone mr-1"></i>কল
-                                    </button>
-                                    <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
-                                        কাজ শুরু করুন
-                                    </button>
+                                     মেসেজ দিন
+                                   </button>
+                                   <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
+                                    বাতিল করুন
+                                  </button>
+                                  <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
+                                    বিতর্কিত
+                                  </button>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +250,7 @@ onMounted(() => {
 
                             <div class="flex justify-end">
                                 <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
-                                    অন্যান্য কাজ দেখুন
+                                রিবিউ দিন
                                 </button>
                             </div>
                         </div>
