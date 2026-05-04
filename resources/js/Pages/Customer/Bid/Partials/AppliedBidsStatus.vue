@@ -81,7 +81,8 @@ onMounted(()=>{
                                 'bg-green-100 text-green-800': index === 1,
                                 'bg-red-100 text-red-800': index === 2
                             }">
-                               
+                                {{ index === 0 ? pendingBid.length : index === 1 ? bidInProgress.length :
+                                taskCompleted.length }}
                             </span>
                         </button>
                     </Tab>
