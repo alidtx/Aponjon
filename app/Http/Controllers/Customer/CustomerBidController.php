@@ -41,7 +41,7 @@ public function waitingForAcceptance()
         ->with([
             'task:id,title,task_number,customer_id,category_id,status,budget,bidding_ends_at',
             'task.category:id,name',
-            'task.customer:id,name,email,phone',
+            'task.customers:id,name,email,phone',
             'tasker:id,name,email,phone,avatar'
         ])
 
