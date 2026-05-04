@@ -3,6 +3,11 @@ import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout.v
 import { Head } from '@inertiajs/vue3';
 import AppliedBidsStatus from './Partials/AppliedBidsStatus.vue';
 
+
+
+
+
+
 </script>
 
 
