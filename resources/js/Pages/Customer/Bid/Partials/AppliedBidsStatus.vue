@@ -4,20 +4,24 @@ import { onMounted, ref } from 'vue'
 
 const categories = ['কাজের আবেদন গুলো', 'চলামান কাজ গুলো', 'কমপ্লিটেড কাজ গুলো']
 
-
 const loading=ref(false) 
 const pendingBid=ref(false) 
 const bidInProgress=ref(false) 
 const taskCompleted=ref(false) 
 const error = ref(null)
 
+// Track which tabs have been loaded
+const tabsLoaded = ref({
+  pending: true, // First tab loads on mount
+  inProgress: false,
+  completed: false
+})
 
 const waitingForAcceptance = async () => {
     loading.value = true
     try {
         const response = await axios.get(route('customer.bids.waiting'))
         pendingBid.value = response.data.data
-
     } catch (err) {
         error.value = 'Failed to fetch pending bids list.'
     } finally {
@@ -26,11 +30,14 @@ const waitingForAcceptance = async () => {
 }
 
 const inProgress = async () => {
+    // Skip if already loaded
+    if (tabsLoaded.value.inProgress) return
+    
     loading.value = true
     try {
         const response = await axios.get(route('customer.bids.in-progress'))
         bidInProgress.value = response.data.data
-
+        tabsLoaded.value.inProgress = true
     } catch (err) {
         error.value = 'Failed to fetch bid in progress list.'
     } finally {
@@ -39,11 +46,14 @@ const inProgress = async () => {
 }
 
 const Taskcompleted = async () => {
+    // Skip if already loaded
+    if (tabsLoaded.value.completed) return
+    
     loading.value = true
     try {
         const response = await axios.get(route('customer.tasks.completed'))
         taskCompleted.value = response.data.data
-
+        tabsLoaded.value.completed = true
     } catch (err) {
         error.value = 'Failed to fetch task completed list.'
     } finally {
@@ -51,20 +61,25 @@ const Taskcompleted = async () => {
     }
 }
 
-onMounted(()=>{
-   waitingForAcceptance(); 
-   inProgress(); 
-   Taskcompleted()
+// Handle tab change
+const handleTabChange = (index) => {
+    if (index === 1 && !tabsLoaded.value.inProgress) {
+        inProgress()
+    } else if (index === 2 && !tabsLoaded.value.completed) {
+        Taskcompleted()
+    }
+}
+
+onMounted(() => {
+   waitingForAcceptance()
 })
-
-
 </script>
 
 <template>
     <div id="tasks" class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-2xl font-bold text-gray-800 mb-4">আপনার কাজ সমূহ</h2>
 
-        <TabGroup>
+        <TabGroup @change="handleTabChange">
             <div class="border-b border-gray-200">
                 <TabList class="flex space-x-8">
                     <Tab v-for="(category, index) in categories" :key="index" v-slot="{ selected }"
@@ -81,22 +96,28 @@ onMounted(()=>{
                                 'bg-green-100 text-green-800': index === 1,
                                 'bg-red-100 text-red-800': index === 2
                             }">
-                                {{ index === 0 ? pendingBid.length : index === 1 ? bidInProgress.length :
-                                taskCompleted.length }}
+                                {{ index === 0 ? (pendingBid ? pendingBid.length : 0) : 
+                                   index === 1 ? (bidInProgress ? bidInProgress.length : 0) :
+                                   (taskCompleted ? taskCompleted.length : 0) }}
                             </span>
                         </button>
                     </Tab>
                 </TabList>
             </div>
+            
             <TabPanels class="mt-6">
-
+                <!-- Pending Tab (already loaded) -->
                 <TabPanel>
-                    <div v-if="pendingBid.length === 0" class="text-center py-12">
+                    <div v-if="loading && !pendingBid" class="text-center py-12">
+                        <p class="text-gray-500">লোড হচ্ছে...</p>
+                    </div>
+                    <div v-else-if="!pendingBid || pendingBid.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন পেন্ডিং বিড নেই</p>
                     </div>
                     <div v-else class="space-y-4">
                         <div v-for="bid in pendingBid" :key="bid.id"
                             class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+                            <!-- Rest of your pending bid template remains the same -->
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
@@ -135,14 +156,18 @@ onMounted(()=>{
                     </div>
                 </TabPanel>
 
-                <!-- Accepted Tab -->
+                <!-- In Progress Tab (loads on click) -->
                 <TabPanel>
-                    <div v-if="bidInProgress.length === 0" class="text-center py-12">
+                    <div v-if="loading && !bidInProgress && !tabsLoaded.inProgress" class="text-center py-12">
+                        <p class="text-gray-500">লোড হচ্ছে...</p>
+                    </div>
+                    <div v-else-if="!bidInProgress || bidInProgress.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন একসেপ্টেড বিড নেই</p>
                     </div>
                     <div v-else class="space-y-4">
                         <div v-for="bid in bidInProgress" :key="bid.id"
                             class="border border-green-200 rounded-lg p-4 bg-green-50">
+                            <!-- Rest of your in-progress bid template remains the same -->
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
@@ -185,14 +210,18 @@ onMounted(()=>{
                     </div>
                 </TabPanel>
 
-                <!-- Rejected Tab -->
+                <!-- Completed Tab (loads on click) -->
                 <TabPanel>
-                    <div v-if="taskCompleted.length === 0" class="text-center py-12">
+                    <div v-if="loading && !taskCompleted && !tabsLoaded.completed" class="text-center py-12">
+                        <p class="text-gray-500">লোড হচ্ছে...</p>
+                    </div>
+                    <div v-else-if="!taskCompleted || taskCompleted.length === 0" class="text-center py-12">
                         <p class="text-gray-500">কোন রিজেক্টেড বিড নেই</p>
                     </div>
                     <div v-else class="space-y-4">
                         <div v-for="bid in taskCompleted" :key="bid.id"
                             class="border border-red-200 rounded-lg p-4 bg-red-50">
+                            <!-- Rest of your completed task template remains the same -->
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.title }}</h3>
@@ -225,7 +254,6 @@ onMounted(()=>{
                     </div>
                 </TabPanel>
             </TabPanels>
-           
         </TabGroup>
     </div>
 </template>
