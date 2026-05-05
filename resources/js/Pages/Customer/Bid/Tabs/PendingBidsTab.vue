@@ -60,7 +60,7 @@ const getFilteredResults = (pageNumber = 1) => {
                         <span class="font-medium text-gray-800">আপনার বাজেট: ৳{{ Math.round(bid.task.budget)
                             }}</span>
                         <span class="text-gray-600 mx-2">•</span>
-                        <span class=" font-semibold text-yellow-600">স্ট্যাটাস: {{ bid.status }}</span>
+                        <span class=" bg-yellow-500 text-white-300 px-3 py-1 rounded-full text-sm capitalize">{{ bid.status }}</span>
                     </div>
                     <div class="text-sm text-gray-600">
                         <i class="fas fa-clock mr-1"></i>
