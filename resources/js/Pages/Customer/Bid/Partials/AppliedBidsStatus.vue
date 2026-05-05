@@ -128,16 +128,16 @@ onMounted(() => {
                                     </p>
                                 </div>
                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
-                                    বিডের পরিমাণ: ৳{{ bid.amount }}
+                                     প্রস্তাতাব করেছেন: ৳{{ Math.round(bid.amount) }}
                                 </span>
                             </div>
 
                             <div class="flex justify-between items-center mb-3">
                                 <div class="text-sm">
-                                    <span class="font-medium text-gray-800">আপনার প্রস্তাবিত মূল্য: ৳{{ bid.amount
+                                    <span class="font-medium text-gray-800">আপনার বাজেট: ৳{{ Math.round(bid.task.budget)
                                         }}</span>
                                     <span class="text-gray-600 mx-2">•</span>
-                                    <span class="text-gray-600">স্ট্যাটাস: {{ bid.status }}</span>
+                                    <span class=" font-semibold text-yellow-600">স্ট্যাটাস: {{ bid.status }}</span>
                                 </div>
                                 <div class="text-sm text-gray-600">
                                     <i class="fas fa-clock mr-1"></i>
