@@ -126,6 +126,7 @@ onMounted(() => {
                                         {{ bid.tasker.name }} •
                                         {{ bid.tasker.tasker_profile.full_address || 'এলাকা' }}
                                     </p>
+                                    <p class="text-gray-600 text-sm">Here Home: address will be added and will come from tasker profile table</p>
                                 </div>
                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
                                      প্রস্তাতাব করেছেন: ৳{{ Math.round(bid.amount) }}

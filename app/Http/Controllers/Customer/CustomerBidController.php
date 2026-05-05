@@ -39,10 +39,9 @@ public function waitingForAcceptance()
         })
 
         ->with([
-            'task:id,title,task_number,customer_id,category_id,status,budget,bidding_ends_at',
-            'task.category:id,name',
-            'tasker:id,name,email,phone,avatar',
-            'tasker.taskerProfiles'
+            'task:id,title,budget',
+            'tasker:id,name',
+            'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
         ])
 
         ->latest()
