@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Enum\BidStatus;
+use App\Enum\PaginationLimits;
+use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\TaskResource;
@@ -16,8 +19,11 @@ class CustomerBidController extends Controller
 public function index() {
    return Inertia::render('Customer/Bid/Index');
 }
-public function waitingForAcceptance()
-{
+public function waitingForAcceptance(Request $request)
+{   
+   $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIVE->value);
+    $perPage = max(1, min(100, $perPage));
+
     $customerId = auth()->id();
 
     $bids = Bid::query()
@@ -32,7 +38,7 @@ public function waitingForAcceptance()
             'status',
             'created_at'
         ])
-        ->where('status', 'pending')
+        ->where('status', BidStatus::Pending->value)
 
         ->whereHas('task', function ($q) use ($customerId) {
             $q->where('customer_id', $customerId);
@@ -45,7 +51,7 @@ public function waitingForAcceptance()
         ])
 
         ->latest()
-        ->paginate(10);
+        ->paginate($perPage);
 
     return BidResource::collection($bids);
 }
@@ -53,7 +59,7 @@ public function waitingForAcceptance()
 public function inProgress()
 {
     $bids = Bid::query()
-        ->where('status', 'accepted')
+        ->where('status', BidStatus::Accepted->value)
 
         ->whereHas('task', function ($q) {
             $q->where('customer_id', auth()->id());
@@ -88,7 +94,7 @@ public function completed()
             'updated_at'
         ])
         ->where('customer_id', $customerId)
-        ->where('status', 'completed')
+        ->where('status', TaskStatus::Completed->value)
 
         ->with([
             'category:id,name',

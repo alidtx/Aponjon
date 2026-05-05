@@ -2,6 +2,7 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 import { onMounted, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { TailwindPagination } from 'laravel-vue-pagination'
 
 const categories = ['কাজের আবেদন গুলো', 'চলামান কাজ গুলো', 'কমপ্লিটেড কাজ গুলো']
 
@@ -9,6 +10,7 @@ const loading = ref(false)
 const pendingBid = ref([])
 const bidInProgress = ref([])
 const taskCompleted = ref([])
+const perPage = ref(5)
 const error = ref(null)
 
 const tabsLoaded = ref({
@@ -67,6 +69,21 @@ const handleTabChange = (index) => {
     }
 }
 
+
+const getFilteredResults = (pageNumber = 1) => {
+    isLoading.value = true
+
+    router.get(route('customer.bids.waiting'), {
+        page: pageNumber,
+        per_page: perPage.value,
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+        onFinish: () => {
+            isLoading.value = false
+        }
+    })
+}
 onMounted(() => {
     waitingForAcceptance()
 })
@@ -162,6 +179,10 @@ onMounted(() => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="flex justify-center mt-8">
+                    <TailwindPagination :data="pendingBid" @pagination-change-page="getFilteredResults"
+                        :limit="1" />
                     </div>
                 </TabPanel>
 
