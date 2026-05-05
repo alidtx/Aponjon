@@ -66,10 +66,9 @@ public function inProgress()
         })
 
         ->with([
-            'task:id,title,task_number,customer_id,category_id,status,budget',
-            'task.category:id,name',
-            'task.customers:id,name,email,phone',
-            'tasker:id,name,email,phone,avatar'
+            'task:id,title,budget',
+            'tasker:id,name',
+            'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
         ])
         ->latest()
         ->paginate(10);
