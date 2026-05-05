@@ -140,9 +140,14 @@ onMounted(() => {
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
-                                    <p class="text-gray-600 text-sm">
-                                        {{ bid.tasker.name }} •
-                                        {{ bid.tasker.tasker_profile.full_address || 'এলাকা' }}
+                                    <p class="text-gray-600 text-sm flex items-center gap-2 py-1">
+                                        <img src="/img/profile/dummy-image.jpg" :alt="bid.tasker.name"
+                                            class="w-6 h-6 rounded-full object-cover">
+
+                                        <span>
+                                            <Link class="text-blue-500">{{ bid.tasker.name }}</Link> •
+                                            {{ bid.tasker.tasker_profile?.full_address || 'এলাকা' }}
+                                        </span>
                                     </p>
                                     <p class="text-gray-600 text-sm">Here Home: address will be added and will come from
                                         tasker
@@ -156,7 +161,7 @@ onMounted(() => {
                             <div class="flex justify-between items-center mb-3">
                                 <div class="text-sm">
                                     <span class="font-medium text-gray-800">আপনার বাজেট: ৳{{ Math.round(bid.task.budget)
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-600 mx-2">•</span>
                                     <span class=" font-semibold text-yellow-600">স্ট্যাটাস: {{ bid.status }}</span>
                                 </div>
@@ -181,8 +186,8 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="flex justify-center mt-8">
-                    <TailwindPagination :data="pendingBid" @pagination-change-page="getFilteredResults"
-                        :limit="1" />
+                        <TailwindPagination :data="pendingBid" @pagination-change-page="getFilteredResults"
+                            :limit="1" />
                     </div>
                 </TabPanel>
 
