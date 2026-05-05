@@ -23,6 +23,10 @@ Route::get('/tasks/{taskId}/{slug}', [BidController::class, 'show'])->name('task
 Route::get('/show-bid-submit-form/{taskId}/{slug}', [BidController::class, 'showBidSubmissionForm'])->name('show.bid.submit.form');
 Route::post('/bid-store', [BidController::class, 'bidStore'])->name('bid.store');
 
+Route::prefix('tasker')->name('tasker.')->group(function () {
+    Route::get('public-profile/{TaskerId}', [TaskerProfileController::class, 'TaskerPublicProfile'])->name('public.profile');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])
     ->name('kyc.awaiting-approval.index');

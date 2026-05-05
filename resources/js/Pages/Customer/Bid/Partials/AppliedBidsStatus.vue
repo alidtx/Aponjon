@@ -145,7 +145,7 @@ onMounted(() => {
                                             class="w-6 h-6 rounded-full object-cover">
 
                                         <span>
-                                            <Link class="text-blue-500">{{ bid.tasker.name }}</Link> •
+                                            <Link :href="route('tasker.public.profile',bid.tasker.id)" class="text-blue-500">{{ bid.tasker.name }}</Link> •
                                             {{ bid.tasker.tasker_profile?.full_address || 'এলাকা' }}
                                         </span>
                                     </p>

@@ -58,4 +58,8 @@ class TaskerProfileController extends Controller
         ->withInput();
     }
   }
+  public function TaskerPublicProfile($taskerId)
+  {  
+    return  Inertia::render('Tasker/PublicProfile/Index');
+  }
 }
