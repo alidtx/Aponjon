@@ -174,11 +174,8 @@ onMounted(() => {
                             <div class="flex justify-end space-x-2">
                                 <Link :href="route('customer.chats.index', { user: bid.tasker.id })"
                                     class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-sm">
-                                    মেসেজ দিন
+                                    মেসেজ পাঠান
                                 </Link>
-                                <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-red-600 text-sm">
-                                    বিসিট প্রোফাইল
-                                </button>
                                 <button class="px-3 py-1 bg-green-500 text-white rounded hover:bg-red-600 text-sm">
                                     একচেপ্ট করুন
                                 </button>
