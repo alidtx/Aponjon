@@ -141,11 +141,15 @@ onMounted(() => {
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
                                     <p class="text-gray-600 text-sm flex items-center gap-2 py-1">
-                                        <img :src="bid.tasker.tasker_profile?.profile_photo || '/img/profile/dummy-image.jpg'" :alt="bid.tasker.name"
-                                            class="w-6 h-6 rounded-full object-cover">
+                                        <img :src="bid.tasker.tasker_profile?.profile_photo || '/img/profile/dummy-image.jpg'"
+                                            :alt="bid.tasker.name" class="w-6 h-6 rounded-full object-cover">
 
                                         <span>
-                                            <Link :href="route('tasker.public.profile',bid.tasker.id)" class="text-blue-500">{{ bid.tasker.name }}</Link> •
+                                            <Link :href="route('tasker.public.profile', bid.tasker.id)"
+                                                class="text-blue-500 hover:text-blue-700 hover:underline">{{
+                                                bid.tasker.name }}
+                                                <i class="fas fa-external-link-alt text-xs"></i>
+                                            </Link> •
                                             {{ bid.tasker.tasker_profile?.full_address || 'এলাকা' }}
                                         </span>
                                     </p>
@@ -161,7 +165,7 @@ onMounted(() => {
                             <div class="flex justify-between items-center mb-3">
                                 <div class="text-sm">
                                     <span class="font-medium text-gray-800">আপনার বাজেট: ৳{{ Math.round(bid.task.budget)
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-600 mx-2">•</span>
                                     <span class=" font-semibold text-yellow-600">স্ট্যাটাস: {{ bid.status }}</span>
                                 </div>
@@ -174,7 +178,7 @@ onMounted(() => {
                             <div class="flex justify-end space-x-2">
                                 <Link :href="route('customer.chats.index', { user: bid.tasker.id })"
                                     class="px-2 py-1 border border-gray-300 rounded bg-primary text-white  hover:bg-blue-700">
-                                   <i class="fas fa-comment mr-2"></i> মেসেজ পাঠান
+                                    <i class="fas fa-comment mr-2"></i> মেসেজ পাঠান
                                 </Link>
                                 <button class="px-3 py-1 bg-green-500 text-white rounded hover:bg-red-600 text-sm">
                                     একচেপ্ট করুন
