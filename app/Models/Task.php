@@ -18,7 +18,7 @@ class Task extends Model
         'slug',
         'description',
         'location_address',
-        'location_coordinates',  // string or point handled with package
+        'location_coordinates',  
         'district_id',
         'zila_id',
         'upozila_id',

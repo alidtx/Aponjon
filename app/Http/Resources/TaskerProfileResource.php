@@ -28,6 +28,7 @@ class TaskerProfileResource extends JsonResource
             'completed_task' => $this->completed_task,
             'is_online' => (bool) $this->is_online,
             'profile_photo' => $this->user_profile_picture,
+            'full_address' => $this->full_address,
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }

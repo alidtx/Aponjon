@@ -123,8 +123,8 @@ onMounted(() => {
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
                                     <p class="text-gray-600 text-sm">
-                                        {{ bid.task.customer.name }} •
-                                        {{ bid.full_address || 'এলাকা' }}
+                                        {{ bid.tasker.name }} •
+                                        {{ bid.tasker.tasker_profile.full_address || 'এলাকা' }}
                                     </p>
                                 </div>
                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">

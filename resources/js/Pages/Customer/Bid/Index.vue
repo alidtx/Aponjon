@@ -9,7 +9,7 @@ import AppliedBidsStatus from './Partials/AppliedBidsStatus.vue';
 
 <template>
       <CustomerAuthenticatedLayout>
-         <Head title="bids"/>
+         <Head title="বিড"/>
          <div class="lg:col-span-3">
            <AppliedBidsStatus
            />
