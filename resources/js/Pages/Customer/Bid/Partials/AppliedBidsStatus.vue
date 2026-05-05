@@ -141,7 +141,7 @@ onMounted(() => {
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
                                     <p class="text-gray-600 text-sm flex items-center gap-2 py-1">
-                                        <img src="/img/profile/dummy-image.jpg" :alt="bid.tasker.name"
+                                        <img :src="bid.tasker.tasker_profile?.profile_photo || '/img/profile/dummy-image.jpg'" :alt="bid.tasker.name"
                                             class="w-6 h-6 rounded-full object-cover">
 
                                         <span>
