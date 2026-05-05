@@ -62,7 +62,7 @@ public function TaskerPublicProfile($taskerId)
 {
     return Inertia::render('Tasker/PublicProfile/Index', [
      'profile' => new UserResource(User::with('taskerProfiles')->findOrFail($taskerId)),
-     
+      
       ]);
 }
 }

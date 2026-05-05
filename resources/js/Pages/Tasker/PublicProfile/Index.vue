@@ -13,11 +13,11 @@ const props = defineProps({
 })
 
 const name = computed(() => props.profile.data?.name)
+const profile_id = computed(() => props.profile.data?.id)
 const designation = computed(() => props.profile.data?.tasker_profile?.designation)
 const address = computed(() => props.profile.data?.tasker_profile?.full_address)
 const photo = computed(() => props.profile.data?.tasker_profile?.profile_photo)
 const skills = computed(() => props.profile.data?.tasker_profile?.skills)
-console.log(skills)
 
 </script>
 
@@ -141,7 +141,9 @@ console.log(skills)
                     </button>
                 </div>
             </div>
-            <SideBar />
+            <SideBar 
+              :profileId="profile_id" 
+            />
         </div>
     </DefaultLayout>
 </template>
