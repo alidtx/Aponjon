@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\MessageSent;
 use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Customer\CustomerBidController;
 use App\Http\Controllers\Customer\CustomerController;
@@ -14,7 +13,6 @@ use App\Http\Controllers\Tasker\TaskerChatController;
 use App\Http\Controllers\Tasker\TaskController;
 use App\Http\Controllers\Tasker\TaskerProfileController;
 use App\Http\Controllers\Tasker\TaskerProfileSettingController;
-use App\Models\Message;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
