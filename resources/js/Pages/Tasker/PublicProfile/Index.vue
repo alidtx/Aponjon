@@ -3,32 +3,45 @@ import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ProfileHead from './Partials/ProfileHead.vue';
 import SideBar from './Partials/SideBar.vue';
+import { computed } from 'vue';
+
+const props = defineProps({
+    profile: {
+        type: Object,
+        default: () => ({})
+    }
+})
+
+const name = computed(() => props.profile.data?.name)
+const designation = computed(() => props.profile.data?.tasker_profile?.designation)
+const address = computed(() => props.profile.data?.tasker_profile?.full_address)
+const photo = computed(() => props.profile.data?.tasker_profile?.profile_photo)
+const skills = computed(() => props.profile.data?.tasker_profile?.skills)
+console.log(skills)
 
 </script>
 
 
 <template>
-     <DefaultLayout>
+    <DefaultLayout>
+
         <Head title="পাবলিক প্রফাইল" />
-         <ProfileHead/>
-         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-             <div class="lg:col-span-2 space-y-6">
+        <ProfileHead :name="name" :designation="designation" :address="address" :photo="photo" />
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-xl font-bold text-dark mb-4">আমার সম্পর্কে</h2>
-                    <p class="text-gray-700 leading-relaxed">
-                        ৮ বছরের অভিজ্ঞতা নিয়ে আমি একজন প্রফেশনাল ইলেকট্রিশিয়ান। বাসা-বাড়ি, অফিস, 
-                        দোকান - সকল ধরনের ইলেকট্রিক্যাল কাজে আমি পারদর্শী। আমি শুধু মেরামতই নয়, 
-                        নতুন ওয়্যারিং, ইলেকট্রিক্যাল ডিজাইন এবং এনার্জি এফিসিয়েন্ট সলিউশনও প্রদান করি।
-                    </p>
-                    
+                    <p class="text-gray-700 leading-relaxed">{{ props.profile.data?.tasker_profile.bio }}</p>
+
                     <div class="mt-6">
                         <h3 class="font-bold text-dark mb-3">বিশেষজ্ঞতা</h3>
+
                         <div class="flex flex-wrap gap-2">
-                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">হোম ওয়্যারিং</span>
-                            <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">ইলেকট্রিক্যাল মেরামত</span>
-                            <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-sm">লাইটিং ইন্সটলেশন</span>
-                            <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-sm">সোলার সিস্টেম</span>
-                            <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-sm">ইমার্জেন্সি সার্ভিস</span>
+                            <span v-for="(item, index) in skills" :key="index"
+
+                                class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">
+                                {{ item }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -46,7 +59,7 @@ import SideBar from './Partials/SideBar.vue';
                                 <div class="text-sm text-gray-600">শুরু হয়</div>
                             </div>
                         </div>
-                    
+
                         <div class="flex justify-between items-center p-4 border border-gray-200 rounded-lg">
                             <div>
                                 <h3 class="font-bold text-dark">হোম ওয়্যারিং</h3>
@@ -63,7 +76,8 @@ import SideBar from './Partials/SideBar.vue';
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-xl font-bold text-dark">গ্রাহক রিভিউ</h2>
                         <div class="text-right">
-                            <div class="text-3xl font-bold text-dark">৪.৫<small class="text-lg text-gray-600">/৫</small></div>
+                            <div class="text-3xl font-bold text-dark">৪.৫<small class="text-lg text-gray-600">/৫</small>
+                            </div>
                             <div class="text-sm text-gray-600">৪৫টি রিভিউ</div>
                         </div>
                     </div>
@@ -86,7 +100,8 @@ import SideBar from './Partials/SideBar.vue';
                             </div>
                         </div>
                         <p class="text-gray-700">
-                            করিমুল ভাই খুবই এক্সপার্ট ইলেকট্রিশিয়ান। আমাদের বাসার পুরাতন ওয়্যারিং সম্পূর্ণ চেঞ্জ করেছেন। 
+                            করিমুল ভাই খুবই এক্সপার্ট ইলেকট্রিশিয়ান। আমাদের বাসার পুরাতন ওয়্যারিং সম্পূর্ণ চেঞ্জ
+                            করেছেন।
                             খুব ক্লিন ও নিয়ম মেনে কাজ করেছেন। দামও যৌক্তিক।强烈推荐!
                         </p>
                         <div class="flex space-x-2 mt-3">
@@ -113,7 +128,7 @@ import SideBar from './Partials/SideBar.vue';
                             </div>
                         </div>
                         <p class="text-gray-700">
-                            অফিসের ইমার্জেন্সি ইলেকট্রিক সমস্যা নিয়ে ডাকেছিলাম। ১ ঘন্টার মধ্যে এসে সমস্যা সল্ভ করেছেন। 
+                            অফিসের ইমার্জেন্সি ইলেকট্রিক সমস্যা নিয়ে ডাকেছিলাম। ১ ঘন্টার মধ্যে এসে সমস্যা সল্ভ করেছেন।
                             প্রফেশনাল এবং সময়নিষ্ঠ।
                         </p>
                         <div class="flex space-x-2 mt-3">
@@ -126,7 +141,7 @@ import SideBar from './Partials/SideBar.vue';
                     </button>
                 </div>
             </div>
-            <SideBar/>
-         </div>
-     </DefaultLayout>
+            <SideBar />
+        </div>
+    </DefaultLayout>
 </template>

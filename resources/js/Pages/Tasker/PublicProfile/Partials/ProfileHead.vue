@@ -1,14 +1,33 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+    name: {
+        type: String,
+        default: ''
+    },
+    designation: {
+        type: String,
+        default: ''
+    },
+    address: {
+        type: String,
+        default: ''
+    },
+     photo: {
+        type: String,
+        default: ''
+    }
+})
+</script>
 
 
 <template>
   <div class="bg-white rounded-lg shadow-md p-8 mb-6">
             <div class="flex flex-col md:flex-row items-start md:items-center space-y-6 md:space-y-0 md:space-x-8">
                 <div class="flex flex-col items-center text-center md:text-left md:flex-row md:items-start md:space-x-6">
-                    <img src="https://via.placeholder.com/120" alt="Tasker" class="w-24 h-24 rounded-full mb-4 md:mb-0">
+                    <img :src="photo || '/img/profile/dummy-image.jpg'" alt="Tasker" class="w-24 h-24 rounded-full mb-4 md:mb-0">
                     <div>
-                        <h1 class="text-3xl font-bold text-dark mb-2">করিমুল ইসলাম</h1>
-                        <p class="text-lg text-gray-600 mb-3">প্রফেশনাল ইলেকট্রিশিয়ান</p>
+                        <h1 class="text-3xl font-bold text-dark mb-2">{{ props.name }}</h1>
+                        <p class="text-lg text-gray-600 mb-3">{{ props.designation }}</p>
                         <div class="flex items-center justify-center md:justify-start space-x-2 mb-3">
                             <div class="flex text-yellow-400">
                                 <i class="fas fa-star"></i>
@@ -22,7 +41,7 @@
                         </div>
                         <div class="flex items-center justify-center md:justify-start text-gray-600 mb-4">
                             <i class="fas fa-map-marker-alt mr-2"></i>
-                            <span>ধানমন্ডি, ঢাকা</span>
+                            <span>{{ props.address }}</span>
                         </div>
                     </div>
                 </div>
