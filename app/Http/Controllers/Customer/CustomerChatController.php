@@ -12,13 +12,15 @@ use Inertia\Inertia;
 
 class CustomerChatController extends Controller
 {
- public function index()
+ public function index(Request $request)
     {   
       
          $chatUsers=ChatService::getChatUsers(auth()->user()); 
           return Inertia::render('Customer/Chats/Index', [
             'chatUsers' => $chatUsers,
             'authUser' => auth()->user(),
+            'selectedUserId' => $request->user
+
         ]);
     }
 

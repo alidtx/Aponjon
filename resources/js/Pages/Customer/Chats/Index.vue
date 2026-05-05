@@ -8,7 +8,8 @@ import axios from 'axios'
 
 const props = defineProps({
     chatUsers: Array,
-    authUser: Object
+    authUser: Object,
+   selectedUserId: Number
 })
 
 const selectedUser = ref(null)
@@ -66,20 +67,32 @@ onMounted(() => {
     if (window.Echo && props.authUser) {
 
         const channelName = `chat.${props.authUser.id}`
-        console.log(`Listening to channel: ${channelName}`)
         
         echoInstance.value = window.Echo
             .private(channelName)
             .listen('.MessageSent', (e) => { 
-                console.log('🔔 MESSAGE RECEIVED IN VUE!', e)
+                
                 if (e && e.message) {
                     handleNewMessage(e.message)
                 }
             })
             .subscribed(() => {
-                console.log('✅ Successfully subscribed to channel!')
+            
             })
     }
+})
+onMounted(() => {
+
+    if (props.selectedUserId) {
+        const user = props.chatUsers.find(
+            u => u.id == props.selectedUserId
+        )
+
+        if (user) {
+            openChat(user)
+        }
+    }
+
 })
 
 onUnmounted(() => {

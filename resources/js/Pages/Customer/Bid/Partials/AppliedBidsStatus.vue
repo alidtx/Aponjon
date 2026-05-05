@@ -1,19 +1,20 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 import { onMounted, ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 
 const categories = ['কাজের আবেদন গুলো', 'চলামান কাজ গুলো', 'কমপ্লিটেড কাজ গুলো']
 
-const loading=ref(false)
-const pendingBid=ref([]) 
-const bidInProgress=ref([]) 
-const taskCompleted=ref([]) 
+const loading = ref(false)
+const pendingBid = ref([])
+const bidInProgress = ref([])
+const taskCompleted = ref([])
 const error = ref(null)
 
 const tabsLoaded = ref({
-  pending: true, 
-  inProgress: false,
-  completed: false
+    pending: true,
+    inProgress: false,
+    completed: false
 })
 
 const waitingForAcceptance = async () => {
@@ -30,7 +31,7 @@ const waitingForAcceptance = async () => {
 
 const inProgress = async () => {
     if (tabsLoaded.value.inProgress) return
-    
+
     loading.value = true
     try {
         const response = await axios.get(route('customer.bids.in-progress'))
@@ -45,7 +46,7 @@ const inProgress = async () => {
 
 const Taskcompleted = async () => {
     if (tabsLoaded.value.completed) return
-    
+
     loading.value = true
     try {
         const response = await axios.get(route('customer.tasks.completed'))
@@ -67,7 +68,7 @@ const handleTabChange = (index) => {
 }
 
 onMounted(() => {
-   waitingForAcceptance()
+    waitingForAcceptance()
 })
 </script>
 
@@ -106,7 +107,7 @@ onMounted(() => {
                     </Tab>
                 </TabList>
             </div>
-            
+
             <TabPanels class="mt-6">
 
                 <TabPanel>
@@ -117,7 +118,7 @@ onMounted(() => {
                         <p class="text-gray-500">কোন পেন্ডিং বিড নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                         <div v-for="bid in pendingBid" :key="bid.id"
+                        <div v-for="bid in pendingBid" :key="bid.id"
                             class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
@@ -126,17 +127,19 @@ onMounted(() => {
                                         {{ bid.tasker.name }} •
                                         {{ bid.tasker.tasker_profile.full_address || 'এলাকা' }}
                                     </p>
-                                    <p class="text-gray-600 text-sm">Here Home: address will be added and will come from tasker profile table</p>
+                                    <p class="text-gray-600 text-sm">Here Home: address will be added and will come from
+                                        tasker
+                                        profile table</p>
                                 </div>
                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
-                                     প্রস্তাতাব করেছেন: ৳{{ Math.round(bid.amount) }}
+                                    প্রস্তাতাব করেছেন: ৳{{ Math.round(bid.amount) }}
                                 </span>
                             </div>
 
                             <div class="flex justify-between items-center mb-3">
                                 <div class="text-sm">
                                     <span class="font-medium text-gray-800">আপনার বাজেট: ৳{{ Math.round(bid.task.budget)
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-600 mx-2">•</span>
                                     <span class=" font-semibold text-yellow-600">স্ট্যাটাস: {{ bid.status }}</span>
                                 </div>
@@ -147,9 +150,10 @@ onMounted(() => {
                             </div>
 
                             <div class="flex justify-end space-x-2">
-                                <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-sm">
+                                <Link :href="route('customer.chats.index', { user: bid.tasker.id })"
+                                    class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-sm">
                                     মেসেজ দিন
-                                </button>
+                                </Link>
                                 <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-red-600 text-sm">
                                     বিসিট প্রোফাইল
                                 </button>
@@ -169,7 +173,7 @@ onMounted(() => {
                         <p class="text-gray-500">কোন একসেপ্টেড বিড নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                         <div v-for="bid in bidInProgress" :key="bid.id"
+                        <div v-for="bid in bidInProgress" :key="bid.id"
                             class="border border-green-200 rounded-lg p-4 bg-green-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
@@ -202,14 +206,14 @@ onMounted(() => {
                                 </div>
                                 <div class="flex space-x-2">
                                     <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-sm">
-                                     মেসেজ দিন
-                                   </button>
-                                   <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
-                                    বাতিল করুন
-                                  </button>
-                                  <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
-                                    বিতর্কিত
-                                  </button>
+                                        মেসেজ দিন
+                                    </button>
+                                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
+                                        বাতিল করুন
+                                    </button>
+                                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
+                                        বিতর্কিত
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -224,7 +228,7 @@ onMounted(() => {
                         <p class="text-gray-500">কোন রিজেক্টেড বিড নেই</p>
                     </div>
                     <div v-else class="space-y-4">
-                         <div v-for="bid in taskCompleted" :key="bid.id"
+                        <div v-for="bid in taskCompleted" :key="bid.id"
                             class="border border-red-200 rounded-lg p-4 bg-red-50">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
@@ -251,11 +255,11 @@ onMounted(() => {
 
                             <div class="flex justify-end">
                                 <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
-                                রিবিউ দিন
+                                    রিবিউ দিন
                                 </button>
                             </div>
                         </div>
-                        
+
                     </div>
                 </TabPanel>
             </TabPanels>
