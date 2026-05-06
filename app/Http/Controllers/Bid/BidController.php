@@ -38,4 +38,10 @@ class BidController extends Controller
             'message' => 'কাটি সপল ভাবে আবেদন করা হয়েছে',
         ]);
     }
+    public function accept(Bid $bid)
+{
+    $bid->update(['status' => 'accepted']);
+    $bid->task->update(['status' => 'in_progress']);
+    return response()->json(['success' => true]);
+}
 }

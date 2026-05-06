@@ -1,6 +1,10 @@
 <script setup>
+import Modal from '@/Components/Modal.vue';
 import { Link } from '@inertiajs/vue3'
 import { TailwindPagination } from 'laravel-vue-pagination'
+import { ref } from 'vue'
+import axios from 'axios'
+import Confirm from '../Partials/Confirm.vue';
 
 const props = defineProps({
     pendingBid: {
@@ -12,6 +16,43 @@ const props = defineProps({
         default: false
     }
 })
+
+const isShowModal = ref(false)
+const selectedBid = ref(null)
+const isProcessing = ref(false)
+
+const acceptBid = (bid) => {
+    selectedBid.value = bid
+    isShowModal.value = true
+}
+
+const confirmAccept = async () => {
+    if (!selectedBid.value) return
+    
+    isProcessing.value = true
+    try {
+        const response = await axios.post(route('customer.bids.accept', selectedBid.value.id))
+        
+        if (response.data.success) {
+            isShowModal.value = false
+            emit('refresh')
+            toast.success('বিড সফলভাবে গ্রহণ করা হয়েছে!')
+        }
+    } catch (error) {
+        console.error('Error accepting bid:', error)
+        toast.error('বিড গ্রহণ করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।')
+    } finally {
+        isProcessing.value = false
+        selectedBid.value = null
+    }
+}
+
+const closeModal = () => {
+    if (!isProcessing.value) {
+        isShowModal.value = false
+        selectedBid.value = null
+    }
+}
 
 const emit = defineEmits(['accept-bid', 'refresh'])
 
@@ -51,7 +92,7 @@ const getFilteredResults = (pageNumber = 1) => {
                             profile table</p>
                     </div>
                     <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
-                        প্রস্তাতাব করেছেন: ৳{{ Math.round(bid.amount) }}
+                        প্রস্তাব করেছেন: ৳{{ Math.round(bid.amount) }}
                     </span>
                 </div>
 
@@ -70,11 +111,11 @@ const getFilteredResults = (pageNumber = 1) => {
 
                 <div class="flex justify-end space-x-2">
                     <Link :href="route('customer.chats.index', { user: bid.tasker.id })"
-                        class="px-2 py-1 border border-gray-300 rounded bg-primary text-white  hover:bg-blue-700">
+                        class="px-2 py-1 border border-gray-300 rounded bg-primary text-white hover:bg-blue-700">
                         <i class="fas fa-comment mr-2"></i> মেসেজ পাঠান
                     </Link>
-                    <button class="px-3 py-1 bg-green-500 text-white rounded hover:bg-red-600 text-sm">
-                        একচেপ্ট করুন
+                    <button @click="acceptBid(bid)" class="px-2 py-1 bg-green-400 text-white rounded hover:bg-green-700 text-sm">
+                     <i class="fas fa-check mr-2"></i>গ্রহণ করুন
                     </button>
                 </div>
             </div>
@@ -82,5 +123,20 @@ const getFilteredResults = (pageNumber = 1) => {
         <div class="flex justify-center mt-8">
             <TailwindPagination :data="pendingBid" @pagination-change-page="getFilteredResults" :limit="1" />
         </div>
+        
+        <Modal
+            :show="isShowModal"
+            @close="closeModal"
+            max-width="sm"
+        >
+            <Confirm
+                :title="selectedBid?.task?.title"
+                :name="selectedBid?.tasker?.name"
+                :amount="selectedBid?.amount"
+                :is-processing="isProcessing"
+                @confirm="confirmAccept"
+                @cancel="closeModal"
+            /> 
+        </Modal>
     </div>
 </template>
