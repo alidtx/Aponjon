@@ -56,7 +56,7 @@ public function waitingForAcceptance(Request $request)
     return BidResource::collection($bids);
 }
 
-public function inProgress()
+public function accepted()
 {
     $bids = Bid::query()
         ->where('status', BidStatus::Accepted->value)
@@ -75,6 +75,28 @@ public function inProgress()
 
     return BidResource::collection($bids);
 }
+
+public function inProgress() {
+   $tasks = Bid::query()
+        ->where('status', BidStatus::Accepted->value)
+
+        ->whereHas('task', function ($q) {
+            $q->where('customer_id', auth()->id());
+            $q->where('status', TaskStatus::InProgress->value);
+        })
+
+        ->with([
+            'task:id,title,budget,status',
+            'tasker:id,name',
+            'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
+        ])
+        ->latest()
+        ->paginate(10);
+
+    return BidResource::collection($tasks);
+
+}
+
 public function completed()
 { 
     $tasks = Bid::query()
@@ -82,7 +104,7 @@ public function completed()
 
         ->whereHas('task', function ($q) {
             $q->where('customer_id', auth()->id());
-            $q->where('status', 'completed');
+            $q->where('status', TaskStatus::Completed);
         })
 
         ->with([

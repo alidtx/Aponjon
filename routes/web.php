@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/bid', [CustomerBidController::class, 'index'])->name('bids');
             Route::post('customer/bids/{bid}/accept', [BidController::class, 'accept'])->name('bids.accept');
             Route::get('/bids/waiting', [CustomerBidController::class, 'waitingForAcceptance'])->name('bids.waiting');
+            Route::get('/bids/accepted', [CustomerBidController::class, 'accepted'])->name('bids.accepted');
             Route::get('/bids/in-progress', [CustomerBidController::class, 'inProgress'])->name('bids.in-progress');
             Route::get('/tasks/completed', [CustomerBidController::class, 'completed'])->name('tasks.completed');
             Route::get('/gig', [GigController::class, 'Index'])->name('gig');

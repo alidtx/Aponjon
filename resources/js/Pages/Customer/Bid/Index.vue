@@ -7,21 +7,21 @@ import { onMounted, ref, defineAsyncComponent } from 'vue'
 
 
 const PendingBidsTab = defineAsyncComponent(() => import('./Tabs/PendingBidsTab.vue'))
-const InProgressBidsTab = defineAsyncComponent(() => import('./Tabs/InProgressBidsTab.vue'))
+const AcceptedBidsTab = defineAsyncComponent(() => import('./Tabs/AcceptedBidsTab.vue'))
 const CompletedBidsTab = defineAsyncComponent(() => import('./Tabs/CompletedBidsTab.vue'))
 
-const categories = ['কাজের আবেদন গুলো', 'চলামান কাজ গুলো', 'কমপ্লিটেড কাজ গুলো']
+const categories = ['কাজের আবেদন গুলো', 'গৃহীত কাজগুলো','চলামান কাজ গুলো','কমপ্লিটেড কাজ গুলো']
 
 const loading = ref(false)
 const pendingBid = ref([])
-const bidInProgress = ref([])
+const bidAccepted = ref([])
 const taskCompleted = ref([])
 const perPage = ref(5)
 const error = ref(null)
 
 const tabsLoaded = ref({
   pending: true,
-  inProgress: false,
+  bidAccepted: false,
   completed: false
 })
 
@@ -37,14 +37,14 @@ const waitingForAcceptance = async () => {
   }
 }
 
-const inProgress = async () => {
-  if (tabsLoaded.value.inProgress) return
+const accepted = async () => {
+  if (tabsLoaded.value.bidAccepted) return
 
   loading.value = true
   try {
-    const response = await axios.get(route('customer.bids.in-progress'))
-    bidInProgress.value = response.data.data
-    tabsLoaded.value.inProgress = true
+    const response = await axios.get(route('customer.bids.accepted'))
+    bidAccepted.value = response.data.data
+    tabsLoaded.value.bidAccepted = true
   } catch (err) {
     error.value = 'Failed to fetch bid in progress list.'
   } finally {
@@ -69,7 +69,7 @@ const Taskcompleted = async () => {
 
 const handleTabChange = (index) => {
   if (index === 1 && !tabsLoaded.value.inProgress) {
-    inProgress()
+    accepted()
   } else if (index === 2 && !tabsLoaded.value.completed) {
     Taskcompleted()
   }
@@ -106,13 +106,14 @@ onMounted(() => {
                   <span class="ml-2 px-2 py-0.2 text-xs rounded-full" :class="{
                     'bg-yellow-100 text-yellow-800': index === 0,
                     'bg-green-100 text-green-800': index === 1,
-                    'bg-red-100 text-red-800': index === 2
+                    'bg-blue-100 text-red-800': index === 2,
+                    'bg-red-100 text-red-800': index === 3
                   }">
                     <template v-if="index === 0">
                       {{ pendingBid.length }}
                     </template>
                     <template v-else-if="index === 1">
-                      {{ tabsLoaded.inProgress ? bidInProgress.length : '?' }}
+                      {{ tabsLoaded.inProgress ? bidAccepted.length : '?' }}
                     </template>
                     <template v-else>
                       {{ tabsLoaded.completed ? taskCompleted.length : '?' }}
@@ -131,10 +132,13 @@ onMounted(() => {
             </TabPanel>
 
             <TabPanel>
-              <InProgressBidsTab :bid-in-progress="bidInProgress" :loading="loading && !tabsLoaded.inProgress"
-                :is-loaded="tabsLoaded.inProgress" />
+              <AcceptedBidsTab :bid-accepted="bidAccepted" :loading="loading && !tabsLoaded.bidAccepted"
+                :is-loaded="tabsLoaded.bidAccepted" />
             </TabPanel>
-
+             <TabPanel>
+              <CompletedBidsTab v-if="tabsLoaded.completed" :task-completed="taskCompleted"
+                :loading="loading && !tabsLoaded.completed" :is-loaded="tabsLoaded.completed" />
+            </TabPanel>
             <TabPanel>
               <CompletedBidsTab v-if="tabsLoaded.completed" :task-completed="taskCompleted"
                 :loading="loading && !tabsLoaded.completed" :is-loaded="tabsLoaded.completed" />

@@ -2,7 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
-    bidInProgress: {
+    bidAccepted: {
         type: Array,
         required: true
     },
@@ -22,11 +22,11 @@ const props = defineProps({
         <div v-if="loading && !isLoading" class="text-center py-12">
             <p class="text-gray-500">লোড হচ্ছে...</p>
         </div>
-        <div v-else-if="!bidInProgress || bidInProgress.length === 0" class="text-center py-12">
+        <div v-else-if="!bidAccepted || bidAccepted.length === 0" class="text-center py-12">
             <p class="text-gray-500">কোন একসেপ্টেড বিড নেই</p>
         </div>
         <div v-else class="space-y-4">
-            <div v-for="bid in bidInProgress" :key="bid.id" class="border border-green-200 rounded-lg p-4 bg-green-50">
+            <div v-for="bid in bidAccepted" :key="bid.id" class="border border-green-200 rounded-lg p-4 bg-green-50">
                 <div class="flex justify-between items-start mb-3">
                     <div>
                         <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>

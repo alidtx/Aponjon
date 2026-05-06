@@ -41,7 +41,7 @@ class BidController extends Controller
     public function accept(Bid $bid)
 {
     $bid->update(['status' => 'accepted']);
-    $bid->task->update(['status' => 'in_progress']);
+    $bid->task->update(['status' => 'assigned']);
     return response()->json(['success' => true]);
 }
 }
