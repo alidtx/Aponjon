@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Bid;
 
+use App\Enum\BidStatus;
+use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BidRequest;
 use App\Http\Resources\BidResource;
@@ -39,9 +41,34 @@ class BidController extends Controller
         ]);
     }
     public function accept(Bid $bid)
-{
-    $bid->update(['status' => 'accepted']);
-    $bid->task->update(['status' => 'assigned']);
+    {
+        $bid->update(['status' => BidStatus::Accepted->value]);
+        $bid->task->update(['status' => TaskStatus::Assigned->value]);
+        return response()->json(['success' => true]);
+    }
+    public function cancel(Request $request, Bid $bid)
+{        
+    
+    $request->validate([
+        'cancellation_reason' => 'required|string|min:5|max:100'
+    ]);
+    
+    $bid->update(['status' => BidStatus::Rejected->value]);
+   // 'cancelled_at' => now(),
+    // 'cancelled_by' => auth()->id()
+    $bid->task->update([
+        'status' => TaskStatus::Cancelled->value,
+        'customer_notes' => $request->cancellation_reason,
+        ]);
+
+    // Optional: Store in a separate log table for analytics
+    // CancellationLog::create([
+    //     'bid_id' => $bid->id,
+    //     'user_id' => auth()->id(),
+    //     'reason' => $request->cancellation_reason,
+    //     'cancelled_at' => now()
+    // ]);
+
     return response()->json(['success' => true]);
 }
 }

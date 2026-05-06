@@ -1,5 +1,10 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import axios from 'axios';
+import Modal from '@/Components/Modal.vue';
+import Cancel from '../Partials/Cancel.vue';
+import { toast } from 'vue3-toastify';
 
 const props = defineProps({
     bidAccepted: {
@@ -15,6 +20,47 @@ const props = defineProps({
         default: false
     }
 })
+
+const emit = defineEmits(['refresh'])
+
+const isShowCancelModal = ref(false)
+const selectedBid = ref(null)
+const isProcessing = ref(false)
+
+const cancelBid = (bid) => {
+    selectedBid.value = bid
+    isShowCancelModal.value = true
+}
+
+const confirmCancel = async (cancellationReason) => {
+    if (!selectedBid.value) return
+    
+    isProcessing.value = true
+    try {
+        const response = await axios.post(route('customer.bids.cancel', selectedBid.value.id), {
+            cancellation_reason: cancellationReason
+        })
+        
+        if (response.data.success) {
+            isShowCancelModal.value = false
+            emit('refresh')
+            toast.success('বিড সফলভাবে বাতিল করা হয়েছে!')
+        }
+    } catch (error) {
+        console.error('Error cancelling bid:', error)
+        toast.error('বিড বাতিল করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।')
+    } finally {
+        isProcessing.value = false
+        selectedBid.value = null
+    }
+}
+
+const closeCancelModal = () => {
+    if (!isProcessing.value) {
+        isShowCancelModal.value = false
+        selectedBid.value = null
+    }
+}
 </script>
 
 <template>
@@ -58,20 +104,30 @@ const props = defineProps({
                     </div>
                 </div>
 
-
                 <div class="flex justify-end space-x-2">
                     <Link :href="route('customer.chats.index', { user: bid.tasker.id })"
-                        class="px-2 py-1 border border-gray-300 rounded bg-primary text-white  hover:bg-blue-700">
+                        class="px-2 py-1 border border-gray-300 rounded bg-primary text-white hover:bg-blue-700">
                         <i class="fas fa-comment mr-2"></i> মেসেজ পাঠান
                     </Link>
-                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
-                        বাতিল করুন
-                    </button>
-                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
-                        বিতর্কিত
+                    <button @click="cancelBid(bid)" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                       <i class="fas fa-times mr-2"></i> বাতিল করুন
                     </button>
                 </div>
             </div>
         </div>
+        <Modal
+            :show="isShowCancelModal"
+            @close="closeCancelModal"
+            max-width="sm"
+        >
+            <Cancel
+                :title="selectedBid?.task?.title"
+                :name="selectedBid?.tasker?.name"
+                :amount="selectedBid?.amount"
+                :is-processing="isProcessing"
+                @confirm="confirmCancel"
+                @cancel="closeCancelModal"
+            /> 
+        </Modal>
     </div>
 </template>
