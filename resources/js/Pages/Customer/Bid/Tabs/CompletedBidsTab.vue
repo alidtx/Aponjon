@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from '@inertiajs/vue3';
+
 const props = defineProps({
     taskCompleted: {
         type: Array,
@@ -28,9 +30,17 @@ const props = defineProps({
                 <div class="flex justify-between items-start mb-3">
                     <div>
                         <h3 class="text-lg font-bold text-gray-800">{{ task.task.title }}</h3>
-                        <p class="text-gray-600 text-sm">
-                            {{ task.tasker.name }} •
-                            {{ task.tasker.tasker_profile.full_address || 'এলাকা' }}
+                        <p class="text-gray-600 text-sm flex items-center gap-2 py-1">
+                            <img :src="task.tasker.tasker_profile?.profile_photo||'/img/profile/dummy-image.jpg'"
+                                :alt="task.tasker.name" class="w-6 h-6 rounded-full object-cover">
+                            <span>
+                                <Link :href="route('tasker.public.profile', task.tasker.id)"
+                                    class="text-blue-500 hover:text-blue-700 hover:underline">{{
+                                        task.tasker.name }}
+                                    <i class="fas fa-external-link-alt text-xs"></i>
+                                </Link> •
+                                {{ task.tasker.tasker_profile?.full_address || 'এলাকা' }}
+                            </span>
                         </p>
                     </div>
                     <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
