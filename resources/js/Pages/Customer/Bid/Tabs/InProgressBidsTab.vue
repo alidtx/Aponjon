@@ -45,9 +45,7 @@ const props = defineProps({
                             </span>
                         </p>
                     </div>
-                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm capitalize">
-                        {{ bid.status }}
-                    </span>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"> চলমান</span>
                 </div>
 
                 <div class="flex justify-between items-center mb-3">
