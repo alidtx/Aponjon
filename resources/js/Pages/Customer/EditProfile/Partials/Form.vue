@@ -6,11 +6,8 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import BaseNumberInput from '@/Components/BaseNumberInput.vue';
 import LocationSelector from '@/Components/LocationSelector.vue';
-import SelectInput from '@/Components/SelectInput.vue';
 import Upolad from '@/Components/Upolad.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextArea from '@/Components/TextArea.vue';
-import TagsInput from '@/Components/TagsInput.vue';
 import { toast } from 'vue3-toastify';
 import UpdateIcon from '@/Components/Icons/UpdateIcon.vue';
 

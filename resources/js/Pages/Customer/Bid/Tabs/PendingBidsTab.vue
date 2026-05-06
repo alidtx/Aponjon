@@ -5,6 +5,7 @@ import { TailwindPagination } from 'laravel-vue-pagination'
 import { ref } from 'vue'
 import axios from 'axios'
 import Confirm from '../Partials/Confirm.vue';
+import { toast } from 'vue3-toastify';
 
 const props = defineProps({
     pendingBid: {
