@@ -136,8 +136,8 @@ onMounted(() => {
             </TabPanel>
 
             <TabPanel>
-              <CompletedBidsTab :task-completed="taskCompleted" :loading="loading && !tabsLoaded.completed"
-                :is-loaded="tabsLoaded.completed" />
+              <CompletedBidsTab v-if="tabsLoaded.completed" :task-completed="taskCompleted"
+                :loading="loading && !tabsLoaded.completed" :is-loaded="tabsLoaded.completed" />
             </TabPanel>
           </TabPanels>
         </TabGroup>

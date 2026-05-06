@@ -76,47 +76,24 @@ public function inProgress()
     return BidResource::collection($bids);
 }
 public function completed()
-{
-    $customerId = auth()->id();
+{ 
+    $tasks = Bid::query()
+        ->where('status', BidStatus::Accepted->value)
 
-    $tasks = Task::query()
-        ->select([
-            'id',
-            'task_number',
-            'title',
-            'slug',
-            'budget',
-            'status',
-            'customer_id',
-            'category_id',
-            'created_at',
-            'updated_at'
-        ])
-        ->where('customer_id', $customerId)
-        ->where('status', TaskStatus::Completed->value)
+        ->whereHas('task', function ($q) {
+            $q->where('customer_id', auth()->id());
+            $q->where('status', 'completed');
+        })
 
         ->with([
-            'category:id,name',
-
-            'bids' => function ($q) {
-                $q->where('status', 'accepted')
-                  ->select([
-                      'id',
-                      'task_id',
-                      'tasker_id',
-                      'amount',
-                      'status'
-                  ])
-                  ->with('tasker:id,name,email,phone,avatar');
-            },
-
-            'customers:id,name,email,phone'
+            'task:id,title,budget,status',
+            'tasker:id,name',
+            'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
         ])
-
         ->latest()
         ->paginate(10);
 
-    return TaskResource::collection($tasks);
+    return BidResource::collection($tasks);
 }
 
 }
