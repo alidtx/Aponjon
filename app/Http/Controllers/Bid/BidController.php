@@ -6,6 +6,7 @@ use App\Enum\BidStatus;
 use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BidRequest;
+use App\Http\Requests\CancelBidRequest;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Bid;
@@ -46,7 +47,7 @@ class BidController extends Controller
         $bid->task->update(['status' => TaskStatus::Assigned->value]);
         return response()->json(['success' => true]);
     }
-    public function cancel(Request $request, Bid $bid)
+    public function cancel(CancelBidRequest $request, Bid $bid)
 {        
     
     $request->validate([
@@ -54,7 +55,7 @@ class BidController extends Controller
     ]);
     
     $bid->update(['status' => BidStatus::Rejected->value]);
-   // 'cancelled_at' => now(),
+     // 'cancelled_at' => now(),
     // 'cancelled_by' => auth()->id()
     $bid->task->update([
         'status' => TaskStatus::Cancelled->value,

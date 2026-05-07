@@ -1,4 +1,5 @@
 <script setup>
+import InputError from '@/Components/InputError.vue'
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -17,7 +18,8 @@ const props = defineProps({
     isProcessing: {
         type: Boolean,
         default: false
-    }
+    },
+    errors: Object
 })
 
 const emit = defineEmits(['confirm', 'cancel'])
@@ -56,6 +58,10 @@ const handleCancel = () => {
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
                     :disabled="isProcessing"
                 ></textarea>
+                <p v-if="errors.cancellation_reason"
+                class="text-red-500 text-sm mt-1">
+                {{ errors.cancellation_reason[0] }}
+                </p>
                 <p class="text-xs text-gray-500 mt-1">
                     আপনার মতামত আমাদের উন্নত করতে সাহায্য করবে
                 </p>

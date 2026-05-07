@@ -26,6 +26,7 @@ const emit = defineEmits(['refresh'])
 const isShowCancelModal = ref(false)
 const selectedBid = ref(null)
 const isProcessing = ref(false)
+const errors = ref({})
 
 const cancelBid = (bid) => {
     selectedBid.value = bid
@@ -47,8 +48,13 @@ const confirmCancel = async (cancellationReason) => {
             toast.success('বিড সফলভাবে বাতিল করা হয়েছে!')
         }
     } catch (error) {
-        console.error('Error cancelling bid:', error)
-        toast.error('বিড বাতিল করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।')
+        if (error.response?.status === 422) {
+           errors.value = error.response.data.errors
+      return
+   }
+
+   toast.error('সমস্যা হয়েছে')
+
     } finally {
         isProcessing.value = false
         selectedBid.value = null
@@ -125,6 +131,7 @@ const closeCancelModal = () => {
                 :name="selectedBid?.tasker?.name"
                 :amount="selectedBid?.amount"
                 :is-processing="isProcessing"
+                :errors="errors"
                 @confirm="confirmCancel"
                 @cancel="closeCancelModal"
             /> 
