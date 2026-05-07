@@ -21,8 +21,6 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['refresh'])
-
 const isShowCancelModal = ref(false)
 const selectedBid = ref(null)
 const isProcessing = ref(false)
@@ -67,6 +65,7 @@ const closeCancelModal = () => {
         selectedBid.value = null
     }
 }
+const emit = defineEmits(['refresh'])
 </script>
 
 <template>

@@ -40,8 +40,8 @@ const waitingForAcceptance = async () => {
   }
 }
 
-const accepted = async () => {
-  if (tabsLoaded.value.bidAccepted) return
+const accepted = async (forceRefresh = false) => {
+  if (!forceRefresh && tabsLoaded.value.bidAccepted) return
 
   loading.value = true
   try {
@@ -87,11 +87,10 @@ const Taskcompleted = async () => {
 
 const handleTabChange = (index) => {
   if (index === 1 && !tabsLoaded.value.bidAccepted) {
-    accepted()
-  }else if (index === 2 && !tabsLoaded.value.bidInprogress) {
+    accepted(false) 
+  } else if (index === 2 && !tabsLoaded.value.bidInprogress) {
     InProgress()
-  }
-   else if (index === 3 && !tabsLoaded.value.completed) {
+  } else if (index === 3 && !tabsLoaded.value.completed) {
     Taskcompleted()
   }
 }
@@ -157,7 +156,9 @@ onMounted(() => {
 
             <TabPanel>
               <AcceptedBidsTab :bid-accepted="bidAccepted" :loading="loading && !tabsLoaded.bidAccepted"
-                :is-loaded="tabsLoaded.bidAccepted" />
+                :is-loaded="tabsLoaded.bidAccepted" 
+                @refresh="() => accepted(true)"  
+                />
             </TabPanel>
              <TabPanel>
               <InProgressBidsTab v-if="tabsLoaded.bidInprogress" :bid-inprogress="bidInprogress"
