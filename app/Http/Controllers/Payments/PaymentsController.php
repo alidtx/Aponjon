@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Bid;
+namespace App\Http\Controllers\Payments;
 
 use App\Enum\BidStatus;
 use App\Enum\TaskStatus;
@@ -10,16 +10,16 @@ use App\Models\Bid;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class BidDisputedController extends Controller
+class PaymentsController extends Controller
 {
     public function index()
-    {
-        $disputed = Bid::query()
+    {  
+        $customerPayableBids = Bid::query()
             ->where('status', BidStatus::Accepted->value)
 
             ->whereHas('task', function ($q) {
                 $q->where('customer_id', auth()->id());
-                $q->where('status', TaskStatus::Disputed->value);
+                $q->where('status', TaskStatus::Completed->value);
             })
 
             ->with([
@@ -29,8 +29,8 @@ class BidDisputedController extends Controller
             ])
             ->latest()
             ->paginate(10);
-        return Inertia::render('Customer/Disputed/Index', [
-            'disputed' => BidResource::collection($disputed)
+        return Inertia::render('Customer/Payments/Index',[
+            'payableBids' => BidResource::collection($customerPayableBids)
         ]);
     }
 }

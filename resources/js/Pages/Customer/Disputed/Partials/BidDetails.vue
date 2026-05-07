@@ -135,14 +135,14 @@ const getTimeAgo = (date) => {
             </div>
         </div>
 
-        <div v-if="task.proposal && task.proposal !== 'ffff'">
+        <div>
             <h4 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
                 <i class="fas fa-file-alt text-primary mr-2"></i>
-                প্রস্তাবনা
+                বিতর্কের কারন
             </h4>
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
                 <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                    {{ task.proposal }}
+                    {{ task.task.customer_notes }}
                 </p>
             </div>
         </div>

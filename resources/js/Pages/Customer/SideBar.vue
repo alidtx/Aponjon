@@ -118,9 +118,9 @@ onMounted(() => {
                     :class="route().current('customer.disputed') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-exclamation-triangle mr-3 text-primary"></i>বিতর্কিত কাজসমূহ
                 </Link>
-                 <Link :href="route('customer.disputed')"
+                 <Link :href="route('customer.payment')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
-                    :class="route().current('customer.gig') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    :class="route().current('customer.payment') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-money-check-alt mr-3 text-primary"></i>কাজের পেমেন্ট দিন
                 </Link>
             </nav>

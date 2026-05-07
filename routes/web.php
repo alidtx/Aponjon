@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Bid\BidController;
 use App\Http\Controllers\Bid\BidDisputedController;
+use App\Http\Controllers\Payments\PaymentsController;
 use App\Http\Controllers\Customer\CustomerBidController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\KycApprovalController;
@@ -45,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/bid-activity', [CustomerController::class, 'bidActivity'])->name('bid.activity');
             Route::get('/bid', [CustomerBidController::class, 'index'])->name('bids');
             Route::get('/disputed', [BidDisputedController::class, 'index'])->name('disputed');
+            Route::get('/payment', [PaymentsController::class, 'index'])->name('payment');
             Route::post('customer/bids/{bid}/accept', [BidController::class, 'accept'])->name('bids.accept');
             Route::post('customer/bids/{bid}/cancel', [BidController::class, 'cancel'])->name('bids.cancel');
             Route::post('/customer/bids/dispute/{bid}', [BidController::class, 'dispute'])->name('bids.dispute');
