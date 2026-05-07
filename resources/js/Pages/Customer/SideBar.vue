@@ -110,12 +110,12 @@ onMounted(() => {
                 </Link>
                 <Link :href="route('customer.bids')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
-                    :class="route().current('tasker.pending.tasks') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    :class="route().current('customer.bids') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-file-signature mr-3 text-primary"></i>আবেদনকৃত কাজসমূহ
                 </Link>
                 <Link :href="route('customer.disputed')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
-                    :class="route().current('customer.gig') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    :class="route().current('customer.disputed') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-exclamation-triangle mr-3 text-primary"></i>বিতর্কিত কাজসমূহ
                 </Link>
                  <Link :href="route('customer.disputed')"
