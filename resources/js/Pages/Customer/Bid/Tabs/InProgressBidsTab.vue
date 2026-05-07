@@ -27,26 +27,26 @@ const isShowDisputedModal = ref(false)
 const selectedBid = ref(null)
 const isProcessing = ref(false)
 const errors = ref({})
-const modalKey = ref(0) 
+const modalKey = ref(0)
 
 const disputed = (bid) => {
     selectedBid.value = bid
-    errors.value = {} 
-    modalKey.value++ 
+    errors.value = {}
+    modalKey.value++
     isShowDisputedModal.value = true
 }
 
 const confirmDisputed = async (disputeReason) => {
     if (!selectedBid.value) return
-    
+
     isProcessing.value = true
     errors.value = {}
-    
+
     try {
         const response = await axios.post(route('customer.bids.dispute', selectedBid.value.id), {
             dispute_reason: disputeReason
         })
-        
+
         if (response.data.success) {
             isShowDisputedModal.value = false
             emit('refresh') // Refresh the list
@@ -72,6 +72,13 @@ const closeModal = () => {
         selectedBid.value = null
         errors.value = {}
     }
+}
+
+const statusLabel = (status) => {
+    return {
+        in_progress: 'কাজ চলমান',
+        disputed: 'বিতর্কিত',
+    }[status] || 'অজানা';
 }
 </script>
 
@@ -103,7 +110,9 @@ const closeModal = () => {
                             </span>
                         </p>
                     </div>
-                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">কাজ চলমান</span>
+                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                        {{ statusLabel(bid.task.status) }}
+                    </span>
                 </div>
 
                 <div class="flex justify-between items-center mb-3">
@@ -120,28 +129,18 @@ const closeModal = () => {
                         class="px-2 py-1 border border-gray-300 rounded bg-primary text-white hover:bg-blue-700">
                         <i class="fas fa-comment mr-2"></i> মেসেজ পাঠান
                     </Link>
-                    <button @click="disputed(bid)" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                    <button v-if="bid.task.status !== 'disputed'" @click="disputed(bid)"
+                        class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
                         <i class="fas fa-exclamation-triangle mr-1"></i>বিতর্কিত
                     </button>
                 </div>
             </div>
         </div>
-        
-        <Modal
-            :show="isShowDisputedModal"
-            @close="closeModal"
-            max-width="sm"
-        >
-            <Disputed
-                :key="modalKey"
-                :title="selectedBid?.task?.title"
-                :name="selectedBid?.tasker?.name"
-                :amount="selectedBid?.amount"
-                :is-processing="isProcessing"
-                :errors="errors"
-                @confirm="confirmDisputed"
-                @cancel="closeModal"
-            /> 
+
+        <Modal :show="isShowDisputedModal" @close="closeModal" max-width="sm">
+            <Disputed :key="modalKey" :title="selectedBid?.task?.title" :name="selectedBid?.tasker?.name"
+                :amount="selectedBid?.amount" :is-processing="isProcessing" :errors="errors" @confirm="confirmDisputed"
+                @cancel="closeModal" />
         </Modal>
     </div>
 </template>
