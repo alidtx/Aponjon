@@ -84,10 +84,7 @@ class CustomerBidController extends Controller
 
             ->whereHas('task', function ($q) {
                 $q->where('customer_id', auth()->id());
-                $q->whereIn('status', [
-                    TaskStatus::InProgress->value,
-                    TaskStatus::Disputed->value,
-                ]);
+                $q->where('status', TaskStatus::InProgress->value);
             })
 
             ->with([
