@@ -1,6 +1,6 @@
 <script setup>
 import InputError from '@/Components/InputError.vue'
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 const props = defineProps({
     title: {
@@ -19,14 +19,27 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    errors: Object
+    errors: {
+        type: Object,
+        default: () => ({})
+    }
 })
 
 const emit = defineEmits(['confirm', 'cancel'])
 const cancellationReason = ref('')
+watch(() => props.errors, (newErrors) => {
+
+}, { deep: true })
+
+onMounted(() => {
+    cancellationReason.value = ''
+})
 
 const handleConfirm = () => {
-    emit('confirm', cancellationReason.value)
+    const reason = cancellationReason.value.trim()
+    if (reason.length >= 5) { 
+        emit('confirm', reason)
+    }
 }
 
 const handleCancel = () => {
@@ -58,9 +71,8 @@ const handleCancel = () => {
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
                     :disabled="isProcessing"
                 ></textarea>
-                <p v-if="errors.cancellation_reason"
-                class="text-red-500 text-sm mt-1">
-                {{ errors.cancellation_reason[0] }}
+                <p v-if="errors.cancellation_reason" class="text-red-500 text-sm mt-1">
+                    {{ errors.cancellation_reason[0] }}
                 </p>
                 <p class="text-xs text-gray-500 mt-1">
                     আপনার মতামত আমাদের উন্নত করতে সাহায্য করবে
@@ -77,7 +89,7 @@ const handleCancel = () => {
                 </button>
                 <button 
                     @click="handleConfirm"
-                    :disabled="isProcessing || !cancellationReason.trim()"
+                    :disabled="isProcessing || cancellationReason.trim().length < 5"
                     class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                     <i v-if="isProcessing" class="fas fa-spinner fa-spin mr-2"></i>

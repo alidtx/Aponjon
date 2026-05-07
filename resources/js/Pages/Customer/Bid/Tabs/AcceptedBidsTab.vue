@@ -25,9 +25,12 @@ const isShowCancelModal = ref(false)
 const selectedBid = ref(null)
 const isProcessing = ref(false)
 const errors = ref({})
+const modalKey = ref(0) 
 
 const cancelBid = (bid) => {
     selectedBid.value = bid
+    errors.value = {} 
+    modalKey.value++ 
     isShowCancelModal.value = true
 }
 
@@ -35,6 +38,7 @@ const confirmCancel = async (cancellationReason) => {
     if (!selectedBid.value) return
     
     isProcessing.value = true
+    
     try {
         const response = await axios.post(route('customer.bids.cancel', selectedBid.value.id), {
             cancellation_reason: cancellationReason
@@ -44,18 +48,19 @@ const confirmCancel = async (cancellationReason) => {
             isShowCancelModal.value = false
             emit('refresh')
             toast.success('বিড সফলভাবে বাতিল করা হয়েছে!')
+            selectedBid.value = null
+            errors.value = {}
         }
     } catch (error) {
         if (error.response?.status === 422) {
-           errors.value = error.response.data.errors
-      return
-   }
-
-   toast.error('সমস্যা হয়েছে')
-
+            errors.value = error.response.data.errors
+            return
+        }
+        toast.error('সমস্যা হয়েছে')
+        isShowCancelModal.value = false
+        selectedBid.value = null
     } finally {
         isProcessing.value = false
-        selectedBid.value = null
     }
 }
 
@@ -63,8 +68,10 @@ const closeCancelModal = () => {
     if (!isProcessing.value) {
         isShowCancelModal.value = false
         selectedBid.value = null
+        errors.value = {}
     }
 }
+
 const emit = defineEmits(['refresh'])
 </script>
 
@@ -126,6 +133,7 @@ const emit = defineEmits(['refresh'])
             max-width="sm"
         >
             <Cancel
+                :key="modalKey"
                 :title="selectedBid?.task?.title"
                 :name="selectedBid?.tasker?.name"
                 :amount="selectedBid?.amount"
