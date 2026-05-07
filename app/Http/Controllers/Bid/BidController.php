@@ -7,6 +7,7 @@ use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BidRequest;
 use App\Http\Requests\CancelBidRequest;
+use App\Http\Requests\DisputedBidRequest;
 use App\Http\Resources\BidResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Bid;
@@ -49,11 +50,7 @@ class BidController extends Controller
     }
     public function cancel(CancelBidRequest $request, Bid $bid)
 {        
-    
-    $request->validate([
-        'cancellation_reason' => 'required|string|min:5|max:100'
-    ]);
-    
+      
     $bid->update(['status' => BidStatus::Rejected->value]);
      // 'cancelled_at' => now(),
     // 'cancelled_by' => auth()->id()
@@ -72,4 +69,16 @@ class BidController extends Controller
 
     return response()->json(['success' => true]);
 }
+public function dispute(DisputedBidRequest $request, Bid $bid)
+{
+   
+    $bid->task->update([
+        'status' => TaskStatus::Disputed->value,
+        'dispute_reason' => $request->dispute_reason,
+        // 'disputed_at' => now()
+    ]);
+    
+    return response()->json(['success' => true]);
+}
+
 }

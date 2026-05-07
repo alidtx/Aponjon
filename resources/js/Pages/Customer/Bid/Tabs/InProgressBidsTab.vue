@@ -1,5 +1,10 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import Disputed from '../Partials/Disputed.vue';
+import Modal from '@/Components/Modal.vue';
+import { ref } from 'vue';
+import axios from 'axios';
+import { toast } from 'vue3-toastify';
 
 const props = defineProps({
     bidInprogress: {
@@ -15,6 +20,59 @@ const props = defineProps({
         default: false
     }
 })
+
+const emit = defineEmits(['refresh'])
+
+const isShowDisputedModal = ref(false)
+const selectedBid = ref(null)
+const isProcessing = ref(false)
+const errors = ref({})
+const modalKey = ref(0) 
+
+const disputed = (bid) => {
+    selectedBid.value = bid
+    errors.value = {} 
+    modalKey.value++ 
+    isShowDisputedModal.value = true
+}
+
+const confirmDisputed = async (disputeReason) => {
+    if (!selectedBid.value) return
+    
+    isProcessing.value = true
+    errors.value = {}
+    
+    try {
+        const response = await axios.post(route('customer.bids.dispute', selectedBid.value.id), {
+            dispute_reason: disputeReason
+        })
+        
+        if (response.data.success) {
+            isShowDisputedModal.value = false
+            emit('refresh') // Refresh the list
+            toast.success('বিডটি সফলভাবে বিতর্কিত করা হয়েছে!')
+            selectedBid.value = null
+        }
+    } catch (error) {
+        if (error.response?.status === 422) {
+            errors.value = error.response.data.errors
+            return // Don't close modal, let user fix
+        }
+        toast.error('সমস্যা হয়েছে, আবার চেষ্টা করুন')
+        isShowDisputedModal.value = false
+        selectedBid.value = null
+    } finally {
+        isProcessing.value = false
+    }
+}
+
+const closeModal = () => {
+    if (!isProcessing.value) {
+        isShowDisputedModal.value = false
+        selectedBid.value = null
+        errors.value = {}
+    }
+}
 </script>
 
 <template>
@@ -23,10 +81,10 @@ const props = defineProps({
             <p class="text-gray-500">লোড হচ্ছে...</p>
         </div>
         <div v-else-if="!bidInprogress || bidInprogress.length === 0" class="text-center py-12">
-            <p class="text-gray-500">কোন একসেপ্টেড বিড নেই</p>
+            <p class="text-gray-500">কাজ চলমান নেই</p>
         </div>
         <div v-else class="space-y-4">
-            <div v-for="bid in bidInprogress" :key="bid.id" class="border border-green-200 rounded-lg p-4 bg-green-50">
+            <div v-for="bid in bidInprogress" :key="bid.id" class="border border-blue-200 rounded-lg p-4 bg-blue-50">
                 <div class="flex justify-between items-start mb-3">
                     <div>
                         <h3 class="text-lg font-bold text-gray-800">{{ bid.task.title }}</h3>
@@ -45,7 +103,7 @@ const props = defineProps({
                             </span>
                         </p>
                     </div>
-                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">গৃহীত হয়েছে</span>
+                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">কাজ চলমান</span>
                 </div>
 
                 <div class="flex justify-between items-center mb-3">
@@ -54,24 +112,36 @@ const props = defineProps({
                     </div>
                     <div class="text-sm text-gray-600">
                         <i class="fas fa-clock mr-1"></i>
-                        অনুমোদিত: {{ new Date(bid.updated_at).toLocaleDateString('bn-BD') }}
+                        শুরু: {{ new Date(bid.updated_at).toLocaleDateString('bn-BD') }}
                     </div>
                 </div>
-
-
                 <div class="flex justify-end space-x-2">
                     <Link :href="route('customer.chats.index', { user: bid.tasker.id })"
-                        class="px-2 py-1 border border-gray-300 rounded bg-primary text-white  hover:bg-blue-700">
+                        class="px-2 py-1 border border-gray-300 rounded bg-primary text-white hover:bg-blue-700">
                         <i class="fas fa-comment mr-2"></i> মেসেজ পাঠান
                     </Link>
-                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
-                        বাতিল করুন
-                    </button>
-                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-300 text-sm">
-                        বিতর্কিত
+                    <button @click="disputed(bid)" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>বিতর্কিত
                     </button>
                 </div>
             </div>
         </div>
+        
+        <Modal
+            :show="isShowDisputedModal"
+            @close="closeModal"
+            max-width="sm"
+        >
+            <Disputed
+                :key="modalKey"
+                :title="selectedBid?.task?.title"
+                :name="selectedBid?.tasker?.name"
+                :amount="selectedBid?.amount"
+                :is-processing="isProcessing"
+                :errors="errors"
+                @confirm="confirmDisputed"
+                @cancel="closeModal"
+            /> 
+        </Modal>
     </div>
 </template>
