@@ -23,7 +23,7 @@ class BidDisputedController extends Controller
             })
 
             ->with([
-                'task:id,title,budget,status',
+                'task:id,title,budget,status,task_number',
                 'tasker:id,name',
                 'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
             ])
