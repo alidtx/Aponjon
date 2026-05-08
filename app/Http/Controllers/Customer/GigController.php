@@ -29,7 +29,6 @@ class GigController extends Controller
 
     $customerTasks = auth()->user()
       ->customerTasks()
-      ->where('status', TaskStatus::Posted->value)
       ->with('category:id,name')
       ->latest()
       ->paginate($perPage);
