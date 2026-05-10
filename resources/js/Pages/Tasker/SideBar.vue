@@ -113,6 +113,11 @@ onMounted(() => {
                     :class="route().current('tasker.pending.tasks') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
                     <i class="fas fa-gavel mr-3 text-primary"></i>আপনার অপেক্ষমাণ কাজ
                 </Link>
+                <Link :href="route('tasker.applied.task')"
+                    class="flex items-center p-3 rounded-lg font-medium transition-colors"
+                    :class="route().current('tasker.applied.task') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
+                    <i class="fas fa-file-signature mr-3 text-primary"></i>আবেদন করা কাজগুলো
+                </Link>
             </nav>
         </div>
     </div>
