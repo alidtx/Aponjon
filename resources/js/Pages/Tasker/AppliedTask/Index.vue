@@ -2,7 +2,7 @@
 import TaskerAuthenticatedLayout from '@/Layouts/TaskerAuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import DataTable from '@/Components/DataTable/Index.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import AppliedTaskDetails from './Partials/AppliedTaskDetails.vue';
 
@@ -17,9 +17,10 @@ const props=defineProps({
 
 
 const tableHeader = ref([
-    { name: 'কাজের নাম', data: 'title', orderable: true, contentType: 'text' },
-    { name: 'কাজের নম্বর', data: 'task_number', orderable: true, contentType: 'text' },
-    { name: 'বাজেট', data: 'budget', orderable: true, contentType: 'text' },
+    { name: 'কাজের নাম', data: 'task.title', orderable: true, contentType: 'text' },
+    { name: 'কাজের নম্বর', data: 'task.task_number', orderable: true, contentType: 'text' },
+    { name: 'বাজেট', data: 'task.budget', orderable: true, contentType: 'text' },
+    { name: 'আপনার প্রপোজাল', data: 'amount', orderable: true, contentType: 'text' },
     { name: 'স্ট্যাটাস', data: 'status', orderable: true, contentType: 'text', isLabel: true },
     { name: 'অ্যাকশন', data: 'action', orderable: false, contentType: 'slots', slotsName: 'actions' }
 ])
@@ -37,7 +38,7 @@ const closeModal = () => {
     selectedTask.value = null
 }
 
-
+const appliedTask = computed(() => props.appliedTask?.data || [])
 
 </script>
 
@@ -51,7 +52,7 @@ const closeModal = () => {
                 <div class="flex justify-between items-center py-3">
                     <h2 class="text-2xl font-bold text-dark">আপনার আবেদনকৃত কাজগুলো</h2>
                 </div>
-                <DataTable :tableHeader="tableHeader" :tableData="props.appliedTask?.data"
+                <DataTable :tableHeader="tableHeader" :tableData="appliedTask"
                     @rowClicked="handleRowClick" @getFilteredResults="loadMoreData" @updateColumns="handleColumnUpdate">
                     <template #actions="{ rowData }">
 

@@ -15,7 +15,7 @@ class TaskerBidController extends Controller
      public function Index()
      {
           $appliedTask = Bid::query()
-               ->select('id', 'task_id', 'tasker_id', 'status', 'created_at')
+               ->select('id', 'task_id', 'tasker_id', 'status','amount', 'created_at')
                ->whereStatus(BidStatus::Pending->value)
                ->whereTaskerId(auth()->id())
                ->with([
