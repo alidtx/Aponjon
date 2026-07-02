@@ -50,7 +50,7 @@ class TaskController extends Controller
     ]);
   }
 
-  public function AssignedTask()
+  public function taskerTaskStatus()
   {
     $allBids = $this->getAllBids(auth()->id());
     return Inertia::render('Tasker/AssignedTasks/Index', [

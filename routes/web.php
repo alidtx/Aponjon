@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/applied-task', [TaskerBidController::class, 'index'])->name('applied.task');
             Route::get('/tasker-success-rate', [TaskController::class, 'TaskerSuccessRate'])->name('success.rate');
             Route::get('/pending-tasks', [TaskController::class, 'pendingTasks'])->name('pending.tasks');
-            Route::get('/assigned-tasks', [TaskController::class, 'AssignedTask'])->name('assigned.tasks');
+            Route::get('/task-status', [TaskController::class, 'taskerTaskStatus'])->name('task.status');
             Route::get('/edit-profile/{taskerId}', [TaskerProfileController::class, 'editProfile'])->name('profile.edit');
             Route::post('/update-profile/{taskerId}', [TaskerProfileController::class, 'updateProfile'])->name('profile.update');
             Route::get('/chats', [TaskerChatController::class, 'index'])->name('chats.index');
