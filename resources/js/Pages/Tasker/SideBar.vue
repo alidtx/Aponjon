@@ -106,7 +106,7 @@ onMounted(() => {
                 <Link :href="route('tasker.task.status')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
                     :class="route().current('tasker.task.status') ? 'text-primary bg-blue-50' : 'text-gray-600 hover:bg-gray-50'">
-                    <i class="fas fa-tasks mr-3 text-primary"></i>আপনাকে দেওয়া কাজ
+                    <i class="fas fa-tasks mr-3 text-primary"></i>আপনার আবেদনসমূহ
                 </Link>
                 <Link :href="route('tasker.pending.tasks')"
                     class="flex items-center p-3 rounded-lg font-medium transition-colors"
