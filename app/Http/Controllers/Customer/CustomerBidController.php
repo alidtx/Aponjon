@@ -7,27 +7,63 @@ use App\Enum\PaginationLimits;
 use App\Enum\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BidResource;
-use App\Http\Resources\TaskResource;
 use App\Models\Bid;
-use App\Models\Task;
-use Inertia\Inertia;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerBidController extends Controller
 {
-
     public function index()
     {
         return Inertia::render('Customer/Bid/Index');
     }
+
     public function waitingForAcceptance(Request $request)
     {
-        $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIVE->value);
-        $perPage = max(1, min(100, $perPage));
+        return BidResource::collection(
+            $this->baseQuery()
+                ->where('status', BidStatus::Pending->value)
+                ->latest('id')
+                ->paginate($this->perPage($request))
+        );
+    }
 
-        $customerId = auth()->id();
+    public function accepted(Request $request)
+    {
+        return BidResource::collection(
+            $this->baseQuery()
+                ->where('status', BidStatus::Accepted->value)
+                ->latest('id')
+                ->paginate($this->perPage($request))
+        );
+    }
 
-        $bids = Bid::query()
+    public function inProgress(Request $request)
+    {
+        return BidResource::collection(
+            $this->baseQuery()
+                ->where('status', BidStatus::Accepted->value)
+                ->whereHas('task', fn (Builder $query) => $query->where('status', TaskStatus::InProgress->value))
+                ->latest('id')
+                ->paginate($this->perPage($request))
+        );
+    }
+
+    public function completed(Request $request)
+    {
+        return BidResource::collection(
+            $this->baseQuery()
+                ->where('status', BidStatus::Accepted->value)
+                ->whereHas('task', fn (Builder $query) => $query->where('status', TaskStatus::Completed->value))
+                ->latest('id')
+                ->paginate($this->perPage($request))
+        );
+    }
+
+    private function baseQuery(): Builder
+    {
+        return Bid::query()
             ->select([
                 'id',
                 'task_id',
@@ -36,86 +72,24 @@ class CustomerBidController extends Controller
                 'proposal',
                 'estimated_hours',
                 'availability',
+                'specific_date',
+                'terms_accepted',
                 'status',
-                'created_at'
+                'created_at',
+                'updated_at',
             ])
-            ->where('status', BidStatus::Pending->value)
-
-            ->whereHas('task', function ($q) use ($customerId) {
-                $q->where('customer_id', $customerId);
-            })
-
+            ->whereHas('task', fn (Builder $query) => $query->where('customer_id', auth()->id()))
             ->with([
-                'task:id,title,budget',
-                'tasker:id,name',
-                'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
-            ])
-
-            ->latest()
-            ->paginate($perPage);
-
-        return BidResource::collection($bids);
+                'task:id,title,budget,status,task_number,customer_id,customer_notes,created_at,updated_at',
+                'tasker:id,name,phone,avatar,is_verified',
+                'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id,designation,rating,is_online',
+            ]);
     }
 
-    public function accepted()
+    private function perPage(Request $request): int
     {
-        $bids = Bid::query()
-            ->where('status', BidStatus::Accepted->value)
+        $perPage = $request->integer('per_page', PaginationLimits::PER_PAGE_FIVE->value);
 
-            ->whereHas('task', function ($q) {
-                $q->where('customer_id', auth()->id());
-            })
-
-            ->with([
-                'task:id,title,budget',
-                'tasker:id,name',
-                'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
-            ])
-            ->latest()
-            ->paginate(10);
-
-        return BidResource::collection($bids);
-    }
-
-    public function inProgress()
-    {
-        $tasks = Bid::query()
-            ->where('status', BidStatus::Accepted->value)
-
-            ->whereHas('task', function ($q) {
-                $q->where('customer_id', auth()->id());
-                $q->where('status', TaskStatus::InProgress->value);
-            })
-
-            ->with([
-                'task:id,title,budget,status',
-                'tasker:id,name',
-                'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
-            ])
-            ->latest()
-            ->paginate(10);
-
-        return BidResource::collection($tasks);
-    }
-
-    public function completed()
-    {
-        $tasks = Bid::query()
-            ->where('status', BidStatus::Accepted->value)
-
-            ->whereHas('task', function ($q) {
-                $q->where('customer_id', auth()->id());
-                $q->where('status', TaskStatus::Completed);
-            })
-
-            ->with([
-                'task:id,title,budget,status',
-                'tasker:id,name',
-                'tasker.taskerProfiles:id,user_id,district_id,zila_id,upozila_id'
-            ])
-            ->latest()
-            ->paginate(10);
-
-        return BidResource::collection($tasks);
+        return max(1, min(100, $perPage));
     }
 }
