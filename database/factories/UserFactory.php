@@ -2,58 +2,88 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\District;
-use App\Models\Zila;
 use App\Models\Upozila;
 use App\Models\User;
+use App\Models\Zila;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
     protected $model = User::class;
 
+    protected static ?string $password = null;
+
     public function definition(): array
     {
-        $district = District::factory()->create();
-        $zila = Zila::factory()->create(['district_id' => $district->id]);
-        $upozila = Upozila::factory()->create(['zila_id' => $zila->id]);
+        [$districtId, $zilaId, $upozilaId] = $this->resolveLocationIds();
 
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->unique()->phoneNumber(),
-            'password' => bcrypt('password'),
-            'role' => $this->getWeightedUserRole(), 
-            'avatar' => fake()->optional(0.7)->imageUrl(100, 100, 'people'),
+            'phone' => fake()->unique()->numerify('+8801#########'),
+            'password' => static::$password ??= Hash::make('password'),
+            'role' => fake()->randomElement(['customer', 'tasker']),
+            'avatar' => fake()->optional(0.6)->imageUrl(100, 100, 'people'),
             'is_verified' => fake()->boolean(80),
-            'district_id' => $district->id,
-            'zila_id' => $zila->id,
-            'upozila_id' => $upozila->id,
+            'status' => fake()->randomElement(['pending', 'approved', 'rejected']),
+            'is_active' => fake()->boolean(90),
+            'is_profile_completed' => fake()->boolean(75),
+            'district_id' => $districtId,
+            'zila_id' => $zilaId,
+            'upozila_id' => $upozilaId,
             'remember_token' => Str::random(10),
         ];
     }
 
-     private function getWeightedUserRole(): string
+    public function customer(): static
     {
-        
-        $roles = [
-            'customer' => 47, 
-            'tasker'   => 47, 
-            'admin'    => 6,  
-        ];
-
-        $rand = rand(1, 100);
-        $cumulative = 0;
-
-        foreach ($roles as $role => $weight) {
-            $cumulative += $weight;
-            if ($rand <= $cumulative) {
-                return $role;
-            }
-        }
-
-        return 'customer';
+        return $this->state(fn () => [
+            'role' => 'customer',
+            'status' => 'approved',
+            'is_verified' => true,
+            'is_active' => true,
+        ]);
     }
 
+    public function tasker(): static
+    {
+        return $this->state(fn () => [
+            'role' => 'tasker',
+            'status' => 'approved',
+            'is_verified' => true,
+            'is_active' => true,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn () => [
+            'role' => 'admin',
+            'status' => 'approved',
+            'is_verified' => true,
+            'is_active' => true,
+            'is_profile_completed' => true,
+        ]);
+    }
+
+    private function resolveLocationIds(): array
+    {
+        $upozila = Upozila::query()->inRandomOrder()->first();
+
+        if ($upozila) {
+            $zila = Zila::query()->find($upozila->zila_id);
+            $district = $zila ? District::query()->find($zila->district_id) : null;
+
+            return [$district?->id, $zila?->id, $upozila->id];
+        }
+
+        $district = District::factory()->create();
+        $zila = Zila::factory()->create(['district_id' => $district->id]);
+        $upozila = Upozila::factory()->create(['zila_id' => $zila->id]);
+
+        return [$district->id, $zila->id, $upozila->id];
+    }
 }

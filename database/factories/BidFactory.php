@@ -2,23 +2,25 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
+use App\Models\Bid;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bid>
- */
 class BidFactory extends Factory
 {
+    protected $model = Bid::class;
+
     public function definition(): array
     {
         $availability = $this->faker->randomElement(['today', 'tomorrow', 'specific']);
+        $task = Task::query()->inRandomOrder()->first() ?? Task::factory()->create();
+        $tasker = User::query()->where('role', 'tasker')->inRandomOrder()->first() ?? User::factory()->tasker()->create();
 
         return [
-            'task_id' => Task::factory(),
-            'tasker_id' => User::factory(),
-            'amount' => $this->faker->randomFloat(2, 100, 100000),
+            'task_id' => $task->id,
+            'tasker_id' => $tasker->id,
+            'amount' => $this->faker->randomFloat(2, 500, 20000),
             'proposal' => $this->faker->paragraph(),
             'estimated_hours' => $this->faker->numberBetween(1, 40),
             'availability' => $availability,

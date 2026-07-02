@@ -2,28 +2,24 @@
 
 namespace Database\Factories;
 
+use App\Models\Review;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Review>
- */
 class ReviewFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Review::class;
+
     public function definition(): array
-    {  
+    {
+        $task = Task::query()->whereNotNull('tasker_id')->inRandomOrder()->first() ?? Task::factory()->create();
         $type = $this->faker->randomElement(['customer_to_tasker', 'tasker_to_customer']);
+
         return [
-            'task_id' => Task::factory(),
-            'reviewer_id' => User::factory(),
-            'reviewee_id' => User::factory(),
-            'rating' => $this->faker->numberBetween(1, 5),
+            'task_id' => $task->id,
+            'reviewer_id' => $type === 'customer_to_tasker' ? $task->customer_id : $task->tasker_id,
+            'reviewee_id' => $type === 'customer_to_tasker' ? $task->tasker_id : $task->customer_id,
+            'rating' => $this->faker->numberBetween(3, 5),
             'comment' => $this->faker->sentence(12),
             'type' => $type,
         ];

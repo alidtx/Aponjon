@@ -2,17 +2,29 @@
 
 namespace Database\Seeders;
 
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Bid;
+use App\Models\Task;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
 class BidTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Bid::factory()->count(10)->create();
+        $taskerIds = User::query()
+            ->where('role', 'tasker')
+            ->pluck('id');
+
+        Task::query()->each(function (Task $task) use ($taskerIds) {
+            $selectedTaskers = $taskerIds->shuffle()->take(rand(2, min(4, $taskerIds->count())));
+
+            foreach ($selectedTaskers as $taskerId) {
+                Bid::factory()->create([
+                    'task_id' => $task->id,
+                    'tasker_id' => $taskerId,
+                    'status' => 'pending',
+                ]);
+            }
+        });
     }
 }

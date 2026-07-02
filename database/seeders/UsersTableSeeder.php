@@ -2,22 +2,21 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+
 class UsersTableSeeder extends Seeder
 {
-    
     public function run(): void
-    {  
-        User::factory()->create([
+    {
+        User::factory()->admin()->create([
             'name' => 'Super Admin',
             'email' => 'admin@gmail.com',
             'phone' => '+8801000000001',
-            'role' => 'admin',
-            'is_verified' => true,
+            'is_profile_completed' => true,
         ]);
-           
-        User::factory()->count(10)->create();
+
+        User::factory()->customer()->count(12)->create();
+        User::factory()->tasker()->count(10)->create();
     }
 }

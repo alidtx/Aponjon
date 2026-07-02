@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-         $this->call([
+        $this->call([
             DistrictsTableSeeder::class,
             ZilasTableSeeder::class,
             UpozilasTableSeeder::class,
@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
             CategoryTableSeeder::class,
             ServiceTableSeeder::class,
             TaskTableSeeder::class,
-            // BidTableSeeder::class,
+            BidTableSeeder::class,
             OrderTableSeeder::class,
             ReviewTableSeeder::class,
-            // PermissionTableSeeder::class
+            // PermissionTableSeeder::class,
         ]);
     }
 }
