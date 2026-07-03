@@ -23,9 +23,6 @@ Route::get('/marketplace', [HomeController::class, 'marketplace'])->name('market
 Route::get('/category', [HomeController::class, 'category'])->name('category');
 
 Route::get('/tasks/{taskId}/{slug}', [BidController::class, 'show'])->name('tasks.show');
-Route::get('/show-bid-submit-form/{taskId}/{slug}', [BidController::class, 'showBidSubmissionForm'])->name('show.bid.submit.form');
-Route::post('/bid-store', [BidController::class, 'bidStore'])->name('bid.store');
-
 Route::prefix('tasker')->name('tasker.')->group(function () {
     Route::get('public-profile/{TaskerId}', [TaskerProfileController::class, 'TaskerPublicProfile'])->name('public.profile');
 });
@@ -100,7 +97,10 @@ Route::middleware(['auth'])->group(function () {
              Route::post('/update-tasker-profile-settings', [TaskerProfileSettingController::class, 'updateSetting'])
             ->name('update.tasker.profile.settings'); 
             Route::delete('/delete-tasker-account', [TaskerProfileSettingController::class, 'destroy'])
-            ->name('delete.tasker.account'); 
+            ->name('delete.tasker.account');
+            Route::get('/show-bid-submit-form/{taskId}/{slug}', [BidController::class, 'showBidSubmissionForm'])
+            ->name('show.bid.submit.form');
+            Route::post('/bid-store', [BidController::class, 'bidStore'])->name('bid.store');
         });
     });
 

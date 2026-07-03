@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Enum\Role;
+use App\Enum\UserStatus;
 use App\Models\Bid;
 use App\Models\Order;
 use App\Models\Task;
+use Illuminate\Auth\Access\AuthorizationException;
 
 
 class BidService
@@ -82,9 +85,23 @@ class BidService
     }
     public static function store($request)
     {
+        $user = auth()->user()?->fresh();
+
+        if (!$user) {
+            throw new AuthorizationException('Please log in as a tasker to apply for a task.');
+        }
+
+        if ($user->role !== Role::Tasker->value) {
+            throw new AuthorizationException('Only taskers can apply for tasks.');
+        }
+
+        if ($user->status !== UserStatus::APPROVED->value || !$user->is_profile_completed) {
+            throw new AuthorizationException('Your account must be approved before applying for tasks.');
+        }
+
         return Bid::create([
             "task_id" => $request->task_id,
-            "tasker_id" => 3,
+            "tasker_id" => $user->id,
             "amount" => $request->bid_amount,
             "proposal" => $request->proposal,
             "estimated_hours" => $request->estimated_hours,

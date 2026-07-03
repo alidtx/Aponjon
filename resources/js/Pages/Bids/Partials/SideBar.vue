@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import InfoCard from '@/Components/InfoCard.vue';
-import { useTimeAgo } from '@/composables/useTimeAgo'
+import { useTimeAgo } from '@/composables/useTimeAgo';
 import { useBidsAverageAmount } from '@/composables/useBidsAverageAmount';
 import { findPercentage } from '@/composables/findPercentage';
 import { useBidAmounts } from '@/composables/useBidAmounts';
@@ -35,26 +35,68 @@ const props = defineProps({
             slug: null
         })
     }
-})
+});
+
+const page = usePage();
+const user = computed(() => page.props.auth?.user ?? null);
+const isLoggedIn = computed(() => !!user.value);
+const isTasker = computed(() => user.value?.role === 'tasker');
+const isApprovedTasker = computed(() => (
+    isTasker.value &&
+    user.value?.status === 'approved' &&
+    user.value?.is_profile_completed
+));
 
 const completedTaskCount = computed(() => {
-    if (!Array.isArray(props.customerTask)) return 0
+    if (!Array.isArray(props.customerTask)) return 0;
 
-    return props.customerTask.filter(
-        task => task?.status === 'completed'
-    )
-})
+    return props.customerTask.filter(task => task?.status === 'completed');
+});
 
-const successRate = findPercentage(completedTaskCount.value, props.customerTask)
-const TaskPercentage = findPercentage(props.customerTask, props.totalTaskCount)
-const average = useBidsAverageAmount(props.bids)
-const bidAmounts = useBidAmounts(props.bids)
+const successRate = findPercentage(completedTaskCount.value, props.customerTask);
+const taskPercentage = findPercentage(props.customerTask, props.totalTaskCount);
+const average = useBidsAverageAmount(props.bids);
+const bidAmounts = useBidAmounts(props.bids);
+
+const applyAction = computed(() => {
+    if (!isLoggedIn.value) {
+        return {
+            label: 'লগইন করে আবেদন করুন',
+            href: route('login'),
+            disabled: false,
+            helper: 'কাজে আবেদন করতে টাস্কার হিসেবে লগইন করুন।'
+        };
+    }
+
+    if (!isTasker.value) {
+        return {
+            label: 'শুধু টাস্কাররা আবেদন করতে পারবেন',
+            href: null,
+            disabled: true,
+            helper: 'কাস্টমার অ্যাকাউন্ট থেকে এই কাজে আবেদন বা বিড করা যাবে না।'
+        };
+    }
+
+    if (!isApprovedTasker.value) {
+        return {
+            label: 'অনুমোদন শেষ হলে আবেদন করুন',
+            href: route('kyc.awaiting-approval.index'),
+            disabled: false,
+            helper: 'আপনার টাস্কার প্রোফাইল অনুমোদনের পর এই কাজে আবেদন করতে পারবেন।'
+        };
+    }
+
+    return {
+        label: 'কাজের আবেদন করুন',
+        href: route('tasker.show.bid.submit.form', { taskId: props.currentTask.id, slug: props.currentTask.slug }),
+        disabled: false,
+        helper: 'শুধু অনুমোদিত টাস্কাররা এই কাজের জন্য বিড করতে পারেন।'
+    };
+});
 </script>
 
 <template>
-    <!-- Right Column - Bid & Stats -->
     <div class="space-y-6">
-        <!-- Budget & Action Card -->
         <div class="bg-white rounded-lg shadow-md p-6 animate-fade-in">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -79,15 +121,30 @@ const bidAmounts = useBidAmounts(props.bids)
                     <span class="font-bold text-red-600">৳{{ Math.round(bidAmounts.highest) }}</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-700">গড় বিড:</span>
+                    <span class="text-gray-700">গড় বিড:</span>
                     <span class="font-bold text-primary">৳{{ average }}</span>
                 </div>
             </div>
 
-            <Link :href="route('show.bid.submit.form', { taskId: currentTask.id, slug: currentTask.slug })"
-                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-                <i class="fas fa-gavel mr-3"></i>কাজের আবেদন করুন
+            <Link
+                v-if="applyAction.href"
+                :href="applyAction.href"
+                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-blue-700 font-medium text-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center"
+            >
+                <i class="fas fa-gavel mr-3"></i>{{ applyAction.label }}
             </Link>
+            <button
+                v-else
+                type="button"
+                disabled
+                class="w-full bg-gray-300 text-gray-600 py-3 rounded-lg font-medium text-lg flex items-center justify-center cursor-not-allowed"
+            >
+                <i class="fas fa-lock mr-3"></i>{{ applyAction.label }}
+            </button>
+
+            <p class="mt-3 text-center text-sm text-gray-600">
+                {{ applyAction.helper }}
+            </p>
 
             <div class="mt-4 text-center">
                 <p class="text-gray-600 text-sm">
@@ -109,7 +166,6 @@ const bidAmounts = useBidAmounts(props.bids)
             </div>
         </div>
 
-        <!-- Recent Bids -->
         <div class="bg-white rounded-lg shadow-md p-6 animate-fade-in">
             <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
                 <i class="fas fa-history text-primary mr-3"></i>
@@ -117,11 +173,12 @@ const bidAmounts = useBidAmounts(props.bids)
             </h3>
 
             <div class="space-y-4 custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
-
-                <!-- If bids exist -->
                 <div v-if="props.bids && props.bids.length > 0">
-                    <div v-for="(bid, index) in props.bids" :key="index"
-                        class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors">
+                    <div
+                        v-for="(bid, index) in props.bids"
+                        :key="index"
+                        class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors"
+                    >
                         <div class="flex justify-between items-start mb-2">
                             <div class="flex items-center">
                                 <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
@@ -145,26 +202,22 @@ const bidAmounts = useBidAmounts(props.bids)
                     </div>
                 </div>
 
-                <!-- If no bids -->
                 <div v-else class="text-center py-8">
-                    <p class="text-gray-600">এখনো কেউ আবেদন করেনি! সুযোগ হাতছাড়া না করে এখনই আবেদন করুন।</p>
+                    <p class="text-gray-600">এখনও কেউ আবেদন করেনি! সুযোগ হাতছাড়া না করে এখনই আবেদন করুন।</p>
                 </div>
-
             </div>
 
-            <!-- Show button only if more than 2 bids -->
             <button
-                class="w-full mt-4 py-2 border border-primary text-primary rounded-lg hover:bg-blue-50 font-medium transition-colors">
+                class="w-full mt-4 py-2 border border-primary text-primary rounded-lg hover:bg-blue-50 font-medium transition-colors"
+            >
                 সব কাজ দেখুন
             </button>
         </div>
 
-
-        <!-- Client Stats -->
         <div class="bg-white rounded-lg shadow-md p-6 animate-fade-in">
             <h3 class="text-lg font-bold text-dark mb-4 flex items-center">
                 <i class="fas fa-chart-line text-primary mr-3"></i>
-                ক্লায়েন্ট স্ট্যাটস
+                ক্লায়েন্ট স্ট্যাটস
             </h3>
 
             <div class="space-y-4">
@@ -174,7 +227,7 @@ const bidAmounts = useBidAmounts(props.bids)
                         <span class="font-medium text-dark text-sm">{{ props.customerTask?.length }}টি</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-primary rounded-full" :style="{ width: TaskPercentage + '%' }"></div>
+                        <div class="h-full bg-primary rounded-full" :style="{ width: taskPercentage + '%' }"></div>
                     </div>
                 </div>
 
@@ -194,8 +247,7 @@ const bidAmounts = useBidAmounts(props.bids)
                         <span class="font-medium text-dark text-sm">{{ paymentCompletionRate }}%</span>
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="h-full bg-accent rounded-full" :style="{ width: paymentCompletionRate + '%' }">
-                        </div>
+                        <div class="h-full bg-accent rounded-full" :style="{ width: paymentCompletionRate + '%' }"></div>
                     </div>
                 </div>
             </div>
@@ -212,15 +264,16 @@ const bidAmounts = useBidAmounts(props.bids)
             </div>
         </div>
 
-        <!-- Safety Tips -->
-        <InfoCard title="সুরক্ষা টিপস" iconClass="fas fa-shield-alt text-primary mr-3"
+        <InfoCard
+            title="সুরক্ষা টিপস"
+            iconClass="fas fa-shield-alt text-primary mr-3"
             wrapperClass="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-5"
-            titleClass="text-lg font-bold text-dark mb-3 flex items-center" :items="[
+            titleClass="text-lg font-bold text-dark mb-3 flex items-center"
+            :items="[
                 { text: 'কাজ শুরু করার আগে লিখিত চুক্তি করুন', icon: 'fas fa-check-circle text-primary' },
-                { text: 'গ্রাহকের পরিচয় যাচাই করুন', icon: 'fas fa-check-circle text-primary' },
+                { text: 'গ্রাহকের পরিচয় যাচাই করুন', icon: 'fas fa-check-circle text-primary' },
                 { text: 'পেমেন্ট লেনদেনের রেকর্ড রাখুন', icon: 'fas fa-check-circle text-primary' }
-            ]" />
-
+            ]"
+        />
     </div>
-
 </template>
