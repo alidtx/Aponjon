@@ -63,7 +63,7 @@ const timeAgo = useTimeAgo(createdAt)
 const average = useBidsAverageAmount(props.bidDetails.data?.bid);
 
 const submit = () => {
-    form.post(route('bid.store'), {
+    form.post(route('tasker.bid.store'), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset()
