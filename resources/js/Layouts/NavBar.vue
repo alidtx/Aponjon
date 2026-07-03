@@ -15,6 +15,14 @@ const props = defineProps({
     items: {
         type: Array,
         default: () => []
+    },
+    showChat: {
+        type: Boolean,
+        default: true
+    },
+    showNotifications: {
+        type: Boolean,
+        default: true
     }
 });
 
@@ -41,10 +49,10 @@ const chatRoute =
                     <slot />
                 </div>
                 <div v-else class="flex items-center space-x-4">
-                    <Link :href="chatRoute">
+                    <Link v-if="props.showChat" :href="chatRoute">
                     <MessageIcon />
                     </Link>
-                    <NotificationIcon />
+                    <NotificationIcon v-if="props.showNotifications" />
                     <UserDropdown :name="props.name">
                         <template #icon>
                             <DropDownIcon />

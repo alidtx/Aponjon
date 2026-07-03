@@ -1,6 +1,5 @@
 <script setup>
-import NavBar from './NavBar.vue';
-import Footer from './Footer.vue';
+import AuthenticatedBaseLayout from './AuthenticatedBaseLayout.vue';
 import SideBar from '@/Pages/Tasker/SideBar.vue';
 import { usePage } from '@inertiajs/vue3';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
@@ -33,18 +32,13 @@ const menuItems = [
 ];
 </script>
 
-<template>  
-<div class="min-h-screen flex flex-col">
-    <NavBar 
-        :name="user?.name"
-        :items="menuItems"
-    />   
-    <div class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <SideBar/>
-            <slot />
+<template>
+    <AuthenticatedBaseLayout :items="menuItems">
+        <div class="max-w-7xl mx-auto px-4 py-8 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <SideBar />
+                <slot />
+            </div>
         </div>
-    </div>
-    <Footer />
-</div>
+    </AuthenticatedBaseLayout>
 </template>
