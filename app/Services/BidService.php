@@ -99,6 +99,14 @@ class BidService
             throw new AuthorizationException('Your account must be approved before applying for tasks.');
         }
 
+        $alreadyBid = Bid::where('task_id', $request->task_id)
+            ->where('tasker_id', $user->id)
+            ->exists();
+
+        if ($alreadyBid) {
+            throw new AuthorizationException('You have already placed a bid on this task.');
+        }
+
         return Bid::create([
             "task_id" => $request->task_id,
             "tasker_id" => $user->id,

@@ -46,6 +46,11 @@ const isApprovedTasker = computed(() => (
     user.value?.status === 'approved' &&
     user.value?.is_profile_completed
 ));
+const hasAlreadyApplied = computed(() => (
+    isTasker.value &&
+    Array.isArray(props.bids) &&
+    props.bids.some((bid) => bid?.tasker_id === user.value?.id)
+));
 
 const completedTaskCount = computed(() => {
     if (!Array.isArray(props.customerTask)) return 0;
@@ -83,6 +88,15 @@ const applyAction = computed(() => {
             href: route('kyc.awaiting-approval.index'),
             disabled: false,
             helper: 'আপনার টাস্কার প্রোফাইল অনুমোদনের পর এই কাজে আবেদন করতে পারবেন।'
+        };
+    }
+
+    if (hasAlreadyApplied.value) {
+        return {
+            label: 'ইতোমধ্যে আবেদন করা হয়েছে',
+            href: null,
+            disabled: true,
+            helper: 'আপনি এই কাজেই ইতোমধ্যে বিড করেছেন। একই কাজের জন্য আবার আবেদন করা যাবে না।'
         };
     }
 
