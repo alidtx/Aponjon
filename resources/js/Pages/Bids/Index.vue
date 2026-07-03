@@ -36,9 +36,11 @@ const currentTask = computed(() => ({id: props.taskDetails.data?.id, slug: props
     <Breadcrumb/>
     <main class="max-w-7xl mx-auto px-4 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <TaskDetail
-           :details="props.taskDetails"
-           />
+           <div class="lg:col-span-2">
+               <TaskDetail
+               :task="props.taskDetails.data"
+               />
+           </div>
            <SideBar
            :bids="props.taskDetails.data?.bid"
            :budget="budget"
