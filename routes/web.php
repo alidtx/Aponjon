@@ -32,6 +32,7 @@ Route::prefix('tasker')->name('tasker.')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/awaiting-kyc-approval', [KycApprovalController::class, 'index'])
+    ->middleware('awaiting_kyc_approval')
     ->name('kyc.awaiting-approval.index');
 
     Route::middleware(['role:admin'])->group(function () {

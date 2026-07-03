@@ -9,6 +9,7 @@ use App\Http\Resources\DistrictResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ZilaResource;
 use App\Models\User;
+use App\Enum\UserStatus;
 use App\Services\LocationService;
 use App\Services\TaskerService;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +22,18 @@ class TaskerProfileController extends Controller
 
   public function createProfile(Request $request)
   {
+    $user = Auth::user();
+
+    if ($user?->is_profile_completed) {
+      if ($user->status !== UserStatus::APPROVED->value) {
+        return redirect()->route('kyc.awaiting-approval.index');
+      }
+
+      return redirect()->route('tasker.dashboard');
+    }
+
     return Inertia::render('Tasker/CreateProfile/Index', [
-      'loggedInUser' => new UserResource(Auth::user()),
+      'loggedInUser' => new UserResource($user),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
@@ -31,6 +42,7 @@ class TaskerProfileController extends Controller
   {
     try {
       TaskerService::storeTaskerProfile($request);
+      $request->session()->put('auth.client', Auth::user()->fresh());
 
       return redirect()->route('kyc.awaiting-approval.index');
     } catch (\Exception $e) {

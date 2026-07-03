@@ -11,6 +11,7 @@ use App\Http\Resources\ZilaResource;
 use App\Models\User;
 use App\Services\CustomerService;
 use App\Services\LocationService;
+use App\Enum\UserStatus;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -21,8 +22,18 @@ class CustomerProfileController extends Controller
 
   public function createProfile(Request $request)
   {
+    $user = Auth::user();
+
+    if ($user?->is_profile_completed) {
+      if ($user->status !== UserStatus::APPROVED->value) {
+        return redirect()->route('kyc.awaiting-approval.index');
+      }
+
+      return redirect()->route('customer.dashboard');
+    }
+
     return Inertia::render('Customer/CreateProfile/Index', [
-      'loggedInUser' => new UserResource(Auth::user()),
+      'loggedInUser' => new UserResource($user),
       'districts' => DistrictResource::collection(LocationService::districtWiseZila()),
       'zilas' => ZilaResource::collection(LocationService::zilaWiseUpozila()),
     ]);
@@ -31,6 +42,7 @@ class CustomerProfileController extends Controller
   {
     try {
       CustomerService::storeCustomerProfile($request);
+      $request->session()->put('auth.client', Auth::user()->fresh());
 
       return redirect()->route('kyc.awaiting-approval.index');
     } catch (\Exception $e) {
